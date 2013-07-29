@@ -10,6 +10,7 @@
 	<a href="/user/add_team">Teams</a>
 	<a href="/user/add_user">Add User</a>
 	<a href="/user/edit_round1">Edit Round1 Questions</a>
+	<a href="/user/encoder_round1">Encoder (Round1)</a>
 
 </div>
 

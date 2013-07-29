@@ -117,8 +117,69 @@ class User extends CI_Controller {
 			$this->load->view('app_config',array('response'=>$data,'app_config'=>$app_config));
 		}
 	}
+	/*************ROUND1 QUESTION SETTINGS*******************/
 	public function edit_round1(){
-		$questions = "";
-		$this->load->view('edit_round1',array('questions'=>$questions));
+		$q_count = $this->app_model->get_qcount_r1();
+		if($q_count == 0){
+			$data = (object)array('status'=>'error','message'=>'Question Count is set to 0. Generate a new question set.');
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count));
+		} else {
+			$data = (object)array('status'=>'ok');
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count));
+		}
+	}
+	public function gen_round1(){
+		$app_config = $this->app_model->get_app_config();
+		$r1_count = $app_config[0]->round1_question_count;	
+		if($r1_count == 0){
+			$data = (object)array('status'=>'error','message'=>'Question Count is set to 0. Edit application settings');
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$r1_count));
+		} else {
+			$res = $this->app_model->gen_round1($r1_count);
+			if($res){
+				$q_count = $this->app_model->get_qcount_r1();
+				$data = (object)array('status'=>'ok','message'=>'Generated new set of questions. Difficulty is set to easy. Points is set to 0, Badge is set to none.');
+				$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count));
+			} else{
+				$data = (object)array('status'=>'error','message'=>'Something went wrong while updating. Please generate new question set.');
+				$this->load->view('edit_round1',array('response'=>$data,'q_count'=>0));
+			}
+		}
+	}
+	public function get_round1_question(){
+		if(isset($_POST['q_number'])){
+			$q_count = $this->app_model->get_qcount_r1();
+			$question = $this->app_model->get_question_r1($_POST['q_number']);
+			$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_POST['q_number']);
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+			
+		} else{
+			echo "Invalid Access..!!";
+		}	
+	}
+	public function update_round1_question(){
+		$q_count = $this->app_model->get_qcount_r1();
+		$question = $this->app_model->get_question_r1($_POST['q_number']);
+		if(isset($_POST['q_multiplier']) && isset($_POST['points']) && $_POST['q_multiplier'] != '' && $_POST['points'] != ''){
+			$params = array('q_multiplier' => $_POST['q_multiplier'],'points'=>$_POST['points'],'badge_type'=>$_POST['badge_type'],'q_type'=>$_POST['q_type']);
+			$res = $this->app_model->update_question_round1($params,$_POST['q_number']);
+			if($res){
+				$question = $this->app_model->get_question_r1($_POST['q_number']);
+				$data = (object)array('status'=>'ok','message'=>'Updated Question');
+				$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+			}else{
+				$data = (object)array('status'=>'error','message'=>'Failed to update');
+				$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));	
+			}
+		} else {
+			$data = (object)array('status'=>'error','message'=>'Missing some parameters');
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+		}
+	}
+
+	/************FOR ROUND 1 ENCODER****************/
+	public function encoder_round1(){
+		$team = $this->user_model->get_all_teams();
+		$this->load->view('encoder_round1',array('teams'=>$team));
 	}
 }

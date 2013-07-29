@@ -60,4 +60,8 @@ class User_model extends CI_Model {
 		$res = $this->db->get('admin')->result_object();
 		return $res;
 	}
+	public function get_all_teams(){
+		$query = $this->db->get('teams')->result_object();
+		return $query;
+	}
 }
