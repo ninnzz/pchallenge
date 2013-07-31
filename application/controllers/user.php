@@ -24,7 +24,7 @@ class User extends CI_Controller {
 			if($_POST['team_name'] != "" && $_POST['members'] != "" && $_POST['contact'] !=""){
 				if($this->user_model->is_valid_teamname($_POST['team_name'])){
 					$params['team_id'] = md5($_POST['team_name']);
-					$params['team_nam]3e'] = $_POST['team_name'];
+					$params['team_name'] = $_POST['team_name'];
 					$params['team_members'] = $_POST['members'];
 					$params['contact'] = $_POST['contact'];
 					$params['date_created'] = $d; 
