@@ -6,6 +6,7 @@ class User extends CI_Controller {
 		parent::__construct();
 		$this->load->model('user_model');
 		$this->load->model('app_model');
+		$this->load->model('round1_model');
 		$this->user_model->auth();
 	}
 
@@ -180,6 +181,77 @@ class User extends CI_Controller {
 	/************FOR ROUND 1 ENCODER****************/
 	public function encoder_round1(){
 		$team = $this->user_model->get_all_teams();
-		$this->load->view('encoder_round1',array('teams'=>$team));
+		$q_count = $this->app_model->get_qcount_r1();
+		if($q_count > 0){
+			$this->load->view('encoder_round1',array('teams'=>$team,'q_count'=>$q_count));
+
+		} else {
+			$data = (object)array('status'=>'error','message'=>'Round1 Question not initialized');
+			$this->load->view('encoder_round1',array('response'=>$data,'teams'=>$team));	
+		}
+	}
+	public function get_team_correct(){
+		if(isset($_POST['team_id'])){
+			$answered = $this->round1_model->get_answered_questions(array('team_id'=>$_POST['team_id']));
+			$response['status'] = "ok";
+			$response['message'] = "Answered Items";
+			$response['data'] = $answered;
+			echo json_encode($response);
+		} else {
+			$response['message'] = "Missing parameters";
+			$response['status'] = "error";
+			echo json_encode($response);
+		}
+
+	}
+	public function addto_round1_answer(){
+		date_default_timezone_set('EST');
+		$date = new DateTime();
+		$d = $date->format('Ymd');	//change format later
+
+		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
+			$app_config = $this->app_model->get_app_config();
+			$state = $app_config[0]->app_state;
+			if($state == 'round_1m'){
+				$is_fast = true;
+			} else{
+				$is_fast = false;
+			}
+			$params = array('team_id'=>$_POST['team_id'],'q_number'=>$_POST['q_number'],'answered_time'=>$d,'is_fast_round'=>$is_fast);
+			$res = $this->round1_model->setAnswered($params);
+			if($res){
+				$response['status'] = "ok";
+				$response['message'] = "Updated team answer";
+				echo json_encode($response);
+			} else{
+				$response['status'] = "error";
+				$response['message'] = "Something went wrong";
+				echo json_encode($response);	
+			}
+		} else {
+			$response['status'] = "error";
+			$response['message'] = "Missing parameters";
+			echo json_encode($response);
+		}
+	}
+	public function delete_round1_answer(){
+		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
+			$params = array('team_id'=>$_POST['team_id'],'q_number'=>$_POST['q_number']);
+			$res = $this->round1_model->deleteAnswered($params);
+			if($res){
+				$response['status'] = "ok";
+				$response['message'] = "Deleted team answer";
+				echo json_encode($response);
+			} else{
+				$response['status'] = "error";
+				$response['message'] = "Something went wrong";
+				echo json_encode($response);	
+			}
+		} else {
+			$response['status'] = "error";
+			$response['message'] = "Missing parameters";
+			echo json_encode($response);
+		}
+
 	}
 }
