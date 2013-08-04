@@ -42,6 +42,8 @@
 			<tr><td colspan='2'><span class='label label-success'>Round 1 Config</span></td></tr>
 			<tr><td>Round 1 Question Count:</td><td><input type='text' name='round1_question_count' value="<?php echo $app_config->round1_question_count; ?>" /></td></tr>
 			<tr><td>Round 1 Timer Limit(minutes):</td><td><input type='text' name='round1_timer' value="<?php echo $app_config->round1_timer; ?>" /></td></tr>
+			<tr><td colspan='2'><span class='label label-success'>Round2</span></td></tr>
+			<tr><td>Round 2 Question Count:</td><td><input type='text' name='round2_question_count' value="<?php echo $app_config->round2_question_count; ?>" /></td></tr>
 			<tr><td colspan='2'><span class='label label-success'>Badge</span></td></tr>
 			<tr><td>Badge Count:</td><td><input type='text' name='badge_count' value="<?php echo $app_config->badge_count; ?>" /></td></tr>
 			

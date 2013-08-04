@@ -6,7 +6,7 @@
 <br/>
 <div class='container'>
 <?php if($this->session->userdata['user']->scope && $this->session->userdata['user']->scope === "all"){ ?>
-<h2>Round 1 Questions</h2>
+<h2>Round2 Questions</h2>
 	<div class='row-fluid'>
 
 		<?php
@@ -18,16 +18,10 @@
 				?>
 			</div>
 		<?php }?>
-
-		<form action="/user/gen_round1" method="post" class='well'>
-			<input type='hidden' name='reset_app' value='1' />
-			<label class='label label-info'>Use only if application is reinitialized or for emergency reset purposes only.</label>
-			<input type='submit' value='GENERATE ROUND1 QUESTION SET' class='btn btn-large btn-danger' style='width:100%;text-align:center;'/>
-		</form>
 	</div>
 	<?php if($q_count != 0){?>
 	<div class='row-fluid well'>
-		<form action="/user/get_round1_question" method="post">
+		<form action="/user/get_round2_question" method="post">
 		<span class='label label-success'>Question Number</span><br/><br/><select name='q_number' id='question_number'>
 			<?php
 				for($i=1;$i<=$q_count;$i++){

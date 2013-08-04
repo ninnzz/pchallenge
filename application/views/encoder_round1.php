@@ -21,7 +21,7 @@
 	
 	</div>
 	<div class='row-fluid'>
-		<div id='numbers' class='well' class=''>
+		<div id='numbers' class='well' >
 			<span class='label label-success'>Questions</span>
 			<div id='q-container'>
 				<?php if(isset($q_count) && $q_count > 0){

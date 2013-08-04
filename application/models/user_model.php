@@ -64,4 +64,8 @@ class User_model extends CI_Model {
 		$query = $this->db->get('teams')->result_object();
 		return $query;
 	}
+	public function get_single_team($team_id){
+		$res = $this->db->get_where('teams', array('team_id' => $team_id))->result_object();
+		return $res;	
+	}
 }

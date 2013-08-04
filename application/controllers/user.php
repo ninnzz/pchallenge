@@ -7,6 +7,7 @@ class User extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('app_model');
 		$this->load->model('round1_model');
+		$this->load->model('event_model');
 		$this->user_model->auth();
 	}
 
@@ -106,6 +107,7 @@ class User extends CI_Controller {
 		$params['app_state'] = $_POST['app_state'];
 		$params['badge_count'] = $_POST['badge_count'];
 		$params['round1_question_count'] = $_POST['round1_question_count'];
+		$params['round2_question_count'] = $_POST['round2_question_count'];
 		$params['round1_timer'] = $_POST['round1_timer'];
 		$res = $this->app_model->set_app_config($params);
 		if($res){
@@ -207,7 +209,7 @@ class User extends CI_Controller {
 	public function addto_round1_answer(){
 		date_default_timezone_set('EST');
 		$date = new DateTime();
-		$d = $date->format('Ymd');	//change format later
+		$d = $date->getTimestamp();	//change format later
 
 		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
 			$app_config = $this->app_model->get_app_config();
@@ -220,6 +222,14 @@ class User extends CI_Controller {
 			$params = array('team_id'=>$_POST['team_id'],'q_number'=>$_POST['q_number'],'answered_time'=>$d,'is_fast_round'=>$is_fast);
 			$res = $this->round1_model->setAnswered($params);
 			if($res){
+				$q_e = $this->app_model->get_question_r1($_POST['q_number']);
+				$pts = $q_e[0]->points;
+				$t = $this->user_model->get_single_team($_POST['team_id']);	
+				$name = $t[0]->team_name;
+				$txt = "Team {$name} answered question number".$_POST['q_number']."(".$q_e[0]->q_type.") worth {$pts}pts";
+				$params = array('evnt'=>$txt,'priority'=>1,'date_time'=>$d);
+				$this->event_model->add_event($params);
+				/**********ADD CHECKING FOR BADGE HERE************/
 				$response['status'] = "ok";
 				$response['message'] = "Updated team answer";
 				echo json_encode($response);
@@ -239,6 +249,7 @@ class User extends CI_Controller {
 			$params = array('team_id'=>$_POST['team_id'],'q_number'=>$_POST['q_number']);
 			$res = $this->round1_model->deleteAnswered($params);
 			if($res){
+				/**********ADD CHECKING FOR BADGE HERE************/
 				$response['status'] = "ok";
 				$response['message'] = "Deleted team answer";
 				echo json_encode($response);
@@ -252,6 +263,17 @@ class User extends CI_Controller {
 			$response['message'] = "Missing parameters";
 			echo json_encode($response);
 		}
-
+	}
+	/*****************ROUND 2**********************/
+	public function edit_round2(){
+		$app_conf = $this->app_model->get_app_config();
+		$q_count = $app_conf[0]->round2_question_count;
+		if($q_count == 0){
+			$data = (object)array('status'=>'error','message'=>'Question Count is set to 0. Generate a new question set.');
+			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count));
+		} else {
+			$data = (object)array('status'=>'ok');
+			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count));
+		}
 	}
 }
