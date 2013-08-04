@@ -276,4 +276,16 @@ class User extends CI_Controller {
 			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count));
 		}
 	}
+	public function get_round2_question(){
+		if(isset($_POST['q_number'])){
+			$q_count = $this->app_model->get_qcount_r1();
+			$question = $this->app_model->get_question_r1($_POST['q_number']);
+			$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_POST['q_number']);
+			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+			
+		} else{
+			echo "Invalid Access..!!";
+		}	
+	}
+
 }
