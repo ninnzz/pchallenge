@@ -17,7 +17,10 @@ class Viewer extends CI_Controller {
 			case 1:
 				$this->load->view('round1_view');
 				break;
-/*			case 2:
+			case 2:
+				$this->load->view('round2_view');
+				break;
+/*		case 2:
 				$teams=$this->vieweradapter->topScorers(3);
 				$this->load->view('round2',array('teams'=>$teams));
 				break;

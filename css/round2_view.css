@@ -1,0 +1,60 @@
+body{
+	margin:0%;
+	font-family:Arial;
+	background-image:url("/img/bg.png");
+}
+
+
+#outer{
+}
+
+
+#upper{
+	width:98.5%;
+	height:68.5%;	
+	float:left;
+	font-size:20px;
+	position:relative;
+	padding-top: 1%;
+	padding-left: 1%;
+}
+
+#lower{
+	width:100%;
+	height:27%;
+	float:left;
+	font-weight:bold;
+	background-image: url('/img/bottombar.png');
+	background-repeat: repeat-x;
+	padding-top:1.5%;
+}
+
+
+#left{
+	height:100%;
+	width:50%;
+	position:relative;
+	float:left;
+	
+}
+
+
+#center{
+	height:100%;
+	width:30%;
+	position:relative;
+	float:left;
+	
+}
+
+#right{
+	height:100%;
+	width:20%;
+	position:relative;
+	float:left;
+	
+}
+
+#q_header{
+	font-weight:bold;
+}
