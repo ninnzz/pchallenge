@@ -21,36 +21,43 @@ class User extends CI_Controller {
 		date_default_timezone_set('EST');
 		$date = new DateTime();
 		$d = $date->format('Ymd');
+		$teams = $this->user_model->get_all_teams();
+		$total_team = count($teams);
 
 		if(isset($_POST['req'])){
-			if($_POST['team_name'] != "" && $_POST['members'] != "" && $_POST['contact'] !=""){
+			if($_POST['team_name'] != "" && $_POST['members'] != "" && $_POST['contact'] !="" && $_POST['team_no'] !=""){
 				if($this->user_model->is_valid_teamname($_POST['team_name'])){
 					$params['team_id'] = md5($_POST['team_name']);
 					$params['team_name'] = $_POST['team_name'];
 					$params['team_members'] = $_POST['members'];
 					$params['contact'] = $_POST['contact'];
+					$params['team_no'] = $_POST['team_no'];
 					$params['date_created'] = $d; 
 
 					$res = $this->user_model->add_team($params);
+					$teams = $this->user_model->get_all_teams();
+					$total_team = count($teams);
 					if($res){
+						$params2 = array('team_id'=>$params['team_id'],'q_number'=>0,'answered_time'=>$d,'is_fast_round'=>false);
+						$res2 = $this->round1_model->setAnswered($params2);
 						$data = (object)array('status'=>'ok','message'=>'Team Added :: '.$params['team_name'].'.');
-						$this->load->view('add_team',array('response'=>$data));
+						$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));
 					} else{
 						$data = (object)array('status'=>'error','message'=>'Something went wrong in the DB, try again.');
-						$this->load->view('add_team',array('response'=>$data));
+						$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));
 					}
 				} else{
 					$data = (object)array('status'=>'error','message'=>'Team name already taken.');
-					$this->load->view('add_team',array('response'=>$data));					
+					$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));					
 				}
 
 			} else{
 				$data = (object)array('status'=>'error','message'=>'Missing Teamname/members/contact');
-				$this->load->view('add_team',array('response'=>$data));
+				$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));
 			}
 
 		} else {
-			$this->load->view('add_team');
+			$this->load->view('add_team',array('total'=>$total_team));
 		}
 	}
 
@@ -224,7 +231,7 @@ class User extends CI_Controller {
 		$team = $this->user_model->get_all_teams();
 		$q_count = $this->app_model->get_qcount_r1();
 		if($q_count > 0){
-			$this->load->view('encoder_round1',array('teams'=>$team,'q_count'=>$q_count));
+			$this->load->view('encoder_round1',array('teams'=>$team,'q_count'=>$q_count-1));
 
 		} else {
 			$data = (object)array('status'=>'error','message'=>'Round1 Question not initialized');
@@ -317,14 +324,70 @@ class User extends CI_Controller {
 	}
 	public function get_round2_question(){
 		if(isset($_POST['q_number'])){
-			$q_count = $this->app_model->get_qcount_r1();
-			$question = $this->app_model->get_question_r1($_POST['q_number']);
-			$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_POST['q_number']);
-			$this->load->view('edit_round1',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+			$app_conf = $this->app_model->get_app_config();
+			$q_count = $app_conf[0]->round2_question_count;
+			$question = $this->app_model->get_question_r2($_POST['q_number']);
+			
+			if(count($question) == 0){
+				$data = (object)array('status'=>'ok','message'=>'No data for question'.$_POST['q_number'].' yet. Please update question data.!');
+			}
+				$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_POST['q_number']);
+			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'q_num'=>$_POST['q_number']));
 			
 		} else{
 			echo "Invalid Access..!!";
 		}	
+	}
+	public function update_round2_question(){
+		$app_conf = $this->app_model->get_app_config();
+		$q_count = $app_conf[0]->round2_question_count;
+		$question = $this->app_model->get_question_r2($_POST['q_number']);
+		if(isset($_POST['multiplier']) && isset($_POST['points']) && $_POST['multiplier'] != '' && $_POST['points'] != ''){
+			$params = array('multiplier' => $_POST['multiplier'],'points'=>$_POST['points'],'badge_timer'=>$_POST['badge_timer'],'q_type'=>$_POST['q_type'],'prev_timer'=>$_POST['prev_timer'],'bet_timer'=>$_POST['bet_timer'],'q_timer'=>$_POST['q_timer'],'body'=>$_POST['body'],'answer'=>$_POST['answer']);
+			if(count($question) == 0){
+				$params['q_number'] = $_POST['q_number'];
+				$res = $this->app_model->insert_round2_question($params);
+			} else{
+				$res = $this->app_model->update_question_round2($params,$_POST['q_number']);
+			}
+			if($res){
+				$question = $this->app_model->get_question_r2($_POST['q_number']);
+				$data = (object)array('status'=>'ok','message'=>'Updated Question For Round2');
+				$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'q_num'=>$_POST['q_number']));
+			}else{
+				$data = (object)array('status'=>'error','message'=>'Failed to update');
+				$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));	
+			}
+		} else {
+			$data = (object)array('status'=>'error','message'=>'Missing some parameters');
+			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+		}
+	}
+	/************ENCODER AND BET MODULES FOR ROUND2***************************/
+	public function encoder_round2(){
+		$app_conf = $this->app_model->get_app_config();
+		$q_count = $app_conf[0]->round2_question_count;
+		$team = $this->user_model->get_all_teams();
+		if($q_count > 0){
+			$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
+
+		} else {
+			$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');
+			$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
+		}
+	}
+	public function get_team_answers_round2(){
+		$app_conf = $this->app_model->get_app_config();
+		$q_count = $app_conf[0]->round2_question_count;
+		$team = $this->user_model->get_all_teams();
+		if(isset($_POST['q_number']) && $_POST['q_number'] != ""){
+
+
+		} else{
+			$response['status'] = "error";
+			$response['message'] = "Missing parameters";
+			echo json_encode($response);
+		}
 	}
 
 }

@@ -9,7 +9,6 @@ class Viewer extends CI_Controller {
 		$this->load->model('round1_model');
 		//$this->user_model->auth();
 	}
-
 	public function _remap($functionName,$args)
 	{
 		switch($functionName)

@@ -61,6 +61,7 @@ class User_model extends CI_Model {
 		return $res;
 	}
 	public function get_all_teams(){
+		$this->db->order_by("team_no", "asc");
 		$query = $this->db->get('teams')->result_object();
 		return $query;
 	}
