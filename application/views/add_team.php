@@ -20,6 +20,7 @@
 <form action="" method="post">
 	<input type="hidden" name="req" value="1" />
 	<table>
+		<tr><td>Team Number</td><td><input type='text' name='team_no' value='<?php echo (($total*1)+1);?>' /></td></tr>
 		<tr><td>Team Name</td><td><input type='text' name='team_name' /></td></tr>
 		<tr><td>Team Members(Separated by comma)</td><td>
 			<textarea name='members' rows=5 cols=10 >Member1,Member2.....</textarea></td></tr>

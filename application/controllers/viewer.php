@@ -10,5 +10,4 @@ class Viewer extends CI_Controller {
 		//$this->user_model->auth();
 	}
 
-
 }
