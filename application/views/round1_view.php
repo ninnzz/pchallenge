@@ -47,7 +47,7 @@
 
 <div id="pre"> Papers are something, pens are something. Yehey get 1/4! </div>
 <div id="countdown">countdown</div>
-<div id = "round1Timer">Timer</div><br/><br/><br/>
+<div id = "round1Timer"></div><br/><br/><br/>
 <div id = "newsfeed"></div>
 <div id = "text"></div>
 
@@ -88,7 +88,6 @@
 	}, 1000);
 
 	function update_newsfeed(){
-		setInterval(function(){
     	$.get("/events/latest", function (latest_news) {
     		temp2 =latest_news;
     		var latest_json = eval("(" + latest_news + ")");
@@ -98,10 +97,6 @@
 //	    	var message = json_json=>[0].evnt;
 //          	$("#newsfeed").html(message);
     	});
-      },
-      //The delay before the data is refreshed
-      100);
-		
 	}
 
 	// if round1/state says the state has changed, react accordingly
@@ -126,6 +121,8 @@
 					function(){
 						current_state="round_1";
 						setState(current_state);
+						
+						countdown("round1Timer", 45*60, function(){});
 					}
 				);
 			}
@@ -136,7 +133,6 @@
 	}
 	
 	function update(){
-		setInterval(function(){
     	$.get("/round1/team_score", function (team_scores) {
     		var teamscores_json = eval("(" + team_scores + ")");
 	    	var message = teamscores_json.message+"<br/>";
@@ -147,9 +143,6 @@
 
           	$("#text").html(message);
     	});
-      },
-      //The delay before the data is refreshed
-      100);
 	}
 </script>
 
