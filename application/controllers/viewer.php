@@ -9,5 +9,23 @@ class Viewer extends CI_Controller {
 		$this->load->model('round1_model');
 		//$this->user_model->auth();
 	}
-
+	public function _remap($functionName,$args)
+	{
+		switch($functionName)
+		{
+			case 1:
+				$this->load->view('round1_view');
+				break;
+/*			case 2:
+				$teams=$this->vieweradapter->topScorers(3);
+				$this->load->view('round2',array('teams'=>$teams));
+				break;
+			case 3:
+				$this->load->view('round2scoreboard_1');
+				break;
+			default:
+				call_user_func_array( array($this,$functionName) , $args);
+				break;
+*/		}
+	}
 }

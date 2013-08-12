@@ -60,6 +60,45 @@ class User extends CI_Controller {
 			$this->load->view('add_team',array('total'=>$total_team));
 		}
 	}
+
+	public function edit_badge(){
+
+/*		date_default_timezone_set('EST');
+		$date = new DateTime();
+		$d = $date->format('Ymd');
+
+		if(isset($_POST['req'])){
+			if($_POST['team_name'] != "" && $_POST['members'] != "" && $_POST['contact'] !=""){
+				if($this->user_model->is_valid_teamname($_POST['team_name'])){
+					$params['team_id'] = md5($_POST['team_name']);
+					$params['team_name'] = $_POST['team_name'];
+					$params['team_members'] = $_POST['members'];
+					$params['contact'] = $_POST['contact'];
+					$params['date_created'] = $d; 
+
+					$res = $this->user_model->add_team($params);
+					if($res){
+						$data = (object)array('status'=>'ok','message'=>'Team Added :: '.$params['team_name'].'.');
+						$this->load->view('add_team',array('response'=>$data));
+					} else{
+						$data = (object)array('status'=>'error','message'=>'Something went wrong in the DB, try again.');
+						$this->load->view('add_team',array('response'=>$data));
+					}
+				} else{
+					$data = (object)array('status'=>'error','message'=>'Team name already taken.');
+					$this->load->view('add_team',array('response'=>$data));					
+				}
+
+			} else{
+				$data = (object)array('status'=>'error','message'=>'Missing Teamname/members/contact');
+				$this->load->view('add_team',array('response'=>$data));
+			}
+
+		} else {
+*/			$this->load->view('edit_badge');
+//		}
+	}
+		
 	public function add_user(){
 		date_default_timezone_set('EST');
 		$date = new DateTime();
