@@ -27,4 +27,19 @@ class Round2_model extends CI_Model {
 		return $res;	
 	}
 
+	public function setState($state){
+		$res = $this->db->query("update app_config set r2_state='{$state}' where r2_state IS NOT NULL ");
+		return $res;
+	}
+
+	public function setNextQuestion(){
+		$res = $this->db->query("update app_config set current_question_round2=current_question_round2+1 where r2_state IS NOT NULL ");
+		return $res;
+	}
+
+	public function setPreviousQuestion(){
+		$res = $this->db->query("update app_config set current_question_round2=current_question_round2-1 where r2_state IS NOT NULL and current_question_round2>0");
+		return $res;
+	}
+	
 }

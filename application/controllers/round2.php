@@ -10,43 +10,29 @@ class Round2 extends CI_Controller {
 		//$this->user_model->auth(); //add this function if you want to make it private
 	}
 
-	public function questionHandler(){
+	public function questionhandler(){
 		$this->load->view('questionhandler');
 	}
 
-	public function readyNextQuestion(){
-
+	
+	function setState(){
+		$state = $this->input->post('message');
+		$arr['state']=$state;
+		$res = $this->round2_model->setState($state);
+		echo json_encode($arr);
 	}
 
-	public function flashQuestion(){
-
+	function setNextQuestion(){
+		$res = $this->round2_model->setNextQuestion();
+		echo json_encode($res);
 	}
 
-	public function powerUpTimer(){
-
+	function setPreviousQuestion(){
+		$res = $this->round2_model->setPreviousQuestion();
+		echo json_encode($res);
 	}
 
-	public function bettingTimer(){
 
-	}
 
-	public function displayQuestion(){
-
-	}
-
-	public function answeringTimer(){
-
-	}
-
-	public function displayTimer(){
-
-	}
-
-	public function displayTeamSummary(){
-		
-	}
-
-	public function getState(){
-		//$state
-	}
+	
 }
