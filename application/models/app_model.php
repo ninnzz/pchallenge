@@ -37,9 +37,10 @@ class App_model extends CI_Model {
 	public function gen_round1($r1_count){
 		$data = array();
 		for($i=1;$i<=$r1_count;$i++){
-			array_push($data, array('q_number'=>$i,'q_type'=>'e','q_multiplier'=>1,'badge_type'=>'','points'=>0));
+			array_push($data, array('q_number'=>$i,'q_type'=>'e','q_multiplier'=>1,'points'=>0));
 		}
 		$this->db->empty_table('questions_round1'); 
+		$this->db->empty_table('questions_badge');
 		$res = $this->db->insert_batch('questions_round1', $data);
 		return $res; 
 	}
@@ -51,8 +52,5 @@ class App_model extends CI_Model {
 		$query = $this->db->get_where('questions_round1', array('q_number' => $q))->result_object();
 		return $query;
 	}
-	public function update_question_round1($params,$q){
-		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
-		return $res;
-	}
+
 }
