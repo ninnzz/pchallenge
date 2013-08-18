@@ -1,6 +1,7 @@
 <?php
 	$this->load->view('includes/header');
 ?>
+
 <br/>
 <br/>
 <div class='container'>
@@ -27,17 +28,26 @@
 				<?php if(isset($q_count) && $q_count > 0){
 					for($i=1;$i<=$q_count;$i++){
 				?>
-				<button class='btn btn-small' data-active='0' data-id='<?=$i;?>' onclick='toggleAnswer(this)' style='width:5%;margin:2px;'><?=$i?></button>
+				<button class='btn btn-small' data-active='0' data-id='<?=$i;?>' onclick='toggleQuestion(this)' style='width:5%;margin:2px;'><?=$i?></button>
 				<?php }}?>
 			</div>
 		</div>
 		<div id='teams'>
-			<span class='label label-success'>Teams</span>
-
+			<span class='label label-success'>Correct</span>
+			<span class='label label-warning'>Incorrect/Did Not Answer</span>
+			<hr/>
+			<span class='label label-important'>Leave blank for teams who did not bet</span>
+			<br/>
+			<br/>
+			<div style='display:inline;' id='teams-div'>
 			<?php foreach($teams as $t){?>
-				<button data-id='<?=$t->team_id?>' onclick='setTeam(this)' style='margin:2px;' class='btn btn-small btn-info'><?='('.$t->team_no.') '.$t->team_name;?></button>
-
-			<?php }?>
+					<div class="input-prepend input-append">
+					<button data-id='<?=$t->team_id?>' onclick='setTeam(this)' class='btn btn-warning'><?='('.$t->team_no.') '.$t->team_name;?></button>	
+					<input class="span6" id="appendedPrependedInput" type="text" />
+					<span class="add-on"> <-- Bet</span>
+					</div>
+							<?php }?>
+			</div>
 
 		</div>
 	</div>
@@ -47,9 +57,6 @@
 		var curr_item = null;
 		var total_question = <?=$q_count;?>;
 
-		function toggleAnswer(obj){
-			console.log(obj);
-		}
 		function setTeam(obj){
 			if(current_team != null){
 				current_team.className = 'btn btn-small btn-info';
@@ -82,29 +89,28 @@
 			//put some loading for the question buttons here
 			current_team.className = 'btn btn-small btn-danger';
 		}
-		function toggleAnswer(obj){
-			if(current_team == null){
-				alert("No team selected");
-			} else {
-				curr_item = obj;
-				obj.disabled = true;
-				obj.innerHTML = "....";
-				team_id = current_team.getAttribute('data-id');
-				active = obj.getAttribute('data-active');
-				q_id = obj.getAttribute('data-id');
-
-				router.setMethod('post');
-				if(active === '1'){
-					router.setTargetUrl('/user/delete_round1_answer');
-					events.setCurrentEvent('itemToggle(data,1)');
-				} else{
-					events.setCurrentEvent('itemToggle(data,0)');
-					router.setTargetUrl('/user/addto_round1_answer');
-				}
-				router.setParams({'q_number':q_id,'team_id':team_id});
-				events.setErrorEvent('alert("Something went wrong");console.log(data);curr_item.disabled = false;');
-				router.connect();
+		function toggleQuestion(obj){
+			if(curr_item != null){
+				curr_item.className = 'btn btn-small';
 			}
+			curr_item = obj;
+			obj.disabled = true;
+			obj.innerHTML = "....";
+			q_id = obj.getAttribute('data-id');
+
+			router.setMethod('post');
+			router.setTargetUrl('/user/get_team_answers_round2');
+			events.setCurrentEvent('setupTeams(data)');
+			router.setParams({'q_number':q_id});
+			events.setErrorEvent('alert("Something went wrong");console.log(data);curr_item.disabled = false;curr_item.className="btn btn-small";curr_item.innerHTML=q_id');
+			router.connect();
+			
+		}
+		function setupTeams(data){
+			console.log(data);
+			curr_item.disabled = false;
+			curr_item.innerHTML = curr_item.getAttribute('data-id');
+			curr_item.className = "btn btn-small btn-success";
 		}
 		function itemToggle(data,opt){
 			console.log(data);

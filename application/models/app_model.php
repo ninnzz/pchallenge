@@ -36,6 +36,7 @@ class App_model extends CI_Model {
 	}
 	public function gen_round1($r1_count){
 		$data = array();
+
 		for($i=1;$i<=$r1_count;$i++){
 			array_push($data, array('q_number'=>$i,'q_type'=>'e','q_multiplier'=>1,'points'=>0));
 		}
@@ -52,5 +53,20 @@ class App_model extends CI_Model {
 		$query = $this->db->get_where('questions_round1', array('q_number' => $q))->result_object();
 		return $query;
 	}
-
+	public function update_question_round1($params,$q){
+		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
+		return $res;
+	}
+	public function get_question_r2($q){
+		$query = $this->db->get_where('questions_round2', array('q_number' => $q))->result_object();
+		return $query;
+	}
+	public function update_question_round2($params,$q){
+		$res = $this->db->update('questions_round2', $params, array('q_number' => $q)); 
+		return $res;
+	}
+	public function insert_round2_question($params){
+		$res = $this->db->insert('questions_round2', $params); 
+		return $res;
+	}	
 }
