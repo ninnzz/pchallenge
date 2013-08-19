@@ -11,24 +11,25 @@
 	<div class='row-fluid'>
 
 		<?php
-			if(isset($response->message)){
+			if($this->session->flashdata('data')){
 		?>
 	 		<div class='alert text-center'>
 				<?php
-					echo $response->message;
+					echo $this->session->flashdata('data')->message;
 				?>
 			</div>
 		<?php }?>
 
-	<form action="/user/reset_app" method="post" class='well'>
+	<form action="/app/reset" method="post" class='well'>
 		<input type='hidden' name='reset_app' value='1' />
 		<label class='label label-warning'>Warning: Clicking this button will reset current application instance and all the game data may be loss...!</label>
-		<input type='submit' value='Reset Application' class='btn btn-large btn-danger' style='width:100%;'/>
+		<input type='submit' value='Reset Application' class='btn btn-large btn-danger' style='width:100%;' onclick='if(!confirm("Are you sure you want to reset application?")) return false'/>
 	</form>
-	<form action="/user/update_app_config" method="post" class='well'>
+	<a href="/app/reset_round1"><button class='btn btn-danger' onclick='if(!confirm("Are you sure you want to reset round 1?")) return false'>Reset Round 1</button></a>
+	<form action="/app/update_config" method="post" class='well'>
 		<input type="hidden" name="req" value="1" />
 		<table>
-			<tr><td colspan='2'><span class='label label-success'>General Config</span></td></tr>
+			<tr><td colspan='2'><span class='label label-success '>General Config</span></td></tr>
 			<tr><td>Application State:</td><td>
 					<select name='app_state' />
 						<option value='pre' <?php if($app_config->app_state == 'pre') echo "selected";?> >Preparation</option>
@@ -40,7 +41,7 @@
 					</select>
 				</td></tr>
 			<tr><td colspan='2'><span class='label label-success'>Round 1 Config</span></td></tr>
-			<tr><td>Round 1 Question Count:</td><td><input type='text' name='round1_question_count' value="<?php echo $app_config->round1_question_count; ?>" /></td></tr>
+			<tr><td></td></tr			<tr><td>Round 1 Question Count:</td><td><input type='text' name='round1_question_count' value="<?php echo $app_config->round1_question_count; ?>" /></td></tr>
 			<tr><td>Round 1 Timer Limit(minutes):</td><td><input type='text' name='round1_timer' value="<?php echo $app_config->round1_timer; ?>" /></td></tr>
 			<tr><td colspan='2'><span class='label label-success'>Round2</span></td></tr>
 			<tr><td>Round 2 Question Count:</td><td><input type='text' name='round2_question_count' value="<?php echo $app_config->round2_question_count; ?>" /></td></tr>

@@ -7,18 +7,13 @@
 <?php if($this->session->userdata['user']->scope && $this->session->userdata['user']->scope === "all"){ ?>
 <h2>Encoder (Round1)</h2>
 	<div class='row-fluid'>
-
 		<?php
-			if(isset($response->message)){
-		?>
-	 		<div class='alert text-center'>
+			if(isset($response->message)){?>
+				<div class='alert text-center' id='message' text='<?php if(isset($response->message)) echo $response->message; else echo "none";?>'>
 				<?php
-					echo $response->message;
-				?>
-			</div>
-		<?php }?>
-
-	
+				echo $response->message;
+				?></div>
+			<?php }?>
 	</div>
 	<div class='row-fluid'>
 		<div id='numbers' class='well' >
@@ -57,14 +52,14 @@
 			current_team = obj;
 			team_id = obj.getAttribute('data-id');
 			router.setMethod('post');
-			router.setTargetUrl('/user/get_team_correct');
+			router.setTargetUrl('/team/get_team_correct');
 			router.setParams({'team_id':team_id});
 			events.setCurrentEvent('setQuestion(data)');
 			events.setErrorEvent('alert("Something went wrong");console.log(data);');
 			router.connect();
 		}
 		function setQuestion(data){
-			var j = 1;
+			var j = 0;
 			var prt = document.getElementById('q-container');
 			var content = "";
 			prt.innerHTML = "";
@@ -92,14 +87,13 @@
 				team_id = current_team.getAttribute('data-id');
 				active = obj.getAttribute('data-active');
 				q_id = obj.getAttribute('data-id');
-
 				router.setMethod('post');
 				if(active === '1'){
-					router.setTargetUrl('/user/delete_round1_answer');
+					router.setTargetUrl('/round1/delete_answer');
 					events.setCurrentEvent('itemToggle(data,1)');
 				} else{
 					events.setCurrentEvent('itemToggle(data,0)');
-					router.setTargetUrl('/user/addto_round1_answer');
+					router.setTargetUrl('/round1/add_to_answer');
 				}
 				router.setParams({'q_number':q_id,'team_id':team_id});
 				events.setErrorEvent('alert("Something went wrong");console.log(data);curr_item.disabled = false;');

@@ -10,14 +10,14 @@ class Events extends CI_Controller {
 	}
 
 	public function index(){
-		$res = $this->event_model->get_all();
+		$res = $this->event_model->getAll();
 		$response['status'] = "ok";
 		$response['message'] = "Events list";
 		$response['data'] = $res;
 		echo json_encode($response);
 	}
 	public function latest(){
-		$res = $this->event_model->get_latest();
+		$res = $this->event_model->getLatest();
 		$response['status'] = "ok";
 		$response['message'] = "Events list";
 		$response['data'] = $res;

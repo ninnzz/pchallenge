@@ -16,7 +16,7 @@ class App_model extends CI_Model {
 		parent::__construct();
 
 	}
-	public function reset_app(){
+	public function resetAPp(){
 		$data = array('app_state'=>'pre','current_question_round2'=>0,'r2_state'=>'init','round1_question_count'=>0,'badge_count'=>0,'round1_timer'=>45);
 		/*
 			**************COMMENT FOR DEV*******************
@@ -27,14 +27,21 @@ class App_model extends CI_Model {
 		$this->db->query("delete from questions_round1");
 		return $this->db->update('app_config', $data);
 	}
-	public function get_app_config(){
+
+	public function resetRound1(){
+		$res1 = $this->db->empty_table('answered_round1');
+		$res2 = $this->db->update('badge',array('owner'=>NULL,'timestamp'=>NULL));
+		return $res1 && $res2;
+	}
+
+	public function getAppConfig(){
 		$res = $this->db->get('app_config')->result_object();
 		return $res;
 	}
-	public function set_app_config($params){
+	public function setAppConfig($params){
 		return $this->db->update('app_config', $params);		
 	}
-	public function gen_round1($r1_count){
+	public function genRound1($r1_count){
 		$data = array();
 
 		for($i=1;$i<=$r1_count;$i++){
@@ -45,27 +52,27 @@ class App_model extends CI_Model {
 		$res = $this->db->insert_batch('questions_round1', $data);
 		return $res; 
 	}
-	public function get_qcount_r1(){
+	public function getQCountR1(){
 		$res = $this->db->get('questions_round1')->num_rows();
 		return $res;	
 	}
-	public function get_question_r1($q){
+	public function getQuestionR1($q){
 		$query = $this->db->get_where('questions_round1', array('q_number' => $q))->result_object();
 		return $query;
 	}
-	public function update_question_round1($params,$q){
+	public function updateRound1Question($params,$q){
 		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
 		return $res;
 	}
-	public function get_question_r2($q){
+	public function getQuestionR2($q){
 		$query = $this->db->get_where('questions_round2', array('q_number' => $q))->result_object();
 		return $query;
 	}
-	public function update_question_round2($params,$q){
+	public function updateRound2Question($params,$q){
 		$res = $this->db->update('questions_round2', $params, array('q_number' => $q)); 
 		return $res;
 	}
-	public function insert_round2_question($params){
+	public function insertRound2Question($params){
 		$res = $this->db->insert('questions_round2', $params); 
 		return $res;
 	}	
