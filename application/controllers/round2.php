@@ -14,11 +14,20 @@ class Round2 extends CI_Controller {
 		$this->load->view('questionhandler');
 	}
 
+	public function view(){
+		$this->load->view('round2_view');
+	}
 	
 	function setState(){
 		$state = $this->input->post('message');
 		$arr['state']=$state;
 		$res = $this->round2_model->setState($state);
+		echo json_encode($arr);
+	}
+
+	function getState(){
+		$res = $this->round2_model->getState();
+		$arr['state']=$res;
 		echo json_encode($arr);
 	}
 

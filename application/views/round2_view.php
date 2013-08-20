@@ -3,9 +3,28 @@
 	$num=10;
 	$q_type="Easy";
 ?>
-
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/routes.js" ></script>
 <script>
 	var debug=false;
+
+	$(document).ready(function() {
+		getState();
+	});
+
+	function getState(){
+		$.post('getState', function(data) {
+			//console.log(data)
+			obj = JSON.parse(data);
+			setState(obj['state']);
+			//console.log(obj['state']);
+			setTimeout("getState();",1000);
+		});
+	}
+
+	function getQuestion(){
+		
+	}
 	
 	function setState(state){
 		if(state=="init"){
