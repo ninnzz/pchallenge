@@ -69,7 +69,7 @@ class Round1 extends CI_Controller {
 				$pts = $q_e[0]->points;
 				$t = $this->team_model->getSingleTeam($_POST['team_id']);	
 				$name = $t[0]->team_name;
-				$txt = "Team {$name} answered question number".$_POST['q_number']."(".$q_e[0]->q_type.") worth {$pts}pts";
+				$txt = "Team {$name} answered question number".$_POST['q_number']."(".$q_e[0]->q_diff.") worth {$pts}pts";
 				$params = array('evnt'=>$txt,'priority'=>1,'date_time'=>$d);
 				$this->event_model->addEvent($params);
 
@@ -79,7 +79,8 @@ class Round1 extends CI_Controller {
 				if(!is_null($badge_types)){
 					foreach($badge_types as $badge_type){
 						if(!$this->badge_model->hasOwner($badge_type)){
-							if($this->badge_model->hasCompletedBadgeFragments($t,$badge_type)){
+							$params = array('team'=>$t,'badge_type'=>$badge_type,'q_type'=>$q_e[0]->q_type);
+							if($this->badge_model->hasCompletedBadgeFragments($params)){
 								$response['team_id'] = $this->team_model->getTeamName(array('team_id'=>$_POST['team_id']));
 								$badge_name = $this->badge_model->getBadgeName($badge_type);
 								$response['badge_completion'] = "Team {$name} obtained the {$badge_name->name} badge.";
@@ -110,9 +111,13 @@ class Round1 extends CI_Controller {
 		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
 			$params = array('team_id'=>$_POST['team_id'],'q_number'=>$_POST['q_number']);
 			$res = $this->round1_model->deleteAnswered($params);
+			
+			$q_e = $this->app_model->getQuestionR1($_POST['q_number']);
+			$pts = $q_e[0]->points;
+
 			if($res){
 				$badge_types = $this->badge_model->getBadgeType($_POST['q_number']);
-				if(!is_null($badge_types)){
+					if(!is_null($badge_types)){
 					foreach($badge_types as $badge_type){
 						if($this->badge_model->hasOwner($badge_type) == $params['team_id']){
 							$response['has_removed_badge'] = "true";
@@ -150,11 +155,10 @@ class Round1 extends CI_Controller {
 		}
 	}
 
-	public function edit_by_question(){
-		$q_count = $this->app_model->getQCountR1();	
-		
+	public function edit_by_badge(){		
+		$q_count = $this->app_model->getQCountR1();
 		$data = (object)array('status'=>'ok');
-		$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count));
+		$this->load->view('edit_round1_by_badge',array('response'=>$data,'q_count'=>$q_count));
 	}
 
 	public function edit_by_difficulty(){
@@ -164,10 +168,18 @@ class Round1 extends CI_Controller {
 		$this->load->view('edit_round1_by_difficulty',array('response'=>$data,'q_count'=>$q_count));
 	}
 
-	public function edit_by_badge(){		
-		$q_count = $this->app_model->getQCountR1();
+	public function edit_by_question(){
+		$q_count = $this->app_model->getQCountR1();	
+		
 		$data = (object)array('status'=>'ok');
-		$this->load->view('edit_round1_by_badge',array('response'=>$data,'q_count'=>$q_count));
+		$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count));
+	}
+
+	public function edit_by_type(){
+		$q_count = $this->app_model->getQCountR1();	
+		
+		$data = (object)array('status'=>'ok');
+		$this->load->view('edit_round1_by_type',array('response'=>$data,'q_count'=>$q_count));
 	}
 
 	public function gen(){
@@ -288,7 +300,7 @@ class Round1 extends CI_Controller {
 		$badge_types = $this->badge_model->getBadgeType($_POST['q_number']);
 
 		if(isset($_POST['q_multiplier']) && isset($_POST['points']) && $_POST['q_multiplier'] != '' && $_POST['points'] != ''){
-			$question_params = array('q_multiplier' => $_POST['q_multiplier'],'points'=>$_POST['points'],'q_type'=>$_POST['q_type']);
+			$question_params = array('q_multiplier' => $_POST['q_multiplier'],'points'=>$_POST['points'],''=>$_POST['q_diff']);
 			$res1 = $this->round1_model->updateRound1Question($question_params,$_POST['q_number']);
 			$res2 = $this->round1_model->updateQuestionBadge(array('q_number'=>$_POST['q_number'],'badge_types'=>$_POST['badge_types']));
 			if($res1 && $res2){
@@ -302,6 +314,43 @@ class Round1 extends CI_Controller {
 		} else {
 			$data = (object)array('status'=>'error','message'=>'Missing some parameters');
 			$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'badge_types'=>$badge_types));
+		}
+	}
+
+	public function update_type(){
+		$q_count = $this->app_model->getQCountR1();
+		if(trim($_POST['question_numbers']) != ''){
+			$string = $_POST['question_numbers'];
+			$type = $_POST['type'];
+
+			$tok = strtok($string,',');
+			while($tok != false){
+				$q_numbers[] = $tok;
+				$tok = strtok(',');
+			}
+			foreach($q_numbers as $q_number){
+				if(!strpos($q_number,'-')){
+					$params = array('q_number'=>$q_number,'type'=>$type);
+					$this->round1_model->updateQuestionType($params);
+				}
+				else{
+					$tok = strtok($q_number,'-');
+					while($tok != false){
+						$range[] = $tok;
+						$tok = strtok('-');	
+					}
+					for($i = $range[0] ; $i <= $range[1] ; $i++){
+						$params = array('q_number'=>$i,'type'=>$type,'points'=>$points);
+						$this->round1_model->updateQuestionType($params);
+					}
+				}
+			}
+			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Type per question was updated successfly.'));
+			redirect('../round1/edit_by_type');
+		}
+		else{
+			$this->session->set_flashdata('data',(object)array('status'=>'error','message'=>'Empty input'));
+			redirect('../round1/edit_by_type');
 		}
 	}
 }

@@ -14,6 +14,17 @@ class App extends CI_Controller {
 		$this->load->view('app_config',array('app_config'=>$app_config));
 	}
 
+	public function remove_events(){
+		$res = $this->app_model->removeEvents();
+		if($res){
+			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'All events has been removed'));
+			redirect('../app/config');
+		}else{
+			$this->session->set_flashdata('data',(object)array('status'=>'error','message'=>'Failed to remove events.'));
+			redirect('../app/config');
+		}
+	}
+
 	public function reset(){
 		$reset = $this->app_model->resetApp();
 		if($reset){
@@ -26,6 +37,29 @@ class App extends CI_Controller {
 			$this->load->view('app_config',array('response'=>$data,'app_config'=>$app_config));
 		}
 	}
+
+	public function reset_round1(){
+		$res = $this->app_model->resetRound1();
+		if($res){
+			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Round 1 has been reset.'));
+			redirect('../app/config');
+		}else{
+			$this->session->set_flashdata('data',(object)array('status'=>'error','message'=>'Failed to reset Round 1.'));
+			redirect('../app/config');
+		}
+	}
+
+	public function reset_round2(){
+		$res = $this->app_model->resetRound2();
+		if($res){
+			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Round 2 has been reset.'));
+			redirect('../app/config');
+		}else{
+			$this->session->set_flashdata('data',(object)array('status'=>'error','message'=>'Failed to reset Round 2.'));
+			redirect('../app/config');
+		}
+	}
+
 	public function update_config(){
 		$params['app_state'] = $_POST['app_state'];
 		$params['badge_count'] = $_POST['badge_count'];
@@ -42,14 +76,4 @@ class App extends CI_Controller {
 		}
 	}
 
-	function reset_round1(){
-		$res = $this->app_model->resetRound1();
-		if($res){
-			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Round 1 has been reset.'));
-			redirect('../app/config');
-		}else{
-			$this->session->set_flashdata('data',(object)array('status'=>'error','message'=>'Failed to reset Round 1.'));
-			redirect('../app/config');
-		}
-	}
 }

@@ -12,9 +12,9 @@
 		<a href="/team/add"><button class="btn">Teams</button></a>
 		<a href="/user/add_user"><button class="btn">Add User</button></a>
 		<a href="/round1/edit"><button class="btn">Edit Round1 Questions</button></a>
-		<a href="/user/edit_round2"><button class="btn">Edit Round2 Questions</button></a>
+		<a href="/round2/edit_round2"><button class="btn">Edit Round2 Questions</button></a>
 		<a href="/round1/encoder"><button class="btn">Encoder (Round1)</button></a>
-		<a href="/user/encoder_round2"><button class="btn">Encoder (Round2)</button></a>
+		<a href="/round2/encoder_round2"><button class="btn">Encoder (Round2)</button></a>
 	</center>
 </div>
 

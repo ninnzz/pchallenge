@@ -62,17 +62,28 @@ class Badge_model extends CI_Model {
 		return $res->result();
 	}
 
-	public function hasCompletedBadgeFragments($team, $badge_type){
-		$fragment_count = $this->round1_model->countAnsweredQuestionsWithBadgeType(array('team_id'=>$team[0]->team_id,'badge_type'=>$badge_type));
-		$this->db->select('count');
-		$res = $this->db->get_where('badge',array('id'=>$badge_type));
-		foreach($res->result() as $result){
-			$badge_total_fragments = $result->count;
+	public function hasCompletedBadgeFragments($params){
+		$res = $this->db->get_where('badge',array('id'=>$params['badge_type']))->row();
+		$badge_total_fragments = $res->count;
+		if($params['badge_type'] == 'COL'){
+			$fragment_count = 0;
+			$q_types = array('#d','pr','pa','re','so');
+			foreach($q_types as $q_type){
+				$res = $this->db->query(
+					"SELECT a.q_number 
+					FROM answered_round1 a, questions_round1 b 
+					WHERE a.q_number=b.q_number 
+					AND a.team_id='{$params['team'][0]->team_id}' 
+					AND b.q_type='{$q_type}'"
+					)->result();
+				if(count($res) >= 1) $fragment_count++;
+				else return false;
+			}
+		}else{
+			$fragment_count = $this->round1_model->countAnsweredQuestionsWithBadgeType(array('team_id'=>$params['team'][0]->team_id,'badge_type'=>$params['badge_type']));
 		}
-		if($fragment_count == $badge_total_fragments)
-			return true;
-		else
-			return false;
+		if($fragment_count == $badge_total_fragments) return true;
+		else return false;
 	}
 
 	public function hasOwner($badge_type){

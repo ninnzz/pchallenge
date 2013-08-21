@@ -20,9 +20,9 @@
 		<?php }?>
 	</div>
 	<div class='row-fluid'>
-		<a href="/round1/edit_by_difficulty"><button class="btn btn-success">Difficulty</button></a>
+		<a href="/round1/edit_by_difficulty"><button class="btn">Difficulty</button></a>
 		<a href="/round1/edit_by_badge"><button class="btn">Badge</button></a>
-		<a href="/round1/edit_by_type"><button class="btn">Type</button></a>
+		<a href="/round1/edit_by_type"><button class="btn btn-success">Type</button></a>
 		<a href="/round1/edit_by_question"><button class="btn">Question</button></a>
 	</div>
 	<?php if($q_count != 0){?>
@@ -30,15 +30,18 @@
 		<p>
 			<h6>Current question count: <?= $q_count?></h6>
 		</p>
-		<form action="/round1/update_difficulty" method="post">
+		<form action="/round1/update_type" method="post">
 			<p>
 				<span class='label label-success'>Difficulty</span>
 			</p>
 			<p>
-				<select name='difficulty' id='difficulty'>
-						<option value='e'>Easy</option>
-						<option value='a'>Average</option>
-						<option value='d'>Difficult</option>
+				<select name='type' id='type'>
+						<option value='#d'>#define</option>
+						<option value='pr'>printf</option>
+						<option value='pa'>pattern</option>
+						<option value='re'>recursion</option>
+						<option value='so'>sorting</option>
+						<option value='NULL'>no type</option>
 				</select>
 			</p>
 			<span class='label label-success'>Question Numbers</span>

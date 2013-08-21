@@ -22,7 +22,7 @@
 		<form action="/round1/gen" method="post" class='well'>
 			<input type='hidden' name='reset_app' value='1' />
 			<label class='label label-info'>Use only if application is reinitialized or for emergency reset purposes only.</label>
-			<input type='submit' value='GENERATE ROUND1 QUESTION SET' class='btn btn-large btn-danger' style='width:100%;text-align:center;'/>
+			<input type='submit' value='GENERATE ROUND1 QUESTION SET' class='btn btn-large btn-danger' style='width:100%;text-align:center;' onclick='if(!confirm("Are you sure you want to reinitialize?")) return false;'/>
 		</form>
 	</div>
 	<div class='row-fluid'>

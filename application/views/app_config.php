@@ -25,7 +25,11 @@
 		<label class='label label-warning'>Warning: Clicking this button will reset current application instance and all the game data may be loss...!</label>
 		<input type='submit' value='Reset Application' class='btn btn-large btn-danger' style='width:100%;' onclick='if(!confirm("Are you sure you want to reset application?")) return false'/>
 	</form>
-	<a href="/app/reset_round1"><button class='btn btn-danger' onclick='if(!confirm("Are you sure you want to reset round 1?")) return false'>Reset Round 1</button></a>
+	<p>
+		<a href="/app/reset_round1"><button class='btn btn-danger' onclick='if(!confirm("Are you sure you want to reset round 1?")) return false'>Reset Round 1</button></a>
+		<a href="/app/reset_round2"><button class='btn btn-danger' onclick='if(!confirm("Are you sure you want to reset round 2?")) return false'>Reset Round 2</button></a>
+		<a href="/app/remove_events"><button class='btn btn-danger' onclick='if(!confirm("Are you sure you want to remove all events?")) return false'>Remove Events</button></a>
+	</p>
 	<form action="/app/update_config" method="post" class='well'>
 		<input type="hidden" name="req" value="1" />
 		<table>

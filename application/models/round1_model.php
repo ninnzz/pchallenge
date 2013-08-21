@@ -58,6 +58,12 @@ class Round1_model extends CI_Model {
 		else return false;
 	}
 	
+	public function setScore($params){
+		$this->db->where('team_id',$params['team_id']);
+		$res = $this->db->update('teams',array('points'=>$params['score']));
+		return $res;
+	}
+
 	public function updateRound1Question($params,$q){
 		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
 		return $res;
@@ -75,7 +81,13 @@ class Round1_model extends CI_Model {
 	
 	public function updateQuestionDifficulty($params){
 		$this->db->where('q_number',$params['q_number']);
-		$res = $this->db->update('questions_round1',array('q_type'=>$params['difficulty'],'points'=>$params['points']));
+		$res = $this->db->update('questions_round1',array('q_diff'=>$params['difficulty'],'points'=>$params['points']));
+		return $res;
+	}
+
+	public function updateQuestionType($params){
+		$this->db->where('q_number',$params['q_number']);
+		$res = $this->db->update('questions_round1',array('q_type'=>$params['type'],'points'=>$params['points']));
 		return $res;
 	}
 }

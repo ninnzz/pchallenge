@@ -16,7 +16,13 @@ class App_model extends CI_Model {
 		parent::__construct();
 
 	}
-	public function resetAPp(){
+
+	public function removeEvents(){
+		$res = $this->db->empty_table('events');
+		return $res;
+	}
+
+	public function resetApp(){
 		$data = array('app_state'=>'pre','current_question_round2'=>0,'r2_state'=>'init','round1_question_count'=>0,'badge_count'=>0,'round1_timer'=>45);
 		/*
 			**************COMMENT FOR DEV*******************
@@ -34,13 +40,20 @@ class App_model extends CI_Model {
 		return $res1 && $res2;
 	}
 
+	public function resetRound2(){
+		$res = $this->db->empty_table('answered_round2');
+		return $res;
+	}
+
 	public function getAppConfig(){
 		$res = $this->db->get('app_config')->result_object();
 		return $res;
 	}
+
 	public function setAppConfig($params){
 		return $this->db->update('app_config', $params);		
 	}
+
 	public function genRound1($r1_count){
 		$data = array();
 
@@ -52,26 +65,32 @@ class App_model extends CI_Model {
 		$res = $this->db->insert_batch('questions_round1', $data);
 		return $res; 
 	}
+
 	public function getQCountR1(){
 		$res = $this->db->get('questions_round1')->num_rows();
 		return $res;	
 	}
+
 	public function getQuestionR1($q){
 		$query = $this->db->get_where('questions_round1', array('q_number' => $q))->result_object();
 		return $query;
 	}
+
 	public function updateRound1Question($params,$q){
 		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
 		return $res;
 	}
+
 	public function getQuestionR2($q){
 		$query = $this->db->get_where('questions_round2', array('q_number' => $q))->result_object();
 		return $query;
 	}
+
 	public function updateRound2Question($params,$q){
 		$res = $this->db->update('questions_round2', $params, array('q_number' => $q)); 
 		return $res;
 	}
+	
 	public function insertRound2Question($params){
 		$res = $this->db->insert('questions_round2', $params); 
 		return $res;

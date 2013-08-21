@@ -40,15 +40,20 @@
 			<br/>
 			<br/>
 			<div style='display:inline;' id='teams-div'>
-			<?php foreach($teams as $t){?>
-					<div class="input-prepend input-append">
-					<button data-id='<?=$t->team_id?>' onclick='setTeam(this)' class='btn btn-warning'><?='('.$t->team_no.') '.$t->team_name;?></button>	
-					<input class="span6" id="appendedPrependedInput" type="text" />
-					<span class="add-on"> <-- Bet</span>
+				<table>
+					<div class="input-prepend input-append">	
+					<?php for($i = 0 ; $i < count($teams) ; $i+=2){?>
+						<tr><?
+						for($j = 0 ; $j < 2 ; $j++){
+							if($i+$j < count($teams)){?>
+								<td><button style='width:200px' data-id='<?=$t->team_id?>' onclick='setTeam(this)' class='btn btn-warning'><?='('.$teams[$i+$j]->team_no.')'.$teams[$i+$j]->team_name;?></button></td>
+								<td><input class="span6" id="appendedPrependedInput" type="text" style='width:100%' /></td>
+							<?}
+						}?>
+					<?php }?>
 					</div>
-							<?php }?>
+				</table>
 			</div>
-
 		</div>
 	</div>
 	<script type="text/javascript" src="/js/routes.js" ></script>
@@ -64,7 +69,7 @@
 			current_team = obj;
 			team_id = obj.getAttribute('data-id');
 			router.setMethod('post');
-			router.setTargetUrl('/user/get_team_correct');
+			router.setTargetUrl('/team/get_team_correct');
 			router.setParams({'team_id':team_id});
 			events.setCurrentEvent('setQuestion(data)');
 			events.setErrorEvent('alert("Something went wrong");console.log(data);');
@@ -99,7 +104,7 @@
 			q_id = obj.getAttribute('data-id');
 
 			router.setMethod('post');
-			router.setTargetUrl('/user/get_team_answers_round2');
+			router.setTargetUrl('/round2/get_team_answers_round2');
 			events.setCurrentEvent('setupTeams(data)');
 			router.setParams({'q_number':q_id});
 			events.setErrorEvent('alert("Something went wrong");console.log(data);curr_item.disabled = false;curr_item.className="btn btn-small";curr_item.innerHTML=q_id');

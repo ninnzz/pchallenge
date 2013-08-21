@@ -22,6 +22,7 @@
 	<div class='row-fluid'>
 		<a href="/round1/edit_by_difficulty"><button class="btn">Difficulty</button></a>
 		<a href="/round1/edit_by_badge"><button class="btn btn-success">Badge</button></a>
+		<a href="/round1/edit_by_type"><button class="btn">Type</button></a>
 		<a href="/round1/edit_by_question"><button class="btn">Question</button></a>
 	</div>
 	<?php if($q_count != 0){?>
