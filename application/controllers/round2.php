@@ -15,10 +15,20 @@ class Round2 extends CI_Controller {
 	}
 
 	/*****************ROUND 2 VIEWER**********************/
+	public function view(){
+		$this->load->view('round2_view');
+	}
+	
 	function setState(){
 		$state = $this->input->post('message');
 		$arr['state']=$state;
 		$res = $this->round2_model->setState($state);
+		echo json_encode($arr);
+	}
+
+	function getState(){
+		$res = $this->round2_model->getState();
+		$arr['state']=$res;
 		echo json_encode($arr);
 	}
 
@@ -43,6 +53,16 @@ class Round2 extends CI_Controller {
 			$data = (object)array('status'=>'ok');
 			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count));
 		}
+	}
+
+	function getQuestionDetails(){
+		$res = $this->round2_model->getQuestionDetails();
+		$arr['q_type'] = $res->q_type;
+		$arr['q_number'] = $res->q_number;
+		$arr['q_timer'] = $res->q_timer;
+		$arr['body'] = $res->body;
+		$arr['answer'] = $res->answer;
+		echo json_encode($arr);
 	}
 
 	public function get_round2_question(){
@@ -87,6 +107,7 @@ class Round2 extends CI_Controller {
 			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
 		}
 	}
+
 	/************ENCODER AND BET MODULES FOR ROUND2***************************/
 	public function encoder_round2(){
 		$app_conf = $this->app_model->getAppConfig();

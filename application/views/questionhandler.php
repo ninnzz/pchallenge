@@ -9,9 +9,7 @@
 		<script src="/js/jquery.min.js"></script>
 		<script type="text/javascript">
 		
-
 			function setState(message){
-	
 				
 				$.post('setState',{"message":message}, function(data) {
 					obj = JSON.parse(data);

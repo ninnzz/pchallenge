@@ -49,6 +49,11 @@ class Round2_model extends CI_Model {
 		return $res;
 	}
 
+	public function getState(){
+		$res = $this->db->query("select * from app_config");
+		return $res->row()->r2_state;
+	}
+
 	public function setNextQuestion(){
 		$res = $this->db->query("update app_config set current_question_round2=current_question_round2+1 where r2_state IS NOT NULL ");
 		return $res;
@@ -57,6 +62,13 @@ class Round2_model extends CI_Model {
 	public function setPreviousQuestion(){
 		$res = $this->db->query("update app_config set current_question_round2=current_question_round2-1 where r2_state IS NOT NULL and current_question_round2>0");
 		return $res;
+	}
+
+	public function getQuestionDetails(){
+		$res = $this->db->query("select * from app_config");
+		$q_number =  $res->row()->current_question_round2;	
+		$res = $this->db->query("select * from questions_round2 where q_number='{$q_number}'");
+		return $res->row();
 	}
 	
 }
