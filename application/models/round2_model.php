@@ -46,5 +46,12 @@ class Round2_model extends CI_Model {
 		$res = $this->db->query("update app_config set current_question_round2=current_question_round2-1 where r2_state IS NOT NULL and current_question_round2>0");
 		return $res;
 	}
+
+	public function getQuestionDetails(){
+		$res = $this->db->query("select * from app_config");
+		$q_number =  $res->row()->current_question_round2;	
+		$res = $this->db->query("select * from questions_round2 where q_number='{$q_number}'");
+		return $res->row();
+	}
 	
 }

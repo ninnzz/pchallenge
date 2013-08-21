@@ -41,6 +41,16 @@ class Round2 extends CI_Controller {
 		echo json_encode($res);
 	}
 
+	function getQuestionDetails(){
+		$res = $this->round2_model->getQuestionDetails();
+		$arr['q_type'] = $res->q_type;
+		$arr['q_number'] = $res->q_number;
+		$arr['q_timer'] = $res->q_timer;
+		$arr['body'] = $res->body;
+		$arr['answer'] = $res->answer;
+		echo json_encode($arr);
+	}
+
 
 
 	
