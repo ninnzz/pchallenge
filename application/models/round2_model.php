@@ -20,7 +20,7 @@ class Round2_model extends CI_Model {
 
 	public function get_scores(){
 		$mult = 2;
-<<<<<<< Updated upstream
+
 		$res = $this->db->query(
 			"select sum( 
 				case when (b.is_fast_round) then (c.points*{$mult}) else c.points end) 
@@ -29,12 +29,6 @@ class Round2_model extends CI_Model {
 				where b.q_number = c.q_number and b.team_id = a.team_id 
 				group by b.team_id 
 				order by points desc")->result_object();
-=======
-		$res = $this->db->query("select sum( case when (b.is_fast_round) 
-		then (c.points*{$mult}) else c.points end) as points,b.team_id, a.team_name from teams a, 
-		answered_round1 b, questions_round1 c where b.q_number = c.q_number and b.team_id = a.team_id 
-		group by b.team_id order by points desc")->result_object();
->>>>>>> Stashed changes
 		return $res;		
 	}
 
@@ -83,12 +77,10 @@ class Round2_model extends CI_Model {
 		return $res->row();
 	}
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-	public function team_already_exist($table, $question_number, $team_id){
-=======
+
+	
 	public function isTeamAlreadyExist($table, $question_number, $team_id){
->>>>>>> 2e8af84d1be20699bcc1787cc64f31e0128d6388
+
 		return $this->db->query("SELECT team_id FROM $table WHERE q_number=$question_number AND team_id='$team_id'")->num_rows;
 	}
 
@@ -121,8 +113,5 @@ class Round2_model extends CI_Model {
 		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
 		return $this->db->query("UPDATE answered_round2 SET is_correct=$is_correct,bet=$bet,badge_in_effect='$badge_in_effect',question_points=$question_points WHERE q_number=$question_number AND team_id='$team_id'");
 	}
-=======
 
-	
->>>>>>> Stashed changes
 }
