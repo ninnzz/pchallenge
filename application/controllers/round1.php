@@ -53,7 +53,7 @@ class Round1 extends CI_Controller {
 	public function add_to_answer(){
 		date_default_timezone_set('EST');
 		$date = new DateTime();
-		$d = $date->format('H:i:s');	//change format later\
+		$d = $date->format('U = H:i:s');	//change format later\
 		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
 			$app_config = $this->app_model->getAppConfig();
 			$state = $app_config[0]->app_state;
