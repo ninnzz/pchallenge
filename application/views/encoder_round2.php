@@ -3,7 +3,7 @@
 <br/><br/><br/>
 		<!-- Display the table for team number, team name, and bet fields -->
 		<table class="span4">
-			<form action="round2/edit_bet" method="post" target="result">
+			<form action="edit_bet" method="post" target="result">
 			<tr>
 				<td>#</td>
 				<td>Team Name</td>
@@ -80,7 +80,7 @@
 		<!-- Displays the result of the query -->
 		<div id="result">
 			Result:<br/>
-			<iframe name="result" style="width:30%;height:40px;"></iframe>
+			<iframe name="result" style="width:50%;height:70px;"></iframe>
 		</div>
 
 		<h2>Use Badge</h2>

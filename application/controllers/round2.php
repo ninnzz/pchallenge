@@ -153,29 +153,30 @@ class Round2 extends CI_Controller {
 	}
 
 	function edit_bet(){
-		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
-			$team_count = sizeof($this->team_model->getAllTeams());
+		if(isset($_POST["submit"])){
+			$team_count = $this->team_model->getTotalNumberOfTeams();
 			$question_number = $_POST["question_number"];
 
 			for($index = 0; $index < $team_count; $index++){
 				$team_id = $_POST[$index];
-				$bet = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+				$bet = $_POST[$team_id];
 
-				$team_in_db = $this->round2_model->isTeamAlreadyExist('bets', $question_number, $team_id);
-				
+				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
+                $params = array('q_number'=>$question_number,'team_id'=>$team_id,'bet'=>$bet);
 				if($bet != ""){
-					$team_in_db > 0 ? $this->round2_model->editBet($question_number,$team_id,$bet) : $this->round2_model->insertBet($question_number,$team_id,$bet);
-					$successful = true;
-				}elseif($team_in_db <= 0 && $bet == ""){
-					$bet = 0;
-					$this->round2_model->insertBet($question_number,$team_id,$bet);
-					$successful = true;
+					if($team_in_db > 0)
+                        $res = $this->round2_model->editBet($params);
+                    else
+                        $res = $this->round2_model->insertBet($params);
 				}else{
-					$successful = false;
+					$params['bet'] = 0;
+                    if($team_in_db > 0)
+                        $res = $this->round2_model->editBet($params);
+                    else
+                        $res = $this->round2_model->insertBet($params);
 				}
 			}
-		
-			echo $successful ? "Bets submitted for Question Number $question_number." : "";
+			echo $res ? "Bets submitted for Question Number $question_number." : "Something went wrong.";
 		}
 	}
 
