@@ -1,7 +1,7 @@
 <html>
 <?php
 $this->load->view('includes/header');
-
+//this is a comment for testing
 ?>
 <br/>
 <br/>
