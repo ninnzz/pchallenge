@@ -1,5 +1,6 @@
 // Usage : call countdown("id", seconds, callback) once to make a div with id="id" count from seconds to 0
 //	callback = function to call if countdown is done
+//test
 function countdown(id, seconds, callback){
 	var minutes_left = Math.floor(seconds/60);
 	var seconds_left = seconds%60;
