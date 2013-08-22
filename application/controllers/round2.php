@@ -109,18 +109,18 @@ class Round2 extends CI_Controller {
 	}
 
 	/************ENCODER AND BET MODULES FOR ROUND2***************************/
-	public function encoder_round2(){
-		$app_conf = $this->app_model->getAppConfig();
-		$q_count = $app_conf[0]->round2_question_count;
-		$team = $this->team_model->getAllTeams();
-		if($q_count > 0){
-			$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
+	// public function encoder_round2(){
+	// 	$app_conf = $this->app_model->getAppConfig();
+	// 	$q_count = $app_conf[0]->round2_question_count;
+	// 	$team = $this->team_model->getAllTeams();
+	// 	if($q_count > 0){
+	// 		$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
 
-		} else {
-			$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');
-			$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
-		}
-	}
+	// 	} else {
+	// 		$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');
+	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
+	// 	}
+	// }
 	
 	public function get_team_answers_round2(){
 		$app_conf = $this->app_model->getAppConfig();
@@ -136,4 +136,77 @@ class Round2 extends CI_Controller {
 		}
 	}
 
+	function encoder_round2(){
+		$data["team_data"] = $this->user_model->get_all_teams();
+		
+		//Badges
+		$data["badges"] = array(
+							0 => array("id" => 0, "badge_name" => "Badge 1", "badge_owner" => "Team 1", "is_used" => 0),
+							1 => array("id" => 1,"badge_name" => "Badge 2", "badge_owner" => "Team 2", "is_used" => 1),
+							2 => array("id" => 2, "badge_name" => "Badge 3", "badge_owner" => "Team 3", "is_used" => 0),
+							3 => array("id" => 3, "badge_name" => "Badge 4", "badge_owner" => "Team 4", "is_used" => 1)
+						  );
+		
+		$data["question_count"] = $this->round2_model->get_total_questions('questions_round2');
+
+		$this->load->view("encoder_round2", $data);
+	}
+
+	function edit_bet(){
+		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
+			$team_count = sizeof($this->user_model->get_all_teams());
+			$question_number = $_POST["question_number"];
+
+			for($index = 0; $index < $team_count; $index++){
+				$team_id = $_POST[$index];
+				$bet = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+
+				$team_in_db = $this->round2_model->team_already_exist('bets', $question_number, $team_id);
+				
+				if($bet != ""){
+					$team_in_db > 0 ? $this->round2_model->edit_bet($question_number,$team_id,$bet) : $this->round2_model->insert_bet($question_number,$team_id,$bet);
+					$successful = true;
+				}elseif($team_in_db <= 0 && $bet == ""){
+					$bet = 0;
+					$this->round2_model->insert_bet($question_number,$team_id,$bet);
+					$successful = true;
+				}else{
+					$successful = false;
+				}
+			}
+		
+			echo $successful ? "Bets submitted for Question Number $question_number." : "";
+		}
+	}
+
+	function update_score(){
+		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
+			$team_count = sizeof($this->user_model->get_all_teams());
+			$question_number = $_POST["question_number"];
+			$question_points = $this->round2_model->get_points($question_number);
+			$badge_in_effect = $_POST["badge_in_effect"];
+
+			for($index = 0; $index < $team_count; $index++){
+				$team_id = $_POST[$index];
+				$is_correct = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+				$bet = $this->round2_model->get_bet($question_number, $team_id);
+				
+				$team_in_db = $this->round2_model->team_already_exist('answered_round2', $question_number, $team_id);
+				
+				if($is_correct != ""){
+					$team_in_db > 0 ? $this->round2_model->update_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points) :$this->round2_model->insert_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points);
+					$successful = true;
+				}else{
+					$successful = false;
+				}
+			}
+			
+			echo $successful ? "Scores updated for Question Number $question_number." : "";
+		}
+	}
+
+	function use_badge(){
+		//Use badge
+		redirect("round2/encoder_round2");
+	}
 }
