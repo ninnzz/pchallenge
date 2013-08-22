@@ -121,21 +121,6 @@ class Round2 extends CI_Controller {
 	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
 	// 	}
 	// }
-	
-	public function get_team_answers_round2(){
-		$app_conf = $this->app_model->getAppConfig();
-		$q_count = $app_conf[0]->round2_question_count;
-		$team = $this->team_model->getAllTeams();
-		if(isset($_POST['q_number']) && $_POST['q_number'] != ""){
-
-
-		} else{
-			$response['status'] = "error";
-			$response['message'] = "Missing parameters";
-			echo json_encode($response);
-		}
-	}
-
 	function encoder_round2(){
 		$data["team_data"] = $this->team_model->getAllTeams();
 		

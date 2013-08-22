@@ -34,13 +34,13 @@ class Round2_model extends CI_Model {
 	public function get_base_score($team_id){
 		$mult = 2;
 		$res = $this->db->query(
-			'select sum(
-				case when (b.is_`fast_round) then (c.points*__mult_) else c.points end)
+			"select sum(
+				case when (b.is_`fast_round) then (c.points*{$mult}) else c.points end)
 				as points,b.team_id, a.team_name
 				from teams a, answered_round1 b, questions_round1 c
-				where b.q_number = c.q_number and b.team_id = a.team_id and b.team_id=\'__team_id_\'
+				where b.q_number = c.q_number and b.team_id = a.team_id and b.team_id='{$team_id}'
 				group by b.team_id
-				order by points desc')->row();
+				order by points desc")->row();
 		return $res->points;	
 	}
 

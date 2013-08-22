@@ -88,10 +88,8 @@ class Badge_model extends CI_Model {
 
 	public function hasOwner($badge_type){
 		$this->db->select('owner');
-		$res = $this->db->get_where('badge',array('id'=>$badge_type));
-		foreach($res->result() as $result){
-			$owner = $result->owner;
-		}
+		$res = $this->db->get_where('badge',array('id'=>$badge_type))->row();
+        $owner = $res->owner;
 		if($owner != NULL) return true;
 		else return false;
 	}
