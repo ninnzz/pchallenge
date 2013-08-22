@@ -33,13 +33,24 @@ class Round2 extends CI_Controller {
 	}
 
 	function setNextQuestion(){
-		$res = $this->round2_model->setNextQuestion();
-		echo json_encode($res);
+		$this->round2_model->setNextQuestion();
+		$res = $this->round2_model->getCurrentQuestionRound2();
+		$arr['q_number'] = $res;
+		echo json_encode($arr);
 	}
 
 	function setPreviousQuestion(){
-		$res = $this->round2_model->setPreviousQuestion();
-		echo json_encode($res);
+		$this->round2_model->setPreviousQuestion();
+		$res = $this->round2_model->getCurrentQuestionRound2();
+		$arr['q_number'] = $res;
+		echo json_encode($arr);
+	}
+
+
+	function getCurrentQuestionRound2(){
+		$res = $this->round2_model->getCurrentQuestionRound2();
+		$arr['q_number'] = $res;
+		echo json_encode($arr);	
 	}
 
 	/*****************ROUND 2 EDTING**********************/
@@ -65,6 +76,7 @@ class Round2 extends CI_Controller {
 		echo json_encode($arr);
 	}
 
+<<<<<<< Updated upstream
 	public function get_round2_question(){
 		if(isset($_POST['q_number'])){
 			$app_conf = $this->app_model->getAppConfig();
@@ -115,6 +127,16 @@ class Round2 extends CI_Controller {
 	// 	$team = $this->team_model->getAllTeams();
 	// 	if($q_count > 0){
 	// 		$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
+=======
+	function getScore(){
+		$res = $this->round2_model->get_scores();
+
+		foreach( $res as $key){
+			echo $key->team_id."<br>";
+			echo $key->points."<br>";
+		}
+	}
+>>>>>>> Stashed changes
 
 	// 	} else {
 	// 		$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');

@@ -5,6 +5,7 @@
 ?>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/timer.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 <script type="text/javascript" src="/js/routes.js" ></script>
 <script>
 	var debug=false;
@@ -45,7 +46,7 @@
 		$.post('getQuestionDetails', function(data) {
 			//console.log(data)
 			obj = JSON.parse(data);
-			$("#q_number").html((obj['q_number']));
+			$("#q_number").html('Question Number: '+(obj['q_number']));
 			$("#duration").html((obj['q_timer'])+' seconds');
 			$("#questionType").html((obj['q_type']));
 			$("#question").html((obj['body']));
@@ -69,11 +70,13 @@
 		
 		$("#answer").hide();
 		$("#scores").hide();
+		$("#timesup").show();
 		hideData = true;
 		
 	}
 	
 	function setState(state){
+		$("#timesup").hide();
 		if(state=="init"){
 			getQuestionDetails();
 			$("#questionType").show();
@@ -158,8 +161,7 @@
 				console.log("setState(show_question)");
 		}
 		else if(state=="timer"){
-			console.log(getQuestionDetails());
-			if(changeState==true) countdown('timer', current_question_timer, getQuestion);
+			if(changeState==true) countdown('timer', current_question_timer, hideAllDetails);
 			$("#questionType").hide();
 			$("#duration").hide();
 			$("#badgeText").hide();
@@ -209,12 +211,13 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/css/round2_view.css">
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 		<script type="text/javascript" src="/js/jquery.min.js"></script>
 	</head>
 	<body>
 		<div id="outer">		
 			<div id="upper">
-				<div id="q_header">Question No.<div id="q_number"></div></div>
+				<div id="q_header"><div id="q_number"></div></div>
 				<div id="q_proper"></div>
 				<div id="questionType">QuestionType</div>
 				<div id="duration">Duration</div>
@@ -227,6 +230,7 @@
 				
 				<div id="answer">Answer</div>
 				<div id="scores">Scores</div>
+				<div id="timesup">Time's Up</div>
 				
 			</div>
 			<div id="lower">
