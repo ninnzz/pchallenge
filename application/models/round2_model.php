@@ -87,12 +87,14 @@ class Round2_model extends CI_Model {
 		return $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
     }
 
-	public function insertBet($question_number,$team_id,$bet){
-		return $this->db->query("INSERT INTO bets (q_number,team_id,bet) VALUES ($question_number,'$team_id',$bet)");
+	public function insertBet($params){
+   		return $this->db->query(
+            "INSERT INTO answered_round2 (q_number,team_id,bet)
+            VALUES ({$params['q_number']},'{$params['team_id']}',{$params['bet']})");
 	}
 
-	public function editBet($question_number,$team_id,$bet){
-		return $this->db->query("UPDATE bets SET bet=$bet WHERE q_number=$question_number AND team_id='$team_id'");
+	public function editBet($params){
+		return $this->db->query("UPDATE answered_round2 SET bet={$params['bet']} WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
 	public function insertScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
