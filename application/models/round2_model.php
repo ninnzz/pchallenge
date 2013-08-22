@@ -70,5 +70,38 @@ class Round2_model extends CI_Model {
 		$res = $this->db->query("select * from questions_round2 where q_number='{$q_number}'");
 		return $res->row();
 	}
-	
+
+	public function team_already_exist($table, $question_number, $team_id){
+		return $this->db->query("SELECT team_id FROM $table WHERE q_number=$question_number AND team_id='$team_id'")->num_rows;
+	}
+
+	public function get_total_questions($table){
+		return $this->db->query("SELECT * FROM $table")->num_rows;
+	}
+
+	public function get_bet($question_number, $team_id){
+		return $this->db->query("SELECT bet FROM bets WHERE q_number=$question_number AND team_id='$team_id'")->result()[0]->bet;
+	}
+
+	public function get_points($question_number){
+		return $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->result()[0]->points;
+	}
+
+	public function insert_bet($question_number,$team_id,$bet){
+		return $this->db->query("INSERT INTO bets (q_number,team_id,bet) VALUES ($question_number,'$team_id',$bet)");
+	}
+
+	public function edit_bet($question_number,$team_id,$bet){
+		return $this->db->query("UPDATE bets SET bet=$bet WHERE q_number=$question_number AND team_id='$team_id'");
+	}
+
+	public function insert_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
+		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->result()[0]->points;
+		return $this->db->query("INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect,question_points) VALUES ($question_number, '$team_id', $is_correct, $bet, '$badge_in_effect', $points)");
+	}
+
+	public function update_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
+		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->result()[0]->points;
+		return $this->db->query("UPDATE answered_round2 SET is_correct=$is_correct,bet=$bet,badge_in_effect='$badge_in_effect',question_points=$question_points WHERE q_number=$question_number AND team_id='$team_id'");
+	}
 }
