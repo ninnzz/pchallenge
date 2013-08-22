@@ -181,28 +181,28 @@ class Round2 extends CI_Controller {
 	}
 
 	function update_score(){
-		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
-			$team_count = sizeof($this->user_model->getAllTeams());
+		if(isset($_POST["submit"])){
+            $team_count = $this->team_model->getTotalNumberOfTeams();
 			$question_number = $_POST["question_number"];
-			$question_points = $this->round2_model->getPoints($question_number);
-			$badge_in_effect = $_POST["badge_in_effect"];
-
+			$badge_in_effect = $_POST["badge_in_effect"] == "" ? NULL : $_POST["badge_in_effect"];
+            $res = NULL;
 			for($index = 0; $index < $team_count; $index++){
 				$team_id = $_POST[$index];
-				$is_correct = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+				$is_correct = $_POST[$team_id];
 				$bet = $this->round2_model->getBet($question_number, $team_id);
 				
 				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
-				
+				$params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>$is_correct,'bet'=>$bet,'badge_in_effect'=>$badge_in_effect);
 				if($is_correct != ""){
-					$team_in_db > 0 ? $this->round2_model->updateScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points) :$this->round2_model->insert_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points);
-					$successful = true;
-				}else{
-					$successful = false;
+					if($team_in_db > 0){
+                        $res = $this->round2_model->updateScore($params);
+                    }else{
+                        $res = $this->round2_model->insertScore($params);
+                    }
 				}
 			}
-			
-			echo $successful ? "Scores updated for Question Number $question_number." : "";
+            if(!is_null($res))
+			    echo $res ? "Scores updated for Question Number $question_number." : "Something went wrong";
 		}
 	}
 

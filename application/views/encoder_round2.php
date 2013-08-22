@@ -44,8 +44,8 @@
 		</table>
 
 		<table>
-			<form action="round2/update_score" method="post" target="result">
-				<input type="hidden" name="badge_in_effect" value="Badge1"/>
+			<form action="update_score" method="post" target="result">
+				<input type="hidden" name="badge_in_effect"/>
 			<tr>
 				<td>Question Number:<br/>
 					<select name="question_number">
@@ -65,8 +65,12 @@
 			<tr>
 				<td>
 					<!-- Use team id to check the team id that correspond to the textboxes -->
-					<input type="hidden" name="<?php echo $index; ?>" value="<?php echo $team_data[$index]->team_id; ?>"/>
-					<input type="text" name="<?php echo $team_data[$index]->team_id; ?>" placeholder="<?php echo $team_data[$index]->team_name; ?>"/>
+                    <input type="hidden" name="<?php echo $index; ?>" value="<?php echo $team_data[$index]->team_id; ?>"/>
+                    <select name="<?php echo $team_data[$index]->team_id; ?>">
+                        <option value="" selected>null</option>
+                        <option value="0">NO</option>
+                        <option value="1">YES</option>
+                    </select>
 				</td>
 			</tr>
 			<?php } ?>

@@ -80,7 +80,7 @@ class Round2_model extends CI_Model {
 	}
 
 	public function getBet($question_number, $team_id){
-		return $this->db->query("SELECT bet FROM bets WHERE q_number='$question_number' AND team_id='$team_id'")->row()->bet;
+		return $this->db->query("SELECT bet FROM answered_round2 WHERE q_number='$question_number' AND team_id='$team_id'")->row()->bet;
 	}
 
 	public function getPoints($question_number){
@@ -97,13 +97,16 @@ class Round2_model extends CI_Model {
 		return $this->db->query("UPDATE answered_round2 SET bet={$params['bet']} WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
-	public function insertScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
-		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
-		return $this->db->query("INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect,question_points) VALUES ($question_number, '$team_id', $is_correct, $bet, '$badge_in_effect', $points)");
+	public function insertScore($params){
+		return $this->db->query(
+            "INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect)
+            VALUES ({$params['q_number']}, '{$params['team_id']}', {$params['is_correct']}, {$params['bet']}, '{$params['badge_in_effect']}'");
 	}
 
-	public function updateScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
-		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
-		return $this->db->query("UPDATE answered_round2 SET is_correct=$is_correct,bet=$bet,badge_in_effect='$badge_in_effect',question_points=$question_points WHERE q_number=$question_number AND team_id='$team_id'");
+	public function updateScore($params){
+        return $this->db->query(
+            "UPDATE answered_round2
+            SET is_correct= {$params['is_correct']},bet={$params['bet']},badge_in_effect='{$params['badge_in_effect']}'
+            WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 }
