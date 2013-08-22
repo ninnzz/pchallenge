@@ -34,7 +34,7 @@
 				</td>
 			</tr>
 			<?php } ?>
-			
+			<?php echo "test"; ?>
 
 			<tr>
 				<td></td>
