@@ -10,11 +10,14 @@ class Badge extends CI_Controller {
     }
 
     public function listings(){
-    	$badge_types = array('ABS','COL','LUC','OOP','SEG');
-    	foreach($badge_types as $badge_type){
-	    	$data[$badge_type] = array('questions'=>$this->badge_model->getQuestionsByBadge($badge_type),'count'=>$this->badge_model->getCount($badge_type));
+    	$badges = $this->badge_model->getBadges();
+    	foreach($badges as $badge){
+            $data[] = array(
+                'badge_name'=>$badge->name,
+                'questions'=>$this->badge_model->getQuestionsByBadge($badge->id),
+                'count'=>$this->badge_model->getCount($badge->id));
     	}
-        $this->load->view("badge_list",$data);
+        $this->load->view("badge_list",array('data'=>$data));
     }
 }
 

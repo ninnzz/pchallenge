@@ -13,38 +13,15 @@
 	</div>
 	
 	<div class='row-fluid well'>
-		<p>
-			<h5>abSORTion (<?=$ABS["count"]?>)</h5>
-			<?foreach($ABS["questions"] as $ABS_element){
-				echo $ABS_element->q_number.", ";
-			}?>
-		</p>
-		<p>
-			<h5>Collectibles (<?=$COL["count"]?>)</h5>
-			<?foreach($COL["questions"] as $COL_element){
-				echo $COL_element->q_number.", ";
-			}?>
-		</p>
-		<p>
-			<h5>Lucky Star (<?=$LUC["count"]?>)</h5>
-			<?foreach($LUC["questions"] as $LUC_element){
-				echo $LUC_element->q_number.", ";
-			}?>
-		</p>
-		<p>
-			<h5>Oops, Added It Again (<?=$OOP["count"]?>)</h5>
-			<?foreach($OOP["questions"] as $OOP_element){
-				echo $OOP_element->q_number.", ";
-			}?>
-		</p>
-		<p>
-			<h5>Segmentation Difficult (<?=$SEG["count"]?>)</h5>
-			<?foreach($SEG["questions"] as $SEG_element){
-				echo $SEG_element->q_number.", ";
-			}?>
-		</p>
-	</div>
-
+        <?foreach($data as $d){?>
+            <p>
+            <h5><?=$d['badge_name'].' ('.$d['count'].')'?></h5>
+            <?foreach($d['questions'] as $q){
+                echo $q->q_number.',';
+            }?>
+            </p>
+        <?}?>
+    </div>
 </div>
 <?php } else{ echo "<h3>Invalid Scope</h3>"; }?>
 <?php

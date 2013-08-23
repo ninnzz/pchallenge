@@ -40,6 +40,17 @@ class Team_model extends CI_Model {
 		return $res;	
 	}
 
+    public function initializeScores(){
+        $teams = $this->getAllTeams();
+        foreach($teams as $team){
+            $data = array('q_number'=>49,'team_id'=>$team->team_id);
+            $res = $this->db->insert('answered_round1',$data);
+            if($res) continue;
+            else return false;
+        }
+        return true;
+    }
+
 	public function isValidTeamName($tname){
 		$query = $this->db->get_where('teams', array('team_name' => $tname))->result_object();
 		if(count($query) > 0){
