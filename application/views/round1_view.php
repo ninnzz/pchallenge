@@ -415,11 +415,13 @@ function startGameLoop(){
             router.connect();
         }
     }, 100);
+
+    $('#slider').carousel();
+
+    //makes the carousel start automatically, without needing a manual mouse click
+    $('#slider').carousel().click();
 }
 
-$(function(){
-    $('#slider').carousel();
-})
 </script>
 
 <?php
