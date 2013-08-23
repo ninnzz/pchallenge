@@ -23,4 +23,11 @@ class Events extends CI_Controller {
 		$response['data'] = $res;
 		echo json_encode($response);	
 	}
+    public function badge(){
+        $res = $this->event_model->getLatestBadge();
+        $response['status'] = "ok";
+        $response['message'] = "Events list";
+        $response['data'] = $res;
+        echo json_encode($response);
+    }
 }
