@@ -20,7 +20,7 @@
 			<span class='label label-success'>Questions</span>
 			<div id='q-container'>
 				<?php if(isset($q_count) && $q_count > 0){
-					for($i=1;$i<=$q_count;$i++){
+					for($i=0;$i<$q_count;$i++){
 				?>
 				<button class='btn btn-small' data-active='0' data-id='<?=$i;?>' onclick='toggleAnswer(this)' style='width:5%;margin:2px;'><?=$i?></button>
 				<?php }}?>
@@ -28,10 +28,8 @@
 		</div>
 		<div id='teams'>
 			<span class='label label-success'>Teams</span>
-
 			<?php foreach($teams as $t){?>
 				<button data-id='<?=$t->team_id?>' onclick='setTeam(this)' style='margin:2px;' class='btn btn-small btn-info'><?='('.$t->team_no.') '.$t->team_name;?></button>
-
 			<?php }?>
 
 		</div>
@@ -65,7 +63,7 @@
 			prt.innerHTML = "";
 			qs = data.data;
 			console.log(qs);
-			for(i=1;i<=total_question;i++){
+			for(i=0;i<=total_question-1;i++){
 				if(data.data.length != 0 && typeof(qs[j]) != 'undefined' && (qs[j].q_number)*1 == i){
 					j++;
 					content += "<button class='btn btn-small btn-success' data-active='1' data-id='"+i+"' onclick='toggleAnswer(this)' style='width:5%;margin:2px;'>"+i+"</button>"

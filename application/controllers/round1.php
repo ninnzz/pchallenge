@@ -43,7 +43,7 @@ class Round1 extends CI_Controller {
 		$team = $this->team_model->getAllTeams();
 		$q_count = $this->app_model->getQCountR1();
 		if($q_count > 0){
-			$this->load->view('encoder_round1',array('teams'=>$team,'q_count'=>$q_count));
+			$this->load->view('encoder_round1',array('teams'=>$team,'q_count'=>$q_count-1));
 
 		} else {
 			$data = (object)array('status'=>'error','message'=>'Round1 Question not initialized');
@@ -53,7 +53,7 @@ class Round1 extends CI_Controller {
 	public function add_to_answer(){
 		date_default_timezone_set('EST');
 		$date = new DateTime();
-		$d = $date->format('U = H:i:s');	//change format later\
+		$d = $date->format('U = H:i:s');
 		if(isset($_POST['q_number']) && isset($_POST['team_id'])){
 			$app_config = $this->app_model->getAppConfig();
 			$state = $app_config[0]->app_state;
@@ -81,13 +81,12 @@ class Round1 extends CI_Controller {
 						if(!$this->badge_model->hasOwner($badge_type)){
 							$params = array('team'=>$t,'badge_type'=>$badge_type,'q_type'=>$q_e[0]->q_type);
 							if($this->badge_model->hasCompletedBadgeFragments($params)){
-								$response['team_id'] = $this->team_model->getTeamName(array('team_id'=>$_POST['team_id']));
 								$badge_name = $this->badge_model->getBadgeName($badge_type);
-								$response['badge_completion'] = "Team {$name} obtained the {$badge_name->name} badge.";
-								$params = array('evnt'=>$response['badge_completion'],'priority'=>1,'date_time'=>$d);
-								$this->event_model->addEvent($params);
-								$this->badge_model->setOwner($response['team_id'],$badge_type,$d);
-							}
+                                $response['badge_completion'] = "Team {$name} obtained the {$badge_name->name} badge.";
+                                $params = array('evnt'=>$response['badge_completion'],'priority'=>1,'date_time'=>$d);
+                                $this->badge_model->setOwner($response['team_id'],$badge_type,$d);
+                                $this->event_model->addEvent($params);
+                            }
 						}
 					}
 				}
@@ -213,8 +212,13 @@ class Round1 extends CI_Controller {
 		}	
 	}
 
+    public function init_score(){
+        if($this->team_model->getTotalNumberOfTeams() > 0){
+            $this->team_model->initializeScores();
+        }
+    }
+
 	public function update_badge(){
-		$q_count = $this->app_model->getQCountR1();
 		if(trim($_POST['question_numbers']) != '' && isset($_POST['badge_types'])){
 			$string = $_POST['question_numbers'];
 			$badge_types = $_POST['badge_types'];
@@ -251,7 +255,6 @@ class Round1 extends CI_Controller {
 	}
 
 	public function update_difficulty(){
-		$q_count = $this->app_model->getQCountR1();
 		if(trim($_POST['question_numbers']) != ''){
 			$string = $_POST['question_numbers'];
 			$difficulty = $_POST['difficulty'];
@@ -318,7 +321,6 @@ class Round1 extends CI_Controller {
 	}
 
 	public function update_type(){
-		$q_count = $this->app_model->getQCountR1();
 		if(trim($_POST['question_numbers']) != ''){
 			$string = $_POST['question_numbers'];
 			$type = $_POST['type'];
@@ -340,7 +342,7 @@ class Round1 extends CI_Controller {
 						$tok = strtok('-');	
 					}
 					for($i = $range[0] ; $i <= $range[1] ; $i++){
-						$params = array('q_number'=>$i,'type'=>$type,'points'=>$points);
+						$params = array('q_number'=>$i,'type'=>$type);
 						$this->round1_model->updateQuestionType($params);
 					}
 				}
