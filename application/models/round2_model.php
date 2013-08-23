@@ -18,30 +18,34 @@ class Round2_model extends CI_Model {
 
 	}
 
-	public function get_scores(){
-		$mult = 2;
-		$res = $this->db->query(
-			"select sum(
-				case when (b.is_fast_round) then (c.points*{$mult}) else c.points end)
-				as points,b.team_id, a.team_name
-				from teams a, answered_round1 b, questions_round1 c
-				where b.q_number = c.q_number and b.team_id = a.team_id
-				group by b.team_id
-				order by points desc")->result_object();
+	public function getScores(){
+        $res = $this->db->query(
+            "select sum(
+                case when (b.is_correct)
+                  then (b.bet*c.multiplier)+c.points
+                  else (-1*b.bet)
+                  end)
+            as points,b.team_id,a.team_name
+            from teams a, answered_round2 b, questions_round2 c
+            where b.q_number = c.q_number and b.team_id = a.team_id
+            group by b.team_id
+            order by points desc")->result_object();
 		return $res;		
 	}
 
-	public function get_base_score($team_id){
-		$mult = 2;
+	public function getBaseScores(){
 		$res = $this->db->query(
 			"select sum(
-				case when (b.is_`fast_round) then (c.points*{$mult}) else c.points end)
-				as points,b.team_id, a.team_name
-				from teams a, answered_round1 b, questions_round1 c
-				where b.q_number = c.q_number and b.team_id = a.team_id and b.team_id='{$team_id}'
-				group by b.team_id
-				order by points desc")->row();
-		return $res->points;	
+				case when (b.is_fast_round)
+				  then (c.points*2)
+				  else c.points
+				  end)
+            as points,b.team_id, a.team_name
+            from teams a, answered_round1 b, questions_round1 c
+            where b.q_number = c.q_number and b.team_id = a.team_id
+            group by b.team_id
+            order by points desc")->row();
+		return $res;
 	}
 
 	public function setState($state){

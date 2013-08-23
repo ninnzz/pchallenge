@@ -42,6 +42,16 @@ class Round2 extends CI_Controller {
 		echo json_encode($res);
 	}
 
+    public function get_base_scores(){
+        $res = $this->round2_model->getBaseScores();
+        echo json_encode($res);
+    }
+
+    public function get_scores(){
+        $res = $this->round2_model->getScores();
+        echo json_encode($res);
+    }
+
 	/*****************ROUND 2 EDTING**********************/
 	public function edit_round2(){
 		$app_conf = $this->app_model->getAppConfig();

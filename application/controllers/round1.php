@@ -84,7 +84,7 @@ class Round1 extends CI_Controller {
 								$badge_name = $this->badge_model->getBadgeName($badge_type);
                                 $response['badge_completion'] = "Team {$name} obtained the {$badge_name->name} badge.";
                                 $params = array('evnt'=>$response['badge_completion'],'priority'=>1,'date_time'=>$d);
-                                $this->badge_model->setOwner($response['team_id'],$badge_type,$d);
+                                $this->badge_model->setOwner($_POST['team_id'],$badge_type,$d);
                                 $this->event_model->addEvent($params);
                             }
 						}

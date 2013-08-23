@@ -32,7 +32,7 @@ class Team extends CI_Controller {
 					$teams = $this->team_model->getAllTeams();
 					$total_team = count($teams);
 					if($res){
-						$params2 = array('team_id'=>$params['team_id'],'q_number'=>-1);
+						$params2 = array('team_id'=>$params['team_id'],'q_number'=>49);
 						$this->round1_model->setAnswered($params2);
 						$data = (object)array('status'=>'ok','message'=>'Team Added :: '.$params['team_name'].'.');
 						$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));
