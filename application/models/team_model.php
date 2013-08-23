@@ -48,7 +48,6 @@ class Team_model extends CI_Model {
             if($res) continue;
             else return false;
         }
-        return true;
     }
 
 	public function isValidTeamName($tname){

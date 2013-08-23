@@ -32,8 +32,8 @@ class Team extends CI_Controller {
 					$teams = $this->team_model->getAllTeams();
 					$total_team = count($teams);
 					if($res){
-						$params2 = array('team_id'=>$params['team_id'],'q_number'=>0,'answered_time'=>$d,'is_fast_round'=>false);
-						$res2 = $this->round1_model->setAnswered($params2);
+						$params2 = array('team_id'=>$params['team_id'],'q_number'=>-1);
+						$this->round1_model->setAnswered($params2);
 						$data = (object)array('status'=>'ok','message'=>'Team Added :: '.$params['team_name'].'.');
 						$this->load->view('add_team',array('response'=>$data,'total'=>$total_team));
 					} else{
