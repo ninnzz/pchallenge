@@ -23,8 +23,11 @@ class Badge_model extends CI_Model {
 	}
 
 	public function getBadges(){
-		$res = $this->db->get("badge");
-		return $res->result();
+        $this->db->select('id,name,team_name,query');
+        $this->db->from('badge');
+        $this->db->join('teams','badge.owner = teams.team_id');
+        $res = $this->db->get()->result();
+		return $res;
 	}
 
 	public function getBadgeType($question_number){

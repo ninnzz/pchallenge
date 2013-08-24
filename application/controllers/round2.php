@@ -7,6 +7,7 @@ class Round2 extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('app_model');
 		$this->load->model('round2_model');
+        $this->load->model('badge_model');
 		//$this->user_model->auth(); //add this function if you want to make it private
 	}
 
@@ -133,17 +134,8 @@ class Round2 extends CI_Controller {
 	// }
 	function encoder_round2(){
 		$data["team_data"] = $this->team_model->getAllTeams();
-		
-		//Badges
-		$data["badges"] = array(
-							0 => array("id" => 0, "badge_name" => "Badge 1", "badge_owner" => "Team 1", "is_used" => 0),
-							1 => array("id" => 1,"badge_name" => "Badge 2", "badge_owner" => "Team 2", "is_used" => 1),
-							2 => array("id" => 2, "badge_name" => "Badge 3", "badge_owner" => "Team 3", "is_used" => 0),
-							3 => array("id" => 3, "badge_name" => "Badge 4", "badge_owner" => "Team 4", "is_used" => 1)
-						  );
-		
+        $data["badges"] = $this->badge_model->getBadges();
 		$data["question_count"] = $this->round2_model->getTotalQuestions('questions_round2');
-
 		$this->load->view("encoder_round2", $data);
 	}
 

@@ -102,27 +102,19 @@
 			}
 
 		</script>
-		<!-- Displays the table for badges -->
-		<!-- To be modified based on badge database -->
-		<table class="span3">
-			<tr>
-				<td>Badge Name [Owner]</td>
-			</tr>
 
+		<table class="span3">
 			</tr>
 				<td>
-					<?php for($index = 0,$badgeCount = sizeof($badges); $index < $badgeCount; $index++) { ?>
-						<button class="btn btn-success" style="width:100%;text-align:left;" value="<?php echo $badges[$index]['badge_name']; ?>" onclick="useBadge(this)"
-							<?php
-								echo $badges[$index]['is_used'] ? "disabled" : "";
-							?>
-							>
-							<?php echo $badges[$index]['badge_name'] . " [" . $badges[$index]['badge_owner'] . "]"; ?>
-						</button>
-							<br/>
-
-					<?php } ?>
-				</td>
+                    <?php foreach($badges as $badge) { ?>
+                        <button class = "btn btn-success" style="width:100%;text-align:left;"
+                            value="<?php echo $badge->name; ?> onclick="useBadge(this)"
+                            <?php if($badge->team_name == NULL) echo "disabled"?>>
+                                <?php echo $badge->name.' ('.$badge->team_name.')';?>
+                        </button>
+                        <br/>
+                    <?php }?>
+                </td>
 			</tr>
 		</table>
 <?php } else{ echo "<h3>Invalid Scope</h3>"; }?>
