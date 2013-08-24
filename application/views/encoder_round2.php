@@ -1,5 +1,7 @@
 <?php $this->load->view("includes/header.php"); ?>
 
+<?php if($this->session->userdata['user']->scope && $this->session->userdata['user']->scope === "all"){ ?>
+
 <br/><br/><br/>
 		<!-- Display the table for team number, team name, and bet fields -->
 		<table class="span4">
@@ -123,5 +125,5 @@
 				</td>
 			</tr>
 		</table>
-
+<?php } else{ echo "<h3>Invalid Scope</h3>"; }?>
 <?php $this->load->view("includes/footer.php"); ?>
