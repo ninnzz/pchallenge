@@ -90,26 +90,13 @@
 		</div>
 
 		<h2>Use Badge</h2>
-
-		<script>
-			function useBadge(badge){
-				var confirmUse = confirm("Use " + badge.value);
-
-				if(confirmUse){
-					badge.disabled = "disabled";
-					window.location = "use_badge";
-				}
-			}
-
-		</script>
-
 		<table class="span3">
 			</tr>
 				<td>
                     <?php foreach($badges as $badge) { ?>
-                        <button class = "btn btn-success" style="width:100%;text-align:left;"
-                            value="<?php echo $badge->name; ?> onclick="useBadge(this)"
-                            <?php if($badge->team_name == NULL) echo "disabled"?>>
+                        <button data-id="<?php echo $badge->id;?>" class = "btn btn-success" style="width:100%;text-align:left;"
+                            value="<?php echo $badge->name; ?>" <?php if($badge->team_name == NULL) echo "disabled"?>
+                            onclick="useBadge(this)">
                                 <?php echo $badge->name.' ('.$badge->team_name.')';?>
                         </button>
                         <br/>
@@ -119,3 +106,18 @@
 		</table>
 <?php } else{ echo "<h3>Invalid Scope</h3>"; }?>
 <?php $this->load->view("includes/footer.php"); ?>
+
+<script type="text/javascript" src="/js/routes.js" ></script>
+<script>
+    function useBadge(badge){
+        var confirmUse = confirm("Use " + badge.value);
+
+        if(confirmUse){
+            badge.disabled = "disabled";
+            badge_id = badge.getAttribute('data-id');
+            router.setMethod('post');
+            router.setTargetUrl('/round2/use_badge');
+        }
+    }
+
+</script>

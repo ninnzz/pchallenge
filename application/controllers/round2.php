@@ -194,7 +194,14 @@ class Round2 extends CI_Controller {
 	}
 
 	function use_badge(){
-		//Use badge
-		redirect("round2/encoder_round2");
+        if(isset($_POST['badge_id'])){
+            $response['status'] = "ok";
+            $response['message'] = "Badge has been used";
+            $response['data'] = $_POST['badge_id'];
+            echo json_encode($response);
+        }else{
+            $response['message'] = "Error";
+            echo json_encode($response);
+        }
 	}
 }
