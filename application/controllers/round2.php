@@ -131,7 +131,7 @@ class Round2 extends CI_Controller {
 		$res = $this->round2_model->get_scores();
 
 		foreach( $res as $key){
-			echo $key->team_id."<br>";
+			echo $key->team_name."<br>";
 			echo $key->points."<br>";
 		}
 	}

@@ -15,12 +15,11 @@
 	var hideData = false;
 	$(document).ready(function() {
 		getState();
-		
 	});
 
 	function getState(){
 		$.post('getState', function(data) {
-			//console.log(data)
+			console.log(data)
 			obj = JSON.parse(data);
 			
 			//console.log(obj['state']);
@@ -42,13 +41,17 @@
 	}
 
 	function getQuestionDetails(){
-
 		$.post('getQuestionDetails', function(data) {
-			//console.log(data)
+			console.log(data)
 			obj = JSON.parse(data);
 			$("#q_number").html('Question Number: '+(obj['q_number']));
 			$("#duration").html((obj['q_timer'])+' seconds');
-			$("#questionType").html((obj['q_type']));
+			if(obj['q_type']=='e')
+				$("#questionType").html('Question Type: Easy');
+			else if (obj['q_type'=='a']) 
+				$("#questionType").html('Question Type: Average');
+			else if (obj['q_type'] == 'd')
+				$("#questionType").html('Question Type: Difficult');
 			$("#question").html((obj['body']));
 			$("#answer").html('Answer: ' + (obj['answer']));
 			//console.log(obj['state']);
@@ -60,11 +63,11 @@
 
 	function hideAllDetails(){
 		$("#questionType").hide();
+		$("#q_number").hide();
 		$("#duration").hide();
 		$("#badgeText").hide();
 		$("#betText").hide();
 		$("#timer").hide();
-		
 		$("#question").hide();
 		$("#questionTimer").hide();
 		
@@ -84,7 +87,7 @@
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").hide();
-			
+			$("#q_number").show();
 			$("#question").hide();
 			$("#questionTimer").hide();
 			
@@ -106,6 +109,7 @@
 			$("#questionTimer").hide();
 			$("#answer").hide();
 			$("#scores").hide();
+			$("#q_number").show();
 			
 			if(debug)
 				console.log("setState(preview)");
@@ -123,7 +127,7 @@
 			
 			$("#answer").hide();
 			$("#scores").hide();
-			
+			$("#q_number").show();
 			if(debug)
 				console.log("setState(badge)");
 		}
@@ -134,10 +138,10 @@
 			$("#badgeText").hide();
 			$("#betText").show();
 			$("#timer").show();
-			
+			$("#q_number").show();
 			$("#question").hide();
 			$("#questionTimer").hide();
-			
+			$("#q_number").show();
 			$("#answer").hide();
 			$("#scores").hide();
 			
@@ -150,7 +154,7 @@
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").hide();
-			
+			$("#q_number").show();
 			$("#question").show();
 			$("#questionTimer").hide();
 			
@@ -167,7 +171,7 @@
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").show();
-				
+			$("#q_number").show();	
 			$("#question").show();
 			$("#answer").hide();
 			$("#scores").hide();
@@ -180,7 +184,7 @@
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").hide();
-			
+			$("#q_number").show();
 			$("#question").hide();
 			$("#questionTimer").hide();
 			
@@ -195,7 +199,7 @@
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").hide();
-			
+			$("#q_number").hide();
 			$("#question").hide();
 			$("#questionTimer").hide();
 			

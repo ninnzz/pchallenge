@@ -20,15 +20,33 @@ class Round2_model extends CI_Model {
 
 	public function get_scores(){
 		$mult = 2;
-
+		/*
 		$res = $this->db->query(
-			"select sum( 
-				case when (b.is_fast_round) then (c.points*{$mult}) else c.points end) 
-				as points,b.team_id, a.team_name 
-				from teams a, answered_round1 b, questions_round1 c 
-				where b.q_number = c.q_number and b.team_id = a.team_id 
-				group by b.team_id 
-				order by points desc")->result_object();
+			"select sum(case when (b.is_correct) then 
+				(
+					case when(b.badge_in_effect = 'SEG') then 
+						(
+							case when(false)
+							then 
+								(b.question_points+b.bet*c.multiplier)
+							end
+						)
+					else
+						b.question_points+(b.bet*c.multiplier)
+					end
+				)
+				else -1*b.bet end) as points, a.team_name as team_name, b.team_id 
+						from 	teams a, 
+								answered_round2 b,
+								questions_round2 c,
+								badge d
+						where 	b.team_id = a.team_id
+								 and c.q_number = b.q_number
+
+						group by b.team_id
+			"
+			)->result_object();
+		*/
 		return $res;		
 	}
 
@@ -76,6 +94,7 @@ class Round2_model extends CI_Model {
 		$res = $this->db->query("select * from questions_round2 where q_number='{$q_number}'");
 		return $res->row();
 	}
+
 
 
 	
