@@ -47,20 +47,35 @@ class Round2_model extends CI_Model {
 			"
 			)->result_object();
 		*/
+	}
+	public function getScores(){
+        $res = $this->db->query(
+            "select sum(
+                case when (b.is_correct)
+                  then (b.bet*c.multiplier)+c.points
+                  else (-1*b.bet)
+                  end)
+            as points,b.team_id,a.team_name
+            from teams a, answered_round2 b, questions_round2 c
+            where b.q_number = c.q_number and b.team_id = a.team_id
+            group by b.team_id
+            order by points desc")->result_object();
 		return $res;		
 	}
 
-	public function get_base_score($team_id){
-		$mult = 2;
+	public function getBaseScores(){
 		$res = $this->db->query(
-			'select sum(
-				case when (b.is_`fast_round) then (c.points*__mult_) else c.points end)
-				as points,b.team_id, a.team_name
-				from teams a, answered_round1 b, questions_round1 c
-				where b.q_number = c.q_number and b.team_id = a.team_id and b.team_id=\'__team_id_\'
-				group by b.team_id
-				order by points desc')->row();
-		return $res->points;	
+			"select sum(
+				case when (b.is_fast_round)
+				  then (c.points*2)
+				  else c.points
+				  end)
+            as points,b.team_id, a.team_name
+            from teams a, answered_round1 b, questions_round1 c
+            where b.q_number = c.q_number and b.team_id = a.team_id
+            group by b.team_id
+            order by points desc")->row();
+		return $res;
 	}
 
 	public function setState($state){
@@ -108,29 +123,34 @@ class Round2_model extends CI_Model {
 	}
 
 	public function getBet($question_number, $team_id){
-		return $this->db->query("SELECT bet FROM bets WHERE q_number='$question_number' AND team_id='$team_id'")->row()->bet;
+		return $this->db->query("SELECT bet FROM answered_round2 WHERE q_number='$question_number' AND team_id='$team_id'")->row()->bet;
 	}
 
 	public function getPoints($question_number){
 		return $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
     }
 
-	public function insertBet($question_number,$team_id,$bet){
-		return $this->db->query("INSERT INTO bets (q_number,team_id,bet) VALUES ($question_number,'$team_id',$bet)");
+	public function insertBet($params){
+   		return $this->db->query(
+            "INSERT INTO answered_round2 (q_number,team_id,bet)
+            VALUES ({$params['q_number']},'{$params['team_id']}',{$params['bet']})");
 	}
 
-	public function editBet($question_number,$team_id,$bet){
-		return $this->db->query("UPDATE bets SET bet=$bet WHERE q_number=$question_number AND team_id='$team_id'");
+	public function editBet($params){
+		return $this->db->query("UPDATE answered_round2 SET bet={$params['bet']} WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
-	public function insertScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
-		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
-		return $this->db->query("INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect,question_points) VALUES ($question_number, '$team_id', $is_correct, $bet, '$badge_in_effect', $points)");
+	public function insertScore($params){
+		return $this->db->query(
+            "INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect)
+            VALUES ({$params['q_number']}, '{$params['team_id']}', {$params['is_correct']}, {$params['bet']}, '{$params['badge_in_effect']}'");
 	}
 
-	public function updateScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points){
-		$points = $this->db->query("SELECT points FROM questions_round2 WHERE q_number=$question_number")->row()->points;
-		return $this->db->query("UPDATE answered_round2 SET is_correct=$is_correct,bet=$bet,badge_in_effect='$badge_in_effect',question_points=$question_points WHERE q_number=$question_number AND team_id='$team_id'");
+	public function updateScore($params){
+        return $this->db->query(
+            "UPDATE answered_round2
+            SET is_correct= {$params['is_correct']},bet={$params['bet']},badge_in_effect='{$params['badge_in_effect']}'
+            WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
 }

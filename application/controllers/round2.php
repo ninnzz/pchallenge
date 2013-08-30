@@ -7,6 +7,7 @@ class Round2 extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('app_model');
 		$this->load->model('round2_model');
+        $this->load->model('badge_model');
 		//$this->user_model->auth(); //add this function if you want to make it private
 	}
 
@@ -52,6 +53,16 @@ class Round2 extends CI_Controller {
 		$arr['q_number'] = $res;
 		echo json_encode($arr);	
 	}
+
+    public function get_base_scores(){
+        $res = $this->round2_model->getBaseScores();
+        echo json_encode($res);
+    }
+
+    public function get_scores(){
+        $res = $this->round2_model->getScores();
+        echo json_encode($res);
+    }
 
 	/*****************ROUND 2 EDTING**********************/
 	public function edit_round2(){
@@ -142,92 +153,76 @@ class Round2 extends CI_Controller {
 	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
 	// 	}
 	// }
-	
-	public function get_team_answers_round2(){
-		$app_conf = $this->app_model->getAppConfig();
-		$q_count = $app_conf[0]->round2_question_count;
-		$team = $this->team_model->getAllTeams();
-		if(isset($_POST['q_number']) && $_POST['q_number'] != ""){
-
-
-		} else{
-			$response['status'] = "error";
-			$response['message'] = "Missing parameters";
-			echo json_encode($response);
-		}
-	}
-
 	function encoder_round2(){
 		$data["team_data"] = $this->team_model->getAllTeams();
-		
-		//Badges
-		$data["badges"] = array(
-							0 => array("id" => 0, "badge_name" => "Badge 1", "badge_owner" => "Team 1", "is_used" => 0),
-							1 => array("id" => 1,"badge_name" => "Badge 2", "badge_owner" => "Team 2", "is_used" => 1),
-							2 => array("id" => 2, "badge_name" => "Badge 3", "badge_owner" => "Team 3", "is_used" => 0),
-							3 => array("id" => 3, "badge_name" => "Badge 4", "badge_owner" => "Team 4", "is_used" => 1)
-						  );
-		
+        $data["badges"] = $this->badge_model->getBadges();
 		$data["question_count"] = $this->round2_model->getTotalQuestions('questions_round2');
-
 		$this->load->view("encoder_round2", $data);
 	}
 
 	function edit_bet(){
-		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
-			$team_count = sizeof($this->team_model->getAllTeams());
+		if(isset($_POST["submit"])){
+			$team_count = $this->team_model->getTotalNumberOfTeams();
 			$question_number = $_POST["question_number"];
 
 			for($index = 0; $index < $team_count; $index++){
 				$team_id = $_POST[$index];
-				$bet = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+				$bet = $_POST[$team_id];
 
-				$team_in_db = $this->round2_model->isTeamAlreadyExist('bets', $question_number, $team_id);
-				
+				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
+                $params = array('q_number'=>$question_number,'team_id'=>$team_id,'bet'=>$bet);
 				if($bet != ""){
-					$team_in_db > 0 ? $this->round2_model->editBet($question_number,$team_id,$bet) : $this->round2_model->insertBet($question_number,$team_id,$bet);
-					$successful = true;
-				}elseif($team_in_db <= 0 && $bet == ""){
-					$bet = 0;
-					$this->round2_model->insertBet($question_number,$team_id,$bet);
-					$successful = true;
+					if($team_in_db > 0)
+                        $res = $this->round2_model->editBet($params);
+                    else
+                        $res = $this->round2_model->insertBet($params);
 				}else{
-					$successful = false;
+					$params['bet'] = 0;
+                    if($team_in_db > 0)
+                        $res = $this->round2_model->editBet($params);
+                    else
+                        $res = $this->round2_model->insertBet($params);
 				}
 			}
-		
-			echo $successful ? "Bets submitted for Question Number $question_number." : "";
+			echo $res ? "Bets submitted for Question Number $question_number." : "Something went wrong.";
 		}
 	}
 
 	function update_score(){
-		if(isset($_POST["submit"]) && $_POST["question_number"] != 0){
-			$team_count = sizeof($this->user_model->getAllTeams());
+		if(isset($_POST["submit"])){
+            $team_count = $this->team_model->getTotalNumberOfTeams();
 			$question_number = $_POST["question_number"];
-			$question_points = $this->round2_model->getPoints($question_number);
-			$badge_in_effect = $_POST["badge_in_effect"];
-
+			$badge_in_effect = $_POST["badge_in_effect"] == "" ? NULL : $_POST["badge_in_effect"];
+            $res = NULL;
 			for($index = 0; $index < $team_count; $index++){
 				$team_id = $_POST[$index];
-				$is_correct = $_POST[$team_id] == "" ? "" : $_POST[$team_id];
+				$is_correct = $_POST[$team_id];
 				$bet = $this->round2_model->getBet($question_number, $team_id);
 				
 				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
-				
+				$params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>$is_correct,'bet'=>$bet,'badge_in_effect'=>$badge_in_effect);
 				if($is_correct != ""){
-					$team_in_db > 0 ? $this->round2_model->updateScore($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points) :$this->round2_model->insert_score($question_number,$team_id,$is_correct,$bet,$badge_in_effect,$question_points);
-					$successful = true;
-				}else{
-					$successful = false;
+					if($team_in_db > 0){
+                        $res = $this->round2_model->updateScore($params);
+                    }else{
+                        $res = $this->round2_model->insertScore($params);
+                    }
 				}
 			}
-			
-			echo $successful ? "Scores updated for Question Number $question_number." : "";
+            if(!is_null($res))
+			    echo $res ? "Scores updated for Question Number $question_number." : "Something went wrong";
 		}
 	}
 
 	function use_badge(){
-		//Use badge
-		redirect("round2/encoder_round2");
+        if(isset($_POST['badge_id'])){
+            $response['status'] = "ok";
+            $response['message'] = "Badge has been used";
+            $response['data'] = $_POST['badge_id'];
+            echo json_encode($response);
+        }else{
+            $response['message'] = "Error";
+            echo json_encode($response);
+        }
 	}
 }

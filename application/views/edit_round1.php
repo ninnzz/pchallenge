@@ -28,7 +28,8 @@
 	<div class='row-fluid'>
 		<a href="/round1/edit_by_difficulty"><button class="btn">Difficulty</button></a>
 		<a href="/round1/edit_by_badge"><button class="btn">Badge</button></a>
-		<a href="/round1/edit_by_question"><button class="btn">Question</button></a>
+        <a href="/round1/edit_by_type"><button class="btn">Type</button></a>
+        <a href="/round1/edit_by_question"><button class="btn">Question</button></a>
 	</div>
 </div>
 <?php } else{ echo "<h3>Invalid Scope</h3>"; }?>

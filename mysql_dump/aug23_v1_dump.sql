@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 22, 2013 at 03:39 AM
+-- Generation Time: Aug 22, 2013 at 07:22 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.3.13
 
@@ -57,6 +57,51 @@ CREATE TABLE IF NOT EXISTS `answered_round1` (
   `answered_time` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `answered_round1`
+--
+
+INSERT INTO `answered_round1` (`q_number`, `team_id`, `is_fast_round`, `answered_time`) VALUES
+(1, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199190),
+(21, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199192),
+(40, '138cd03c355098720838aeef3d26893a', 0, 1377199278),
+(22, '138cd03c355098720838aeef3d26893a', 0, 1377199278),
+(23, '138cd03c355098720838aeef3d26893a', 0, 1377199279),
+(43, '05bd29b524f0851d42e7902d6af59bf1', 0, 1377199280),
+(25, '05bd29b524f0851d42e7902d6af59bf1', 0, 1377199280),
+(7, '05bd29b524f0851d42e7902d6af59bf1', 0, 1377199281),
+(8, '05bd29b524f0851d42e7902d6af59bf1', 0, 1377199281),
+(2, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199289),
+(3, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199289),
+(4, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199289),
+(39, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 1377199291);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answered_round2`
+--
+
+CREATE TABLE IF NOT EXISTS `answered_round2` (
+  `q_number` int(10) NOT NULL,
+  `team_id` varchar(32) NOT NULL,
+  `bet` int(10) NOT NULL,
+  `is_correct` tinyint(1) NOT NULL DEFAULT '0',
+  `badge_in_effect` varchar(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `answered_round2`
+--
+
+INSERT INTO `answered_round2` (`q_number`, `team_id`, `bet`, `is_correct`, `badge_in_effect`) VALUES
+(0, 'b443db5b092a02c6787d60ae0bf19ad8', 0, 0, NULL),
+(0, '138cd03c355098720838aeef3d26893a', 0, 1, NULL),
+(0, '05bd29b524f0851d42e7902d6af59bf1', 0, 0, NULL),
+(0, 'f669a1cb5c11d28bdf26fc62535dcc2d', 0, 0, NULL),
+(0, 'a4528c5c893594d75a1da7e5d9833ac6', 0, 0, NULL),
+(0, '78f183fa5a7d8ecb22b9ad272c3abd79', 0, 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -102,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `badge` (
 
 INSERT INTO `badge` (`id`, `name`, `count`, `query`, `owner`, `timestamp`) VALUES
 ('ABS', 'abSORTion', 5, '', NULL, NULL),
-('COL', 'Collectibles', 5, '', NULL, NULL),
+('COL', 'Collectibles', 5, '', 'Na''Vi', 1377199291),
 ('LUC', 'Lucky *Star', 5, '', NULL, NULL),
 ('OOP', 'Oops, Added It Again', 5, '', NULL, NULL),
 ('SEG', 'Segmentation Difficult', 5, '', NULL, NULL);
@@ -118,6 +163,40 @@ CREATE TABLE IF NOT EXISTS `events` (
   `priority` int(10) DEFAULT NULL,
   `date_time` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`evnt`, `priority`, `date_time`) VALUES
+('Team Na''Vi answered question number1(e) worth 30pts', 1, 1377175108),
+('Team Na''Vi answered question number46(e) worth 30pts', 1, 1377175109),
+('Team TongFu answered question number43(e) worth 30pts', 1, 1377175112),
+('Team TongFu answered question number9(d) worth 70pts', 1, 1377175113),
+('Team TongFu answered question number13(e) worth 30pts', 1, 1377175114),
+('Team Fnatic answered question number24(d) worth 70pts', 1, 1377175125),
+('Team Alliance answered question number44(a) worth 50pts', 1, 1377175130),
+('Team Orange Neolution answered question number33(d) worth 70pts', 1, 1377175134),
+('Team iG answered question number39(d) worth 70pts', 1, 1377175139),
+('Team Na''Vi answered question number16(e) worth 30pts', 1, 1377175144),
+('Team Na''Vi answered question number16(e) worth 30pts', 1, 1377175147),
+('Team Na''Vi answered question number16(e) worth 30pts', 1, 1377175149),
+('Team Na''Vi answered question number32(a) worth 50pts', 1, 1377175153),
+('Team Fnatic answered question number48(d) worth 70pts', 1, 1377175157),
+('Team Na''Vi answered question number1(e) worth 30pts', 1, 1377199190),
+('Team Na''Vi answered question number21(d) worth 70pts', 1, 1377199192),
+('Team iG answered question number40(e) worth 30pts', 1, 1377199278),
+('Team iG answered question number22(e) worth 30pts', 1, 1377199278),
+('Team iG answered question number23(a) worth 50pts', 1, 1377199279),
+('Team Alliance answered question number43(e) worth 30pts', 1, 1377199280),
+('Team Alliance answered question number25(e) worth 30pts', 1, 1377199280),
+('Team Alliance answered question number7(e) worth 30pts', 1, 1377199281),
+('Team Alliance answered question number8(a) worth 50pts', 1, 1377199281),
+('Team Na''Vi answered question number2(a) worth 50pts', 1, 1377199289),
+('Team Na''Vi answered question number3(d) worth 70pts', 1, 1377199289),
+('Team Na''Vi answered question number4(e) worth 30pts', 1, 1377199289),
+('Team Na''Vi answered question number39(d) worth 70pts', 1, 1377199291),
+('Team Na''Vi obtained the Collectibles badge.', 1, 1377199291);
 
 -- --------------------------------------------------------
 
@@ -286,7 +365,7 @@ INSERT INTO `questions_round1` (`q_number`, `q_diff`, `q_type`, `q_multiplier`, 
 CREATE TABLE IF NOT EXISTS `questions_round2` (
   `q_number` int(11) DEFAULT NULL,
   `q_type` enum('e','a','d') DEFAULT NULL,
-  `multiplier` int(11) DEFAULT NULL,
+  `multiplier` float DEFAULT NULL,
   `points` int(10) DEFAULT NULL,
   `prev_timer` int(10) DEFAULT NULL,
   `badge_timer` int(10) DEFAULT NULL,
@@ -295,6 +374,24 @@ CREATE TABLE IF NOT EXISTS `questions_round2` (
   `body` text,
   `answer` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `questions_round2`
+--
+
+INSERT INTO `questions_round2` (`q_number`, `q_type`, `multiplier`, `points`, `prev_timer`, `badge_timer`, `bet_timer`, `q_timer`, `body`, `answer`) VALUES
+(1, 'e', 1, 30, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'e', 1, 30, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 'e', 1, 30, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 'e', 1, 30, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'a', 1.5, 50, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'a', 1.5, 50, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 'a', 1.5, 50, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'd', 2, 70, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 'd', 2, 70, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 'd', 2, 70, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 'a', 1.5, 50, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 'd', 2, 70, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

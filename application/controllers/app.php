@@ -6,6 +6,7 @@ class App extends CI_Controller {
 		parent::__construct();
 		$this->load->model('user_model');
 		$this->load->model('app_model');
+        $this->load->model('team_model');
 		$this->user_model->auth();
 	}
 
@@ -39,8 +40,9 @@ class App extends CI_Controller {
 	}
 
 	public function reset_round1(){
-		$res = $this->app_model->resetRound1();
-		if($res){
+		$res1 = $this->app_model->resetRound1();
+        $res2 = $this->team_model->initializeScores();
+		if($res1 && $res2){
 			$this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Round 1 has been reset.'));
 			redirect('../app/config');
 		}else{
