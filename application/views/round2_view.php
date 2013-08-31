@@ -13,6 +13,8 @@
 	var changeState=false;
 	var current_question_timer=0;
 	var hideData = false;
+	var scores_round1;
+	var scores_round2;
 	$(document).ready(function() {
 		getState();
 	});
@@ -35,14 +37,49 @@
 			else 
 				changeState=false;
 			console.log(changeState);
-			if(hideData==false) setState(obj['state']);
+			if(hideData==false && changeState==true) 
+				setState(obj['state']);
+				if(obj['state'] == 'scores' && changeState==true)
+					loadScores();
+				else if(obj['state'] != 'scores' && changeState==true)
+					$("table").empty();
 			setTimeout("getState();",1000);
 		});
 	}
 
+	function loadScores(){
+		$.post('loadScores', function(data) {
+			obj = JSON.parse(data);
+			for(i=0;i<obj.length;i++)
+				$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
+				//$('#scores').hide();
+			//addScores();
+			isCorrect();
+		});
+		
+	}
+
+	/*function addScores(){
+		$.post('getScore', function(data) {
+			console.log('pwede');
+			obj = JSON.parse(data);
+			for(i=0;i<obj.length;i++){
+				selector = '#'+obj[i]['team_id'];
+				//console.log(selector + ' selector');
+				var score_round1 = $(selector).html();
+				score = parseInt(score_round1) + parseInt(obj[i]['points']);
+				//console.log('add' + score);
+				$(selector).html(score);
+			}
+			isCorrect();
+		});
+		
+	}*/
+
+
 	function getQuestionDetails(){
 		$.post('getQuestionDetails', function(data) {
-			console.log(data)
+			//console.log(data)
 			obj = JSON.parse(data);
 			$("#q_number").html('Question Number: '+(obj['q_number']));
 			$("#duration").html((obj['q_timer'])+' seconds');
@@ -58,6 +95,17 @@
 			current_question_timer = obj['q_timer'];
 		});
 		
+	}
+
+	function isCorrect(){
+		$.post('isCorrect', function(data) {
+			obj = JSON.parse(data);
+			for(i=0;i<obj.length;i++){
+				selector = '#'+obj[i]['team_id'];
+				//console.log(selector + ' selector');
+				$(selector).parent().addClass('correct');
+			}
+		});
 	}
 
 
@@ -80,6 +128,7 @@
 	
 	function setState(state){
 		$("#timesup").hide();
+		$("#scores").show();
 		if(state=="init"){
 			getQuestionDetails();
 			$("#questionType").show();
@@ -187,7 +236,6 @@
 			$("#q_number").show();
 			$("#question").hide();
 			$("#questionTimer").hide();
-			
 			$("#answer").show();
 			$("#scores").hide();
 			
@@ -202,7 +250,6 @@
 			$("#q_number").hide();
 			$("#question").hide();
 			$("#questionTimer").hide();
-			
 			$("#answer").hide();
 			$("#scores").show();
 			
@@ -233,8 +280,8 @@
 				<div id="questionTimer">QuestionTimer</div>
 				
 				<div id="answer">Answer</div>
-				<div id="scores">Scores</div>
 				<div id="timesup">Time's Up</div>
+				<table id="scores"></table>
 				
 			</div>
 			<div id="lower">

@@ -74,7 +74,7 @@ class Round2_model extends CI_Model {
             from teams a, answered_round1 b, questions_round1 c
             where b.q_number = c.q_number and b.team_id = a.team_id
             group by b.team_id
-            order by points desc")->row();
+            order by points desc")->result_object();
 		return $res;
 	}
 
@@ -108,6 +108,13 @@ class Round2_model extends CI_Model {
 		$q_number =  $res->row()->current_question_round2;	
 		$res = $this->db->query("select * from questions_round2 where q_number='{$q_number}'");
 		return $res->row();
+	}
+
+	public function isCorrect(){
+		$res = $this->db->query("select * from app_config");
+		$q_number = $res->row()->current_question_round2;
+		$res = $this->db->query("select a.team_id, b.team_name from answered_round2 a, teams b where a.is_correct=1 and a.q_number='{$q_number}' and a.team_id=b.team_id")->result_object();
+		return $res;
 	}
 
 

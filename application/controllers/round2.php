@@ -139,12 +139,80 @@ class Round2 extends CI_Controller {
 	// 		$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
 
 	function getScore(){
-		$res = $this->round2_model->get_scores();
+		$res = $this->round2_model->getScores();
 
+		$i=0;
 		foreach( $res as $key){
-			echo $key->team_name."<br>";
-			echo $key->points."<br>";
+			$arr[$i]['team_name'] = $key->team_name;
+			$arr[$i]['points'] = $key->points;
+			$arr[$i++]['team_id'] = $key->team_id;
 		}
+		echo json_encode($arr);	
+	}
+
+	function getBaseScore(){
+		$res = $this->round2_model->getBaseScores();
+
+		$i=0;
+		foreach( $res as $key){
+			$arr[$i]['team_name'] = $key->team_name;
+			$arr[$i]['points'] = $key->points;
+			$arr[$i++]['team_id'] = $key->team_id;
+		}
+		echo json_encode($arr);	
+	}
+
+	function loadScores(){
+		$res1 = $this->round2_model->getScores();
+
+		$i=0;
+		/*
+		foreach( $res1 as $key){
+			$arr[$i]['team_name'] = $key->team_name;
+			$arr[$i]['points'] = $key->points;
+			$arr[$i++]['team_id'] = $key->team_id;
+		}
+		*/
+		$res = $this->round2_model->getBaseScores();
+		$i=0;
+		foreach( $res as $key){
+			$arr[$i]['team_name'] = $key->team_name;
+			$arr[$i]['points'] = $key->points;
+			foreach( $res1 as $key1){
+				if($key1->team_id == $key->team_id){
+						$arr[$i]['points'] = $key->points + $key1->points;
+				}
+			}
+			$arr[$i++]['team_id'] = $key->team_id;
+		}
+
+
+		for ($i = 1 ; $i <= 3; $i++) {
+    		$d = $i;
+ 
+    		while ( $d > 0 && $arr[$d]['points']> $arr[$d-1]['points']) {
+     			$t = $arr[$d];
+      			$arr[$d]=$arr[$d-1];
+      			$arr[$d-1]= $t;
+      		$d--;
+    		}
+    	}
+
+
+
+
+
+		echo json_encode($arr);
+	}
+
+	function isCorrect(){
+		$res = $this->round2_model->isCorrect();
+		$i=0;
+		foreach( $res as $key){
+			$arr[$i]['team_id'] = $key->team_id;
+			$arr[$i++]['team_name'] = $key->team_name;
+		}
+		echo json_encode($arr);	
 	}
 
 

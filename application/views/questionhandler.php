@@ -29,6 +29,8 @@
 						$("#result").html('Betting Timer');
 					else if(obj['state']=='show_question')
 						$("#result").html('Display Question');
+					else if(obj['state']=='show_question')
+						$("#result").html('Display Team Summary');
 					//$("#result").html(obj['state']);
 					console.log("test");
 				});

@@ -58,3 +58,8 @@ body{
 #q_header{
 	font-weight:bold;
 }
+
+
+.correct{
+	color:red;
+}
