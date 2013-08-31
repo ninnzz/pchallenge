@@ -20,8 +20,8 @@
 	});
 
 	function getState(){
-		$.post('getState', function(data) {
-			console.log(data)
+		$.post('/round2/getState', function(data) {
+			console.log(data);
 			obj = JSON.parse(data);
 			
 			//console.log(obj['state']);
@@ -78,8 +78,8 @@
 
 
 	function getQuestionDetails(){
-		$.post('getQuestionDetails', function(data) {
-			//console.log(data)
+		$.post('/round2/getQuestionDetails', function(data) {
+			console.log(data);
 			obj = JSON.parse(data);
 			$("#q_number").html('Question Number: '+(obj['q_number']));
 			$("#duration").html((obj['q_timer'])+' seconds');
