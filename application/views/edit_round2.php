@@ -21,7 +21,7 @@
 	</div>
 	<?php if($q_count != 0){?>
 	<div class='row-fluid well'>
-		<form action="/user/get_round2_question" method="post">
+		<form action="/round2/get_round2_question" method="post">
 		<span class='label label-success'>Question Number</span><br/><br/><select name='q_number' id='question_number'>
 			<?php
 				for($i=1;$i<=$q_count;$i++){
@@ -36,7 +36,7 @@
 		<br/>
 		<br/>
 		<?php if(isset($question)){?>
-		<form action="/user/update_round2_question" method="post">
+		<form action="/round2/update_round2_question" method="post">
 		<input type='hidden' name='q_number' value='<?php echo $q_num;?>'/>
 		<table>
 			<tr><td><h6>Difficulty</h6></td><td>
