@@ -54,46 +54,10 @@ class Round1_model extends CI_Model {
 				order by points desc")->result_object();
         return $res;
     }
-	public function getNumberOfQuestions(){
-		return $this->db->count_all("questions_round1");
-	}
 
-	public function isExistingAtBadge($q,$b){
-		$res = $this->db->get_where('questions_badge',array('q_number' => $q,'badge_type' => $b))->num_rows();
-		if($res > 0) return true;
-		else return false;
-	}
-	
 	public function setScore($params){
 		$this->db->where('team_id',$params['team_id']);
 		$res = $this->db->update('teams',array('points'=>$params['score']));
-		return $res;
-	}
-
-	public function updateRound1Question($params,$q){
-		$res = $this->db->update('questions_round1', $params, array('q_number' => $q)); 
-		return $res;
-	}
-
-	public function updateQuestionBadge($params){
-		foreach($params['badge_types'] as $badge_type){	
-			if($this->isExistingAtBadge($params['q_number'],$badge_type)){
-				$this->db->where(array('q_number'=>$params['q_number'],'badge_type'=>$badge_type));
-				$this->db->delete('questions_badge');
-			}
-			$this->db->insert('questions_badge',array('q_number'=>$params['q_number'],'badge_type'=>$badge_type));
-		}
-	}
-	
-	public function updateQuestionDifficulty($params){
-		$this->db->where('q_number',$params['q_number']);
-		$res = $this->db->update('questions_round1',array('q_diff'=>$params['difficulty'],'points'=>$params['points']));
-		return $res;
-	}
-
-	public function updateQuestionType($params){
-		$this->db->where('q_number',$params['q_number']);
-		$res = $this->db->update('questions_round1',array('q_type'=>$params['type'],'points'=>$params['points']));
 		return $res;
 	}
 }

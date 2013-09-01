@@ -87,42 +87,49 @@ class Round2 extends CI_Controller {
 		echo json_encode($arr);
 	}
 
-	public function get_round2_question(){
-		if(isset($_POST['q_number'])){
-			$app_conf = $this->app_model->getAppConfig();
-			$q_count = $app_conf[0]->round2_question_count;
-			$question = $this->app_model->getQuestionR2($_POST['q_number']);
-			
-			if(count($question) == 0){
-				$data = (object)array('status'=>'ok','message'=>'No data for question'.$_POST['q_number'].' yet. Please update question data.!');
-			}
-				$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_POST['q_number']);
-			$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'q_num'=>$_POST['q_number']));
-			
-		} else{
-			echo "Invalid Access..!!";
-		}	
+    public function edit_by_question(){
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round2_question_count;
+
+        $data = (object)array('status'=>'ok');
+        $this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count));
+    }
+
+	public function get_question(){
+        if(isset($_GET['q_number'])){
+            $app_conf = $this->app_model->getAppConfig();
+            $q_count = $app_conf[0]->round2_question_count;
+            $question = $this->app_model->getQuestionR2($_GET['q_number']);
+            if($question == null){
+                $question = array((object)array('q_number' => $_GET['q_number'],'q_type' => 'e',
+                    'multiplier' => '', 'points' => '', 'prev_timer' => '',
+                    'badge_timer' => '', 'bet_timer' => '', 'q_timer' => '',
+                    'body' => '', 'answer' => ''));
+            }
+            $data = (object)array('status'=>'ok','message'=>'Question set to number:'.$_GET['q_number']);
+            $this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
+        } else{
+            echo "Invalid Access..!!";
+        }
 	}
 
-	public function update_round2_question(){
-		$app_conf = $this->app_model->getAppConfig();
-		$q_count = $app_conf[0]->round2_question_count;
-		$question = $this->app_model->getQuestionR2($_POST['q_number']);
+	public function update_question(){
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round2_question_count;
+        $question = $this->app_model->getQuestionR2($_POST['q_number']);
 		if(isset($_POST['multiplier']) && isset($_POST['points']) && $_POST['multiplier'] != '' && $_POST['points'] != ''){
-			$params = array('multiplier' => $_POST['multiplier'],'points'=>$_POST['points'],'badge_timer'=>$_POST['badge_timer'],'q_type'=>$_POST['q_type'][0],'prev_timer'=>$_POST['prev_timer'],'bet_timer'=>$_POST['bet_timer'],'q_timer'=>$_POST['q_timer'],'body'=>$_POST['body'],'answer'=>$_POST['answer']);
-			if(count($question) == 0){
-				$params['q_number'] = $_POST['q_number'];
-				$res = $this->app_model->insertRound2Question($params);
-			} else{
-				$res = $this->app_model->updateRound2Question($params,$_POST['q_number']);
+			$params = array('q_number' => $_POST['q_number'], 'multiplier' => $_POST['multiplier'],'points'=>$_POST['points'],'badge_timer'=>$_POST['badge_timer'],'q_type'=>$_POST['q_type'][0],'prev_timer'=>$_POST['prev_timer'],'bet_timer'=>$_POST['bet_timer'],'q_timer'=>$_POST['q_timer'],'body'=>$_POST['body'],'answer'=>$_POST['answer']);
+			if($this->app_model->isQuestionAlreadyExist('questions_round2',$_POST['q_number'])){
+                $res = $this->app_model->updateRound2Question($params,$_POST['q_number']);
+            }else{
+                $res = $this->app_model->insertRound2Question($params);
 			}
 			if($res){
-				$question = $this->app_model->getQuestionR2($_POST['q_number']);
-				$data = (object)array('status'=>'ok','message'=>'Updated Question For Round2');
-				$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'q_num'=>$_POST['q_number']));
+                $this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Updated Question '.$_POST['q_number'].'.'));
+                redirect('round2/get_question?q_number='.$_POST['q_number'],'refresh');
 			}else{
 				$data = (object)array('status'=>'error','message'=>'Failed to update');
-				$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));	
+				$this->load->view('edit_round2',array('response'=>$data,'q_count'=>$q_count,'question'=>$question));
 			}
 		} else {
 			$data = (object)array('status'=>'error','message'=>'Missing some parameters');
@@ -147,7 +154,7 @@ class Round2 extends CI_Controller {
 			$arr[$i]['points'] = $key->points;
 			$arr[$i++]['team_id'] = $key->team_id;
 		}
-		echo json_encode($arr);	
+		echo json_encode($arr);
 	}
 
 	function getBaseScore(){
@@ -159,7 +166,7 @@ class Round2 extends CI_Controller {
 			$arr[$i]['points'] = $key->points;
 			$arr[$i++]['team_id'] = $key->team_id;
 		}
-		echo json_encode($arr);	
+		echo json_encode($arr);
 	}
 
 	function loadScores(){
@@ -189,7 +196,7 @@ class Round2 extends CI_Controller {
 
 		for ($i = 1 ; $i <= 3; $i++) {
     		$d = $i;
- 
+
     		while ( $d > 0 && $arr[$d]['points']> $arr[$d-1]['points']) {
      			$t = $arr[$d];
       			$arr[$d]=$arr[$d-1];
@@ -212,13 +219,13 @@ class Round2 extends CI_Controller {
 			$arr[$i]['team_id'] = $key->team_id;
 			$arr[$i++]['team_name'] = $key->team_name;
 		}
-		echo json_encode($arr);	
+		echo json_encode($arr);
 	}
 
 
 	// 	} else {
 	// 		$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');
-	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));	
+	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));
 	// 	}
 	// }
 	function encoder_round2(){
@@ -266,7 +273,7 @@ class Round2 extends CI_Controller {
 				$team_id = $_POST[$index];
 				$is_correct = $_POST[$team_id];
 				$bet = $this->round2_model->getBet($question_number, $team_id);
-				
+
 				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
 				$params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>$is_correct,'bet'=>$bet,'badge_in_effect'=>$badge_in_effect);
 				if($is_correct != ""){
@@ -287,9 +294,6 @@ class Round2 extends CI_Controller {
             $response['status'] = "ok";
             $response['message'] = "Badge has been used";
             $response['data'] = $_POST['badge_id'];
-            echo json_encode($response);
-        }else{
-            $response['message'] = "Error";
             echo json_encode($response);
         }
 	}

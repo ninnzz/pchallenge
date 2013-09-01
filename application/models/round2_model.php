@@ -117,11 +117,7 @@ class Round2_model extends CI_Model {
 		return $res;
 	}
 
-
-
-	
 	public function isTeamAlreadyExist($table, $question_number, $team_id){
-
 		return $this->db->query("SELECT team_id FROM $table WHERE q_number=$question_number AND team_id='$team_id'")->num_rows;
 	}
 

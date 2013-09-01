@@ -143,7 +143,8 @@ class Round1 extends CI_Controller {
 
 	/*************FOR ROUND1 QUESTION SETTINGS*******************/
 	public function edit(){
-		$q_count = $this->app_model->getQCountR1();
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round1_question_count;
 
 		if($q_count == 0){
 			$data = (object)array('status'=>'error','message'=>'Question Count is set to 0. Generate a new question set.');
@@ -154,29 +155,30 @@ class Round1 extends CI_Controller {
 		}
 	}
 
-	public function edit_by_badge(){		
-		$q_count = $this->app_model->getQCountR1();
-		$data = (object)array('status'=>'ok');
+	public function edit_by_badge(){
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round1_question_count;
+        $data = (object)array('status'=>'ok');
 		$this->load->view('edit_round1_by_badge',array('response'=>$data,'q_count'=>$q_count));
 	}
 
 	public function edit_by_difficulty(){
-		$q_count = $this->app_model->getQCountR1();
-		
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round1_question_count;
 		$data = (object)array('status'=>'ok');
 		$this->load->view('edit_round1_by_difficulty',array('response'=>$data,'q_count'=>$q_count));
 	}
 
 	public function edit_by_question(){
-		$q_count = $this->app_model->getQCountR1();	
-		
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round1_question_count;
 		$data = (object)array('status'=>'ok');
 		$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count));
 	}
 
 	public function edit_by_type(){
-		$q_count = $this->app_model->getQCountR1();	
-		
+        $app_conf = $this->app_model->getAppConfig();
+        $q_count = $app_conf[0]->round1_question_count;
 		$data = (object)array('status'=>'ok');
 		$this->load->view('edit_round1_by_type',array('response'=>$data,'q_count'=>$q_count));
 	}
@@ -201,10 +203,11 @@ class Round1 extends CI_Controller {
 	}
 	public function get_question(){
 		if(isset($_GET['q_number'])){
-			$q_count = $this->app_model->getQCountR1();
-			$question = $this->app_model->getQuestionR1($_GET['q_number']);
+            $app_conf = $this->app_model->getAppConfig();
+            $q_count = $app_conf[0]->round1_question_count;
+            $question = $this->app_model->getQuestionR1($_GET['q_number']);
 			$badge_types = $this->badge_model->getBadgeType($_GET['q_number']);
-			$data = (object)array('status'=>'ok','message'=>'Question set to question number:'.$_GET['q_number']);
+			$data = (object)array('status'=>'ok','message'=>'Question set to number:'.$_GET['q_number']);
 			$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'badge_types'=>$badge_types));
 			
 		} else{
@@ -230,7 +233,7 @@ class Round1 extends CI_Controller {
 			foreach($q_numbers as $q_number){
 				if(!strpos($q_number,'-')){
 					$params = array('q_number'=>$q_number,'badge_types'=>$badge_types);
-					$this->round1_model->updateQuestionBadge($params);
+					$this->app_model->updateQuestionBadge($params);
 				}
 				else{
 					$tok = strtok($q_number,'-');
@@ -240,7 +243,7 @@ class Round1 extends CI_Controller {
 					}
 					for($i = $range[0] ; $i <= $range[1] ; $i++){
 						$params = array('q_number'=>$i,'badge_types'=>$badge_types);
-						$this->round1_model->updateQuestionBadge($params);
+						$this->app_model->updateQuestionBadge($params);
 					}
 					unset($range);
 				}
@@ -274,7 +277,7 @@ class Round1 extends CI_Controller {
 			foreach($q_numbers as $q_number){
 				if(!strpos($q_number,'-')){
 					$params = array('q_number'=>$q_number,'difficulty'=>$difficulty,'points'=>$points);
-					$this->round1_model->updateQuestionDifficulty($params);
+					$this->app_model->updateQuestionDifficulty($params);
 				}
 				else{
 					$tok = strtok($q_number,'-');
@@ -284,7 +287,7 @@ class Round1 extends CI_Controller {
 					}
 					for($i = $range[0] ; $i <= $range[1] ; $i++){
 						$params = array('q_number'=>$i,'difficulty'=>$difficulty,'points'=>$points);
-						$this->round1_model->updateQuestionDifficulty($params);
+						$this->app_model->updateQuestionDifficulty($params);
 					}
 				}
 			}
@@ -298,27 +301,26 @@ class Round1 extends CI_Controller {
 	}
 
 	public function update_question(){
-		$q_count = $this->app_model->getQCountR1();
-		$question = $this->app_model->getQuestionR1($_POST['q_number']);
-		$badge_types = $this->badge_model->getBadgeType($_POST['q_number']);
-
-		if(isset($_POST['q_multiplier']) && isset($_POST['points']) && $_POST['q_multiplier'] != '' && $_POST['points'] != ''){
-			$question_params = array('q_multiplier' => $_POST['q_multiplier'],'points'=>$_POST['points'],''=>$_POST['q_diff']);
-			$res1 = $this->round1_model->updateRound1Question($question_params,$_POST['q_number']);
-			$res2 = $this->round1_model->updateQuestionBadge(array('q_number'=>$_POST['q_number'],'badge_types'=>$_POST['badge_types']));
-			if($res1 && $res2){
-				$question = $this->app_model->getQuestionR1($_POST['q_number']);
-				$data = (object)array('status'=>'ok','message'=>'Updated Question '.$_POST['q_number']);
-				$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'badge_types'=>$badge_types));
+		if(isset($_POST['q_number']) && isset($_POST['q_multiplier']) && isset($_POST['points']) && $_POST['q_multiplier'] != '' && $_POST['points'] != ''){
+			$question_params = array('q_multiplier' => $_POST['q_multiplier'],'points'=>$_POST['points'],'q_diff'=>$_POST['q_diff'],'q_type'=>$_POST['q_type']);
+            if($this->app_model->isQuestionAlreadyExist('questions_round2',$_POST['q_number'])){
+                $res1 = $this->app_model->updateRound1Question($question_params,$_POST['q_number']);
+            }else{
+                $res1 = $this->app_model->insertRound1Question($question_params);
+            }
+			if(isset($_POST['badge_types'])){
+                $res2 = $this->app_model->updateQuestionBadge(array('q_number'=>$_POST['q_number'],'badge_types'=>$_POST['badge_types']));
+            }
+			if($res1 || ($res1 && $res2)){
+                $this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Updated Question '.$_POST['q_number']));
 			}else{
-				$data = (object)array('status'=>'error','message'=>'Failed to update');
-				$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'badge_types'=>$badge_types));
+                $this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Failed to update question number '.$_POST['q_number']));
 			}
 		} else {
-			$data = (object)array('status'=>'error','message'=>'Missing some parameters');
-			$this->load->view('edit_round1_by_question',array('response'=>$data,'q_count'=>$q_count,'question'=>$question,'badge_types'=>$badge_types));
+            $this->session->set_flashdata('data',(object)array('status'=>'ok','message'=>'Updated Question '.$_POST['q_number']));
 		}
-	}
+        redirect('round1/get_question?q_number='.$_POST['q_number'],'refresh');
+    }
 
 	public function update_type(){
 		if(trim($_POST['question_numbers']) != ''){
@@ -333,7 +335,7 @@ class Round1 extends CI_Controller {
 			foreach($q_numbers as $q_number){
 				if(!strpos($q_number,'-')){
 					$params = array('q_number'=>$q_number,'type'=>$type);
-					$this->round1_model->updateQuestionType($params);
+					$this->app_model->updateQuestionType($params);
 				}
 				else{
 					$tok = strtok($q_number,'-');
@@ -343,7 +345,7 @@ class Round1 extends CI_Controller {
 					}
 					for($i = $range[0] ; $i <= $range[1] ; $i++){
 						$params = array('q_number'=>$i,'type'=>$type);
-						$this->round1_model->updateQuestionType($params);
+						$this->app_model->updateQuestionType($params);
 					}
 				}
 			}
