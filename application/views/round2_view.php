@@ -85,7 +85,7 @@
 			$("#duration").html((obj['q_timer'])+' seconds');
 			if(obj['q_type']=='e')
 				$("#questionType").html('Question Type: Easy');
-			else if (obj['q_type'=='a']) 
+			else if (obj['q_type'] =='a')
 				$("#questionType").html('Question Type: Average');
 			else if (obj['q_type'] == 'd')
 				$("#questionType").html('Question Type: Difficult');

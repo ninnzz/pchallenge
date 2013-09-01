@@ -185,8 +185,6 @@ class Round2 extends CI_Controller {
 			}
 			$arr[$i++]['team_id'] = $key->team_id;
 		}
-
-
 		for ($i = 1 ; $i <= 3; $i++) {
     		$d = $i;
  
