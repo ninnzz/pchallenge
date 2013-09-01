@@ -48,7 +48,7 @@
 	}
 
 	function loadScores(){
-		$.post('loadScores', function(data) {
+		$.post('/round2/loadScores', function(data) {
 			obj = JSON.parse(data);
 			for(i=0;i<obj.length;i++)
 				$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
@@ -128,7 +128,7 @@
 	
 	function setState(state){
 		$("#timesup").hide();
-		$("#scores").show();
+//		$("#scores").show();
 		if(state=="init"){
 			getQuestionDetails();
 			$("#questionType").show();

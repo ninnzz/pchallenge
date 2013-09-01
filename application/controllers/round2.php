@@ -197,11 +197,6 @@ class Round2 extends CI_Controller {
       		$d--;
     		}
     	}
-
-
-
-
-
 		echo json_encode($arr);
 	}
 
