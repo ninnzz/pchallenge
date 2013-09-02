@@ -64,7 +64,7 @@ class Round2 extends CI_Controller {
         echo json_encode($res);
     }
 
-	/*****************ROUND 2 EDTING**********************/
+	/*****************ROUND 2 EDITING**********************/
 	public function edit_round2(){
 		$app_conf = $this->app_model->getAppConfig();
 		$q_count = $app_conf[0]->round2_question_count;
@@ -261,6 +261,14 @@ class Round2 extends CI_Controller {
             $team_count = $this->team_model->getTotalNumberOfTeams();
 			$question_number = $_POST["question_number"];
 			$badge_in_effect = $_POST["badge_in_effect"] == "" ? NULL : $_POST["badge_in_effect"];
+
+            //if there is a badge in effect
+            //CHECK IF IT WORKS
+            if($badge_in_effect != NULL){
+                $params = array('team_id'=>$this->badge_model->getOwner($badge_in_effect));
+                $this->use_badge($params);
+            }
+
             $res = NULL;
 			for($index = 0; $index < $team_count; $index++){
 				$team_id = $_POST[$index];
@@ -282,11 +290,32 @@ class Round2 extends CI_Controller {
 		}
 	}
 
-	function use_badge(){
+    //CHECK IF IT WORKS
+    function set_badge(){
         if(isset($_POST['badge_id'])){
-            $response['status'] = "ok";
-            $response['message'] = "Badge has been used";
-            $response['data'] = $_POST['badge_id'];
+            if($this->badge_model->setBadgeInEffect($_POST['badge_id'],$_POST['question_number'])){
+                $response['status'] = "ok";
+                $response['message'] = "Badge ".$_POST['badge_id']." has been set";
+            }else{
+                $response['status'] = "error";
+                $response['message'] = "Something went wrong";
+            }
+            echo json_encode($response);
+        }
+    }
+
+    //CHECK IF IT WORKS
+    function use_badge($params){
+        if(isset($_POST['badge_id'])){
+            $query = $this->badge_model->getQuery($_POST['badge_id']);
+            if($this->badge_model->executeQuery($query)){
+                $response['status'] = "ok";
+                $response['message'] = "Badge ".$_POST['badge_id']." has been used";
+                $this->badge_model->setOwner(NULL,$_POST['badge_id'],NULL);
+            }else{
+                $response['status'] = "error";
+                $response['message'] = "Something went wrong";
+            }
             echo json_encode($response);
         }
 	}

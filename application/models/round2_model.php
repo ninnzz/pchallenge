@@ -156,4 +156,11 @@ class Round2_model extends CI_Model {
             WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
+
+    public function setBadgeInEffect($badge_id,$q_number){
+        return $this->db->query(
+            "UPDATE answered_round2
+            SET badge_in_effect='{$badge_id}'
+            WHERE q_number={$q_number}");
+    }
 }

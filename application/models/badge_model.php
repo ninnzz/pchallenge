@@ -7,10 +7,21 @@ class Badge_model extends CI_Model {
 		$this->load->model('round1_model');
 	}
 
+    public function executeBadge($query,$params){
+        $res = $this->db->query($query);
+        return $res;
+    }
+
 	public function setOwner($team_id,$badge_type,$timestamp){
 		$this->db->where('id',$badge_type);
 		$this->db->update('badge',array('owner'=>$team_id,'timestamp'=>$timestamp));
 	}
+
+    public function getOwner($badge_type){
+        $this->select('owner');
+        $res = $this->db->get_where('badge',array('id',$badge_type))->row();
+        return $res->owner;
+    }
 
 	public function setQuestionsToBadges($badge_id,$questions_selected,$questions){
 		foreach($questions_selected as $question_selected){
@@ -52,6 +63,11 @@ class Badge_model extends CI_Model {
 		return $res->num_rows();
 	}
 
+    public function getQuery($badge_id){
+        $this->db->select('query');
+        $res = $this->db->get_where('badge',array('badge_type'=>$badge_id))->row();
+        return $res->query;
+    }
 	public function getQuestionsWithBadge($badge_id){
 		$this->db->select('q_number');
 		$res = $this->db->get_where('questions_badge',array('badge_type'=>$badge_id));
@@ -96,5 +112,4 @@ class Badge_model extends CI_Model {
 		if($owner != NULL) return true;
 		else return false;
 	}
-
 }
