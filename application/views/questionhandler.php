@@ -27,6 +27,10 @@
                 $("#result").html('Display Question');
             else if(obj['state']=='show_question')
                 $("#result").html('Display Team Summary');
+            else if(obj['state']=='show_answer')
+                $("#result").html('Show Answer');
+            else if(obj['state']=='scores')
+                $("#result").html('Show Scores');
             //$("#result").html(obj['state']);
             console.log("test");
         });

@@ -48,7 +48,7 @@
 	}
 
 	function loadScores(){
-		$.post('loadScores', function(data) {
+		$.post('/round2/loadScores', function(data) {
 			obj = JSON.parse(data);
 			for(i=0;i<obj.length;i++)
 				$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
@@ -85,7 +85,7 @@
 			$("#duration").html((obj['q_timer'])+' seconds');
 			if(obj['q_type']=='e')
 				$("#questionType").html('Question Type: Easy');
-			else if (obj['q_type'=='a']) 
+			else if (obj['q_type'] =='a')
 				$("#questionType").html('Question Type: Average');
 			else if (obj['q_type'] == 'd')
 				$("#questionType").html('Question Type: Difficult');
@@ -128,7 +128,7 @@
 	
 	function setState(state){
 		$("#timesup").hide();
-		$("#scores").show();
+//		$("#scores").show();
 		if(state=="init"){
 			getQuestionDetails();
 			$("#questionType").show();
