@@ -179,6 +179,9 @@
         <div id="achievement_title">
             ACHIEVEMENT
         </div>
+        <div id="achievement_body">
+
+        </div>
     </div>
 </div>
 
@@ -243,6 +246,7 @@ function update_newsfeed(){
 
     $.get("/events/latest", function (latest_news) {
         var latest_json = eval("(" + latest_news + ")");
+        var event_to_process = null;
 
         if(last_event==latest_json.data[0].evnt){
             return;
@@ -251,22 +255,31 @@ function update_newsfeed(){
         if(start_time!=null && start_time < latest_json.data[0].date_time){
             last_event = latest_json.data[0].evnt;
 
-            if(event_queue.length==0){
-                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
-                renew_newsfeed();
-                console.log('initial event');
+            for(var i= 0,len=latest_json.data.length;i<len;i++){
+                event_to_process = latest_json.data[i].evnt;
+
+                //TODO : this is a sucky way of checking of the event is not a badge achievement. sadly, you have to change the database to add a 'category' attribute for an event
+                if(event_to_process.indexOf("obtained")==-1){
+                    if(event_queue.length==0){
+                        event_queue.push({msg:event_to_process, fading:false});
+                        renew_newsfeed();
+                    }
+                    else if(!event_queue[0].fading){
+                        event_queue[0].fading = true;
+                        event_queue.push({msg:event_to_process, fading:false});
+                        renew_newsfeed();
+                        reload_newsfeed();
+                    }
+                    else{
+                        event_queue.push({msg:event_to_process, fading:false});
+                    }
+                }
+                //if event is a badge achievement
+                else{
+                    $("#achievement_body").html(event_to_process);
+                }
             }
-            else if(!event_queue[0].fading){
-                event_queue[0].fading = true;
-                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
-                renew_newsfeed();
-                reload_newsfeed();
-                console.log('add event and start to reload');
-            }
-            else{
-                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
-                console.log('add event');
-            }
+
         }
     });
 }
