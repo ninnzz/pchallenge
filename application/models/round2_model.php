@@ -18,36 +18,6 @@ class Round2_model extends CI_Model {
 
 	}
 
-	public function get_scores(){
-		$mult = 2;
-		/*
-		$res = $this->db->query(
-			"select sum(case when (b.is_correct) then 
-				(
-					case when(b.badge_in_effect = 'SEG') then 
-						(
-							case when(false)
-							then 
-								(b.question_points+b.bet*c.multiplier)
-							end
-						)
-					else
-						b.question_points+(b.bet*c.multiplier)
-					end
-				)
-				else -1*b.bet end) as points, a.team_name as team_name, b.team_id 
-						from 	teams a, 
-								answered_round2 b,
-								questions_round2 c,
-								badge d
-						where 	b.team_id = a.team_id
-								 and c.q_number = b.q_number
-
-						group by b.team_id
-			"
-			)->result_object();
-		*/
-	}
 	public function getScores(){
         $res = $this->db->query(
             "select sum(
@@ -156,11 +126,25 @@ class Round2_model extends CI_Model {
             WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
+    public function setBadgeInEffect($badge_id,$q_num){
+        foreach($this->team_model->getTeamIds() as $result){
+            if(!$this->isTeamAlreadyExist('answered_round2',$q_num,$result->team_id)){
+                $res = $this->db->insert('answered_round2',array('q_number'=>$q_num,'team_id'=>$result->team_id,'bet'=>0,'is_correct'=>0,'badge_in_effect'=>$badge_id));
+            }else{
+                $this->db->where('q_number',$q_num);
+                $res = $this->db->update('answered_round2',array('badge_in_effect'=>$badge_id));
+            }
+            if($res) continue;
+            else return false;
+        }
+        return true;
+    }
 
-    public function setBadgeInEffect($badge_id,$q_number){
-        return $this->db->query(
-            "UPDATE answered_round2
-            SET badge_in_effect='{$badge_id}'
-            WHERE q_number={$q_number}");
+    public function getBadgeInEffect($q_num){
+        $this->db->select('badge_in_effect');
+        $this->db->from('answered_round2');
+        $this->db->where('q_number',$q_num);
+        $res = $this->db->get()->row();
+        return $res->badge_in_effect;
     }
 }

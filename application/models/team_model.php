@@ -20,6 +20,13 @@ class Team_model extends CI_Model {
 		return $res->team_id;
 	}
 
+    public function getTeamIds(){
+        $this->db->select('team_id');
+        $this->db->from('teams');
+        $res = $this->db->get()->result();
+        return $res;
+    }
+
 	public function addTeam($params){
 		$res = $this->db->insert('teams', (object)$params); 
 		return $res;
