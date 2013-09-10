@@ -1,4 +1,3 @@
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -8,204 +7,356 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
+article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
-    display: block;
+	display: block;
 }
 body {
-    line-height: 1;
+	line-height: 1;
 }
 ol, ul {
-    list-style: none;
+	list-style: none;
 }
 blockquote, q {
-    quotes: none;
+	quotes: none;
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
-    content: '';
-    content: none;
+	content: '';
+	content: none;
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 body{
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
 }
 
 #container{
-    background-image: url('/img/paper1.png');
-    width:1024px;
-    height:768px;
-//background-color: yellow;
-    height: 760px;
-    margin: auto;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#f5ff6d), color-stop(100%,#e1ff00)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #f5ff6d 1%,#e1ff00 100%); /* Chrome10+,Safari5.1+ */
+	background-image: url('/img/bg4.png');
+	/*width:1024px;*/
+	width:100%;
+	/*height:768px;
+	/background-color: yellow;*/
+	height: 768px;
+	margin: auto;
+	/*background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#f5ff6d), color-stop(100%,#e1ff00)); /* Chrome,Safari4+ */
+	/*background: -webkit-linear-gradient(top, #f5ff6d 1%,#e1ff00 100%); /* Chrome10+,Safari5.1+ */
 }
 
 #pre{
-    font-family: Impact;
-    font-size: 30px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 25%;
-    line-height: 40px;
+	font-family: Impact;
+	font-size: 30px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 25%;
+	line-height: 40px;
 }
 
 #countdown{
-    font-family: Impact;
-    font-size: 200px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 25%;
+	color: rgba(0, 0, 0, 0.9);
+	font-family: digital;
+	font-size: 200px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 20%;
+	text-shadow: 2px 2px 0 #CA0800,
+				 3px 3px 0 #CA0800;
+}
+
+@font-face{
+	font-family: segoeprint;
+	src: url(SegoePrint.ttf);
+}
+
+@font-face{
+	font-family: monaco;
+	src: url(Monaco.ttf);
+}
+@font-face{
+	font-family: monaco;
+	src: url(Monaco.ttf);
 }
 
 #newsfeed{
-    width: 100%;
-    height: 10%;
-    background-color: black;
-    padding-top: 3px;
-    padding-bottom: 3px;
+	width: 100%;
+	height: 10%;
+	background-color: black;
 }
 
 #nftitle{
-    margin-top: 2%;
-    margin-left: 1%;
-    width: 15%;
-    height: 10%;
-    text-align: center;
-    float: left;
+	width: 15%;
+	height: 100%;
+	text-align: center;
+	float: left;
+	//background-color: green;
+	font-family: Impact;
+	color: #1F4FC1;
+	font-size: 35px;
+	letter-spacing: 2px;
+	text-shadow: 1px 1px #E9E9E9,
+				 2px 2px #E9E9E9;
 }
 
-h1{
-    font-family: Impact;
-    color: red;
-    padding: 0;
-    margin: 0;
-    background-color: black;
-    font-size: 30px;
-    letter-spacing: 2px;
+#feed, #sub_feed{
+	width: 85%;
+	font-family: monaco;
+	/*padding-left: auto;
+	padding-right: auto;
+	//margin: 1.5% auto;*/
+	text-align: center;
+	/*letter-spacing: 1px;*/
+	float: left;
+	/*text-shadow: -1px -1px black, 1px 1px #FFF;*/
 }
 
 #feed{
-    width: 100%;
-    font-family: Impact;
-    color: white;
-    padding-left: auto;
-    padding-right: auto;
-    margin: 2% auto;
-    background-color: black;
-    font-size: 25px;
-    text-align: center;
-    letter-spacing: 1px;
+	font-size: 25px;
+	/*background-color: blue;*/
+	color: #E9E9E9;
+	height: 60%;
+	text-shadow: 2px 2px 0 #CA0800;
 }
 
-#subfeed{
-    width: 100%;
-    font-family: Impact;
-    color: white;
-    padding-left: auto;
-    padding-right: auto;
-    margin: 2% auto;
-    background-color: black;
-    font-size: 15px;
-    text-align: center;
-    letter-spacing: 1px;
+#sub_feed{
+	height: 40%;
+	font-size: 18px;
+	color: #F7C60C;
+}
+
+@font-face{
+font-family: radioland;
+src: url(RADIOLAND.ttf);
+}
+
+@font-face{
+font-family: digital;
+src: url(DS-DIGI.ttf);
 }
 
 #sponsors{
-    height: 65%;
-    width: 30%;
-    float: left;
-    border-right-style: solid;
-    border-right-width: 3px;
-    border-color: red;
-    padding: auto;
+	height: 60%;
+	width: 30%;
+	float: left;
+	border-right-style: solid;
+	border-right-width: 3px;
+	border-color: red;
+	padding: auto;
+}
+
+#exclusive, .span3 p{
+	font-family: Tahoma;
+	font-weight: bolder;
+	font-size: 33px;
+	color: #CA0800;
+	letter-spacing: 2px;
+	text-shadow: 1px 1px #2c2e38,
+				 2px 2px #2c2e38;
+}
+
+#logos p{
+	margin-top: 5%;
+	margin-left: 5%;
+}
+
+#logos{
+	width: 100%;
+	height: 50%;
+	//background-color: green;
+	margin-top: 10%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #slider{
-    width: 90%;
-    height: 50%;
-//background-color: green;
-//margin: auto;
-//padding: auto;
+	width: 75%;
+	//background-color: red;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 15%;
 }
 
 #exclusive{
-    width: 90%;
-    height: 35%;
-    margin: auto;
-    margin-top: 5%;
+	width: 90%;
+	height: 35%;
+	margin: auto;
+	margin-top: 5%;
 }
 
 #image{
-    margin: auto;
+	margin: auto;
 }
 
 #scores{
-    height: 65%;
-    width: 65%;
-    float: left;
-    margin-top: 0.5%;
-    margin-bottom: 1%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 2%;
-    padding-right: 2%;
+	height: 60%;
+	width: 65%;
+	float: left;
+	margin-top: 0.5%;
+	/*margin-bottom: 1%;*/
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 2%;
+	padding-right: 2%;
+	/*background-color: blue;*/
+}
+
+.team_style{
+	width: 98%;
+	border-width: 2px;
+	border-style: solid;
+	border-color: black; 
+	border-radius: 40px;
+	/*line-height: 30px;*/
+	font-family: "Century Gothic";
+	/*background-color: white;*/
+	background-image: url('/img/whitetile2.png');
+	font-weight: bold;
+	height: 7%;
+	margin-top: 1%;
+	box-shadow:
+		inset 0 1px 0 rgba(255,255,255,0.7), 
+        inset 0 3px 4px rgba(255,255,255,0.3), 
+        inset 0 -3px 4px rgba(0,0,0,0.3),
+        0 2px 2px rgba(255,255,255,0.9);
+}
+
+.team_num{
+	width: 26px;
+	height: 26px;
+	float: left;
+	background-color: black;
+	border-radius: 100%;
+	text-align: center;
+	opacity: 1;
+	margin-top: 0.75%;
+	margin-bottom: 0.75%;
+	margin-right: 0.75%;
+	margin-left: 0.75%;
+	font-size: 100%;
+	color: white;
+}
+
+.team_num p{
+	margin-top: 20%;
 }
 
 #round1Timer{
-    height: 17.5%;
-    width: 26%;
-    float: left;
-    font-family: Impact;
-    text-align: center;
-    font-size: 110px;
-    padding: 2%;
+	height: 22%;
+	width: 26%;
+	float: left;
+	font-family: digital;
+	text-align: center;
+	font-size: 170px;
+	padding: 2%;
+	/*font-weight: bold;
+	//background-color: blue;
+	//font-weight: bold;*/
+	color: black;
+	text-shadow: 2px 2px 0 #CA0800,
+				 3px 3px 0 #CA0800;
 }
 
 #achievement{
-    margin-right: auto;
-    margin-left: auto;
-    width: 66%;
-    height: 22%;
-    float: left;
-    font-family: Impact;
-    padding: 0 2%;
-//background-color: red;
+	margin-right: auto;
+	margin-left: auto;
+	width: 66%;
+	height: 29%;
+	float: left;
+	font-family: Impact;
+	padding: 0 2%;
+	/*background-color: red;*/
 }
 
 #team_scores, #achievement_title{
-    text-align: center;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
-    font-family: Impact;
-    border-width: 2px;
-    border-radius: 15px;
-    margin-top: 0.5%;
-    font-size: 25px;
-    color: white;
-    letter-spacing: 15px;
-    background-color: black;
+	text-align: center;
+	padding-top: 0.5%;
+	padding-bottom: 0.5%;
+	font-family: Impact;
+	border-width: 2px;
+	border-radius: 15px;
+	margin-top: 0.5%;
+	font-size: 25px;
+	/*color: white;*/
+	letter-spacing: 15px;
+	background-color: black;
+	font-weight: bold;
+	/*text-shadow: 1px 1px 20px red;*/
+	color: #d7ceb2;
+	text-shadow: 2px 2px 0px #2c2e38, 3px 3px 0px #5c5f72;
+}
+
+.badge_container{
+	border-style: solid;
+	color: black;
+	border-width: 3px;
+	border-color: black;
+	margin-top: 1%;
+	width: 99%;
+	height: 71%;
+	/*background-color: rgba(255, 255, 0, 0.5);
+	//background-image: url('/img/redtile.png');*/
+	background-size: 100%;
+	border-radius: 15px;
+	box-shadow:
+		inset 0 3px 0 rgba(255,255,255,0.9),
+        inset 0 8px 10px rgba(255,255,255,0.7),
+        inset 0 -8px 10px rgba(0,0,0,0.5),
+        0 5px 5px rgba(255,255,255,0.9);
+}
+
+.badge_pic{
+	width: 17%;
+	height: 90%;
+	/*background-color: black;*/
+	float: left;
+	border-right-style: solid;
+	border-color: black;
+	border-width: 2px;
+	padding: 1%;
+}
+
+
+.badge_title, .badge_owner{
+	/*border-left-style: solid;*/
+	border-width: 3px;
+	border-color: black;
+	width: 79.6%;
+	height: 50.5%;
+	float: left;
+	border-bottom-right-radius: 15px;
+}
+
+.badge_title{
+	/*background-color: yellow;*/
+	text-align: center;
+	font-size: 35px;
+	font-size: segoeprint;
+	line-height: 300%;
+}
+
+.badge_owner{
+	/*background-color: yellow;*/
+	text-align: center;
+	font-family: OCR A Extended;
+	font-size: 30px;
 }
 
