@@ -284,11 +284,10 @@ function update_achievements(){
                 "<div class='badge_owner'>"+
                     "Owner here"+
                 "</div>"+
-
                 "</div>"
-
             );
-//            $('#badge_slider').carousel().click();
+
+//          $('#badge_slider').carousel().click();
             $('#badge_slider').carousel('pause');
             $("#badge_slider").carousel({interval:2000});
             /*$('body').append(

@@ -67,7 +67,7 @@
 			for(i = 0; i < obj.length; i++){
 				var team_name = obj[i]['team_name'];
 				if(team_name.length > 20){
-                	team_name = team_name.substring(0,17) + "...";
+                	team_name = team_name.substring(0,25) + "...";
             	}
 				$("#"+"score_team"+i).html(team_name);
             	$("#"+"score_points"+i).html(obj[i]['points']);	
@@ -272,6 +272,8 @@
 			$("#questionTimer").hide();
 			$("#answer").hide();
 			$("#scores").show();
+
+            $.get("/round2/")
 			
 			if(debug)
 				console.log("setState(scores)");
