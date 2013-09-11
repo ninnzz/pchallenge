@@ -137,14 +137,6 @@ class Round2 extends CI_Controller {
 		}
 	}
 
-	/************ENCODER AND BET MODULES FOR ROUND2***************************/
-	// public function encoder_round2(){
-	// 	$app_conf = $this->app_model->getAppConfig();
-	// 	$q_count = $app_conf[0]->round2_question_count;
-	// 	$team = $this->team_model->getAllTeams();
-	// 	if($q_count > 0){
-	// 		$this->load->view('encoder_round2',array('teams'=>$team,'q_count'=>$q_count-1));
-
 	function getScore(){
 		$res = $this->round2_model->getScores();
 
@@ -171,18 +163,9 @@ class Round2 extends CI_Controller {
 
 	function loadScores(){
 		$res1 = $this->round2_model->getScores();
-
-		$i=0;
-		/*
-		foreach( $res1 as $key){
-			$arr[$i]['team_name'] = $key->team_name;
-			$arr[$i]['points'] = $key->points;
-			$arr[$i++]['team_id'] = $key->team_id;
-		}
-		*/
 		$res = $this->round2_model->getBaseScores();
 		$i=0;
-		foreach( $res as $key){
+		foreach($res as $key){
 			$arr[$i]['team_name'] = $key->team_name;
 			$arr[$i]['points'] = $key->points;
 			foreach( $res1 as $key1){
@@ -215,12 +198,6 @@ class Round2 extends CI_Controller {
 		echo json_encode($arr);
 	}
 
-
-	// 	} else {
-	// 		$data = (object)array('status'=>'error','message'=>'Round2 Question not initialized');
-	// 		$this->load->view('encoder_round2',array('response'=>$data,'teams'=>$team));
-	// 	}
-	// }
 	function encoder_round2(){
 		$data["team_data"] = $this->team_model->getAllTeams();
         $data["badges"] = $this->badge_model->getBadges();
@@ -282,8 +259,33 @@ class Round2 extends CI_Controller {
             if($badge_in_effect != NULL){
                 $owner = $this->badge_model->getOwner($badge_in_effect);
                 if($_POST[$owner] != NULL){
-                    $query = $this->badge_model->getQuery($badge_in_effect);
-                    $this->badge_model->executeBadge($owner,$query);
+                    if($badge_in_effect == 'ABS'){
+                        $res1 = $this->round2_model->getScores();
+                        $res2 = $this->round2_model->getBaseScores();
+                        $owner_bet = 0;
+                        foreach($res1 as $key1){
+                            foreach($res2 as $key2){
+                                if($key2->team_id == $key1->team_id && $key2->team_id != $owner){
+                                    if($key2->points + $key1->points > 30){
+                                        $owner_bet += 20;
+                                        if($_POST[$key2->team_id] == 1){
+                                            $query = "UPDATE answered_round2 SET bet = bet-20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
+                                        }else{
+                                            $query = "UPDATE answered_round2 SET bet = bet+20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
+                                        }
+                                        $this->badge_model->executeBadge($key2->team_id,$query);
+                                    }
+                                }
+                            }
+                        }
+                        if($_POST[$owner] == 1){
+                            $query = "UPDATE answered_round2 SET bet = '{$owner_bet}' WHERE team_id='team-id' AND badge_in_effect='ABS'";
+                            $this->badge_model->executeBadge($owner,$query);
+                        }
+                    }else{
+                        $query = $this->badge_model->getQuery($badge_in_effect);
+                        $this->badge_model->executeBadge($owner,$query);
+                    }
                     $this->badge_model->setOwner(NULL,$badge_in_effect,NULL);
                 }
             }
@@ -292,7 +294,6 @@ class Round2 extends CI_Controller {
 		}
 	}
 
-    //CHECK IF IT WORKS
     function set_badge(){
         if(isset($_POST['badge_id'])){
             if($this->badge_model->hasOwner($_POST['badge_id'])){
