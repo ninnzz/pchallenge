@@ -41,8 +41,10 @@
 				setState(obj['state']);
 				if(obj['state'] == 'scores' && changeState==true)
 					loadScores();
-				else if(obj['state'] != 'scores' && changeState==true)
-					$("table").empty();
+				else if(obj['state'] != 'scores' && changeState==true){
+                    $("#part1").empty();
+                    $("#part2").empty();
+                }
 			setTimeout("getState();",1000);
 		});
 	}
@@ -64,17 +66,31 @@
 	function loadScores(){
 		$.post('/round2/loadScores', function(data) {
 			obj = JSON.parse(data);
+            console.log(obj);
 			for(i = 0; i < obj.length; i++){
 				var team_name = obj[i]['team_name'];
+
 				if(team_name.length > 20){
                 	team_name = team_name.substring(0,25) + "...";
             	}
+
 				$("#"+"score_team"+i).html(team_name);
-            	$("#"+"score_points"+i).html(obj[i]['points']);	
+            	$("#"+"score_points"+i).html(obj[i]['points']);
+                if(i<10)
+                    $('#part1').append('<div id=team'+i+' class="team_style '+obj[i]['team_id']+'">'+
+                    '<div class="team_num"><p>'+(i+1)+'</p></div>'+
+                    '<div id="score_team'+i+'" style="width: 75%; float:left; font-size:150%; margin-top: 1%;">'+team_name+'</div>'+
+                    '<div id="score_points'+i+'" style="float: right; margin-right: 2%; font-size: 150%; margin-top: 1%;">'+obj[i]['points']+'</div>'+
+                    '</div>');
+                else
+                    $('#part2').append('<div id=team'+i+' class="team_style '+obj[i]['team_id']+'">'+
+                        '<div class="team_num"><p>'+(i+1)+'</p></div>'+
+                        '<div id="score_team'+i+'" style="width: 75%; float:left; font-size:150%; margin-top: 1%;">'+team_name+'</div>'+
+                        '<div id="score_points'+i+'" style="float: right; margin-right: 2%; font-size: 150%; margin-top: 1%;">'+obj[i]['points']+'</div>'+
+                        '</div>');
 			}
-				//$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
 				//$('#scores').hide();
-			//addScores();
+			//  addScores();
 			isCorrect();
 		});
 		
@@ -119,15 +135,17 @@
 	}
 
 	function isCorrect(){
-		$.post('isCorrect', function(data) {
+		$.post('/round2/isCorrect', function(data) {
+
 			obj = JSON.parse(data);
+            console.log("asdasdasd");
 			for(i=0;i<obj.length;i++){
-				selector = '#'+obj[i]['team_id'];
-				//console.log(selector + ' selector');
-				$(selector).parent().addClass('correct');
+				selector = '.'+obj[i]['team_id'];
+				console.log(selector + ' selector');
+				$(selector).addClass('correct');
 			}
 		});
-	}
+    }
 
 
 	function hideAllDetails(){
@@ -307,23 +325,10 @@
 					TEAM SCORES
 				</div>
 				<div id="part1" style="width: 48%; green; height: 98%; float:left; padding: 1% 1%;">
-					<?php for($i= 0; $i<10; $i++){?>
-					<div id="team<?php echo $i?>" class="team_style">
-						<div class="team_num"><p><?php echo $i+1 ?></p></div>
-						<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 1%;"></div>
-						<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size: 150%; margin-top: 1%;"></div>
-					</div>
-					<?php }?>
 				</div>
 				<div id="part2" style="width: 48%; height: 98%; float:left; padding: 1% 1%;">
-					<?php for($i = 10; $i<20; $i++){?>
-					<div id="team<?php echo $i?>" class="team_style">
-						<div class="team_num"><p><?php echo $i+1 ?></p></div>
-						<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 1%;"></div>
-						<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size:150%; margin-top: 1%;"></div>
-					</div>
-					<?php }?>
-				</div>		
+				</div>
+
 			</div>
 			</div>
 			<div id="lower">

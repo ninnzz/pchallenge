@@ -274,7 +274,7 @@ function update_achievements(){
             }
 
             $("#badge_slider > div").append(
-                "<div class='item' height='100%' width='100%'>"+
+                "<div class='laman item' height='100%' width='100%'>"+
                 "<div class='badge_pic'>"+
                 "<img src='"+image_path+"' height='85%' width='90%' />"+
                 "</div>" +

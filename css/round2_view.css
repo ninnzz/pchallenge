@@ -224,9 +224,6 @@ body{
 				 2px 2px 0 gray;
 }
 
-.correct{
-	color: red;
-}
 
 @font-face{
 font-family: radioland;
@@ -358,4 +355,8 @@ src: url(DS-DIGI.ttf);
 	padding-top: 1%;
 	text-align: justify;
 	color: rgba(0, 0, 0, 0.9);
+}
+
+.correct{
+    background-image:url('/img/greentile.png');
 }
