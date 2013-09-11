@@ -432,7 +432,7 @@ function startGameLoop(){
         counter++;
         counter%=3;
 
-        if(counter%3 == 0){
+        if(counter == 0){
             events.setCurrentEvent('update_newsfeed()');
             router.setMethod('get');
             router.setParams();
@@ -441,14 +441,14 @@ function startGameLoop(){
         }
 
 
-        else if(counter%3 == 1){
+        else if(counter == 1){
             events.setCurrentEvent('update()');
             router.setMethod('get');
             router.setTargetUrl('/round1/team_score');
             router.connect();
         }
 
-        else if(counter%3 == 2){
+        else if(counter == 2){
             events.setCurrentEvent('update_achievements()');
             router.setMethod('get');
             router.setTargetUrl('/events/badge');
