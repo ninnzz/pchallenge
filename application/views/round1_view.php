@@ -129,16 +129,25 @@
 			TEAM ACHIEVEMENTS
 		</div>
 		<div class="badge_container">
-			<div class="badge_pic">
-				<img src="/img/badge/Collectibles.png" height="85%" width="90%" />
-			</div>
-			<div class="badge_title">
-				Badge Title
-			</div>
-			<div class="badge_owner">
-				Badge Owner
-			</div>
-		</div>		
+            <div id="badge_slider" class="carousel slide">
+                <div class="carousel-inner"height="150px" width="300px">
+                    <!--div class="laman item" height="100%" width="100%">
+
+                        <div class="badge_pic">
+                            <img src="/img/badge/Collectibles.png" height="85%" width="90%" />
+                        </div>
+                        <div class="badge_title">
+                            Badge Title
+                        </div>
+                        <div class="badge_owner">
+                            Badge Owner
+                        </div>
+
+                    </div-->
+                </div>
+            </div>
+
+		</div>
 	</div>
 </div>
 <!--Load JQUERY from Google's network -->
@@ -148,6 +157,7 @@ var start_time = null;
 var event_queue = [];
 var event_lifetime = 3000; //how long a main event should stay in main feed until the secondary one overrides it (milliseconds)
 var last_event;
+var last_badge;
 
 current_state="pre";
 
@@ -226,6 +236,70 @@ function update_newsfeed(){
                 event_queue.push({msg:latest_json.data[0].evnt, fading:false});
                 console.log('add event');
             }
+        }
+    });
+}
+
+function update_achievements(){
+    $.get("/events/badge", function (latest_badge) {
+        var latest_json2 = eval("(" + latest_badge + ")");
+        //(latest_json2);
+        if(latest_json2.data[0] == null || last_badge==latest_json2.data[0].evnt){
+            return;
+        }
+
+        else if(last_badge!=latest_json2.data[0].evnt){
+            var image_path;
+            var badge_title;
+            last_badge = latest_json2.data[0].evnt;
+            console.log(last_badge);
+
+
+
+            if(last_badge.match("Collectibles") != null){
+                image_path = "/img/badge/Collectibles.png";
+                badge_title = "Collectibles";
+            }else if(last_badge.match("Segmentation") != null){
+                image_path = "/img/badge/SegFault.png";
+                badge_title = "Segmentation Difficult";
+            }else if(last_badge.match("abSORTion") != null){
+                image_path = "/img/badge/abSORTion2.png";
+                badge_title = "abSORTion";
+            }else if(last_badge.match("Oops, Added It Again") != null){
+                image_path = "/img/badge/Oops.png";
+                badge_title = "Oops, Added It Again";
+            }else if(last_badge.match("Lucky") != null){
+                image_path = "/img/badge/LuckyStar.png";
+                badge_title = "Lucky Star";
+            }
+
+            $("#badge_slider > div").append(
+                "<div class='item' height='100%' width='100%'>"+
+                "<div class='badge_pic'>"+
+                "<img src='"+image_path+"' height='85%' width='90%' />"+
+                "</div>" +
+                "<div class='badge_title'>"+
+                    badge_title+
+                "</div>"+
+                "<div class='badge_owner'>"+
+                    "Owner here"+
+                "</div>"+
+
+                "</div>"
+
+            );
+//            $('#badge_slider').carousel().click();
+            $('#badge_slider').carousel('pause');
+            $("#badge_slider").carousel({interval:2000});
+            /*$('body').append(
+                "<link rel='stylesheet' type='text/css' href='/css/bootstrap.min.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/bootstrap-responsive.min.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/style.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/vertical_slider.css'>"
+            );*/
+//           $('#badge_slider').carousel().click();
+ //          $('#badge_slider').carousel();
+            console.log("Executed here!");
         }
     });
 }
@@ -356,9 +430,9 @@ function startGameLoop(){
 
     setInterval(function(){
         counter++;
-        counter%=10;
+        counter%=3;
 
-        if(counter%2 == 0){
+        if(counter%3 == 0){
             events.setCurrentEvent('update_newsfeed()');
             router.setMethod('get');
             router.setParams();
@@ -367,18 +441,29 @@ function startGameLoop(){
         }
 
 
-        else if(counter%2 == 1){
+        else if(counter%3 == 1){
             events.setCurrentEvent('update()');
             router.setMethod('get');
             router.setTargetUrl('/round1/team_score');
             router.connect();
         }
+
+        else if(counter%3 == 2){
+            events.setCurrentEvent('update_achievements()');
+            router.setMethod('get');
+            router.setTargetUrl('/events/badge');
+            router.connect();
+        }
+
+
+
     }, 100);
 
-    $('#slider').carousel();
+//    $('#badge_slider').carousel();
 
     //makes the carousel start automatically, without needing a manual mouse click
     $('#slider').carousel().click();
+//    $('#badge_slider').carousel().click();
 }
 
 </script>
