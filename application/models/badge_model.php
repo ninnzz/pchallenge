@@ -7,8 +7,8 @@ class Badge_model extends CI_Model {
 		$this->load->model('round1_model');
 	}
 
-    public function executeBadge($owner,$query){
-        $query = str_replace("team-id",$owner,$query);
+    public function executeBadge($team_id,$query){
+        $query = str_replace("team-id",$team_id,$query);
         $res = $this->db->query($query);
         return $res;
     }
