@@ -47,11 +47,32 @@
 		});
 	}
 
+	/*
 	function loadScores(){
 		$.post('/round2/loadScores', function(data) {
 			obj = JSON.parse(data);
 			for(i=0;i<obj.length;i++)
 				$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
+				//$('#scores').hide();
+			//addScores();
+			isCorrect();
+		});
+		
+	}
+	*/
+
+	function loadScores(){
+		$.post('/round2/loadScores', function(data) {
+			obj = JSON.parse(data);
+			for(i = 0; i < obj.length; i++){
+				var team_name = obj[i]['team_name'];
+				if(team_name.length > 20){
+                	team_name = team_name.substring(0,25) + "...";
+            	}
+				$("#"+"score_team"+i).html(team_name);
+            	$("#"+"score_points"+i).html(obj[i]['points']);	
+			}
+				//$('#scores').append('<tr><td>'+(obj[i]['team_name'])+'</td><td id='+obj[i]['team_id']+'>'+(obj[i]['points'])+'</tr>');
 				//$('#scores').hide();
 			//addScores();
 			isCorrect();
@@ -81,7 +102,7 @@
 		$.post('/round2/getQuestionDetails', function(data) {
 			console.log(data);
 			obj = JSON.parse(data);
-			$("#q_number").html('Question Number: '+(obj['q_number']));
+			$("#q_number").html('Question Number: ' + (obj['q_number']));
 			$("#duration").html((obj['q_timer'])+' seconds');
 			if(obj['q_type']=='e')
 				$("#questionType").html('Question Type: Easy');
@@ -110,8 +131,9 @@
 
 
 	function hideAllDetails(){
+		//$("#q_header").hide();
 		$("#questionType").hide();
-		$("#q_number").hide();
+		//$("#q_number").hide();
 		$("#duration").hide();
 		$("#badgeText").hide();
 		$("#betText").hide();
@@ -131,6 +153,7 @@
 //		$("#scores").show();
 		if(state=="init"){
 			getQuestionDetails();
+			$("#q_header").animate({width: 'toggle'});
 			$("#questionType").show();
 			$("#duration").show();
 			$("#badgeText").hide();
@@ -139,18 +162,16 @@
 			$("#q_number").show();
 			$("#question").hide();
 			$("#questionTimer").hide();
-			
 			$("#answer").hide();
 			$("#scores").hide();
-			
 			if(debug)
 				console.log("setState(init)");
 		}
 		else if(state=="preview"){
 			getQuestionDetails();
 			if(changeState==true) countdown('timer', 5, hideAllDetails);
-			$("#questionType").hide();
-			$("#duration").hide();
+			$("#questionType").show();
+			$("#duration").show();
 			$("#badgeText").hide();
 			$("#betText").hide();
 			$("#timer").show();
@@ -167,10 +188,9 @@
 			$("#questionType").hide();
 			if(changeState==true) countdown('timer', 10, hideAllDetails);
 			$("#duration").hide();
-			$("#badgeText").show();
+			$("#badgeText").animate({width: 'toggle'});
 			$("#betText").hide();
 			$("#timer").show();
-			
 			$("#question").hide();
 			$("#questionTimer").hide();
 			
@@ -185,7 +205,7 @@
 			if(changeState==true) countdown('timer', 10, hideAllDetails);
 			$("#duration").hide();
 			$("#badgeText").hide();
-			$("#betText").show();
+			$("#betText").animate({width: 'toggle'});
 			$("#timer").show();
 			$("#q_number").show();
 			$("#question").hide();
@@ -202,11 +222,10 @@
 			$("#duration").hide();
 			$("#badgeText").hide();
 			$("#betText").hide();
-			$("#timer").hide();
+			$("#timer").hide()
 			$("#q_number").show();
 			$("#question").show();
-			$("#questionTimer").hide();
-			
+			$("#questionTimer").show();
 			$("#answer").hide();
 			$("#scores").hide();
 			
@@ -234,14 +253,15 @@
 			$("#betText").hide();
 			$("#timer").hide();
 			$("#q_number").show();
-			$("#question").hide();
+			$("#question").show();
 			$("#questionTimer").hide();
 			$("#answer").show();
 			$("#scores").hide();
-			
+			$("#q_header").animate({width: 'toggle'});
 			if(debug)
 				console.log("setState(show_answer)");
 		}else if(state=="scores"){
+			$("#q_header").hide();
 			$("#questionType").hide();
 			$("#duration").hide();
 			$("#badgeText").hide();
@@ -252,6 +272,8 @@
 			$("#questionTimer").hide();
 			$("#answer").hide();
 			$("#scores").show();
+
+            $.get("/round2/")
 			
 			if(debug)
 				console.log("setState(scores)");
@@ -268,21 +290,41 @@
 	<body>
 		<div id="outer">		
 			<div id="upper">
-				<div id="q_header"><div id="q_number"></div></div>
+				<div id="q_header">
+				<div id="q_number"></div></div>
 				<div id="q_proper"></div>
+				<div id="question">Question</div>
 				<div id="questionType">QuestionType</div>
 				<div id="duration">Duration</div>
-				<div id="betText">Betting Timer</div>
-				<div id="badgeText">Badge Timer</div>
+				<div id="betText">Place your bets now!</div>
+				<div id="badgeText">Who wants to use a badge?</div>
+				<div id="questionTimer"></div>
 				<div id="timer"></div>
-			
-				<div id="question">Question</div>
-				<div id="questionTimer">QuestionTimer</div>
-				
 				<div id="answer">Answer</div>
-				<div id="timesup">Time's Up</div>
-				<table id="scores"></table>
-				
+				<div id="timesup">Time's Up!</div>
+				<div id="scores">
+				<div id="team_scores">
+					TEAM SCORES
+				</div>
+				<div id="part1" style="width: 48%; green; height: 98%; float:left; padding: 1% 1%;">
+					<?php for($i= 0; $i<10; $i++){?>
+					<div id="team<?php echo $i?>" class="team_style">
+						<div class="team_num"><p><?php echo $i+1 ?></p></div>
+						<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 1%;"></div>
+						<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size: 150%; margin-top: 1%;"></div>
+					</div>
+					<?php }?>
+				</div>
+				<div id="part2" style="width: 48%; height: 98%; float:left; padding: 1% 1%;">
+					<?php for($i = 10; $i<20; $i++){?>
+					<div id="team<?php echo $i?>" class="team_style">
+						<div class="team_num"><p><?php echo $i+1 ?></p></div>
+						<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 1%;"></div>
+						<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size:150%; margin-top: 1%;"></div>
+					</div>
+					<?php }?>
+				</div>		
+			</div>
 			</div>
 			<div id="lower">
 					<div id="left">

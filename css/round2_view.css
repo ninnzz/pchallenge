@@ -1,37 +1,97 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
 body{
 	margin:0%;
 	font-family:Arial;
-	background-image:url("/img/bg.png");
+	background-image:url("/img/bg3.png");
+}
+
+@font-face{
+	font-family: monaco;
+	src: url(Monaco.ttf);
 }
 
 
+
 #outer{
+	width: 1366px;
+	height: 768px;
+	background-image:url("/img/bg3.png");
 }
 
 
 #upper{
-	width:98.5%;
-	height:68.5%;	
-	float:left;
-	font-size:20px;
-	position:relative;
-	padding-top: 1%;
-	padding-left: 1%;
+	width: 95%;
+	height: 74%;	
+	float: left;
+	font-size: 20px;
+	//position: relative;
+	padding:1% 2%;
+	//background-color: red;
 }
 
 #lower{
-	width:100%;
-	height:27%;
-	float:left;
-	font-weight:bold;
-	background-image: url('/img/bottombar.png');
-	background-repeat: repeat-x;
-	padding-top:1.5%;
+	width: 100%;
+	height: 25%;
+	float: left;
+	font-weight: bold;
+	background-image: url('/img/bar.png');
+	background-size: cover;
 }
 
 
 #left{
-	height:100%;
+	height: 100%;
 	width:50%;
 	position:relative;
 	float:left;
@@ -56,10 +116,246 @@ body{
 }
 
 #q_header{
-	font-weight:bold;
+	color: black;
+	margin-top: 1.5%;
+	margin-left: -3%;
+	font-weight: bold;
+	text-align: center;
+	width: 38%;
+	height: 10%;
+	font-size: 35px;
+	letter-spacing: 4px;
+	font-family: Impact;
+	//background-color: black;
+	text-shadow: 1px 1px 0 white;
+	padding-top: 2%;
+	background-color: rgba(204, 0, 0, 0.7);
+	border-radius: 3px;
+	box-shadow:
+		inset 0 1px 0 rgba(255,255,255,0.7), 
+        inset 0 8px 10px rgba(255,255,255,0.5), 
+        inset 0 -8px 10px rgba(0, 0, 0, 0.3),
+        0 2px 2px rgba(255,255,255,0.9);
+}
+
+#timesup{
+	margin-top: 1.5%;
+	margin-left: 1.5%;
+	text-align: center;
+	width: 100%;
+	height: 20%;
+	font-size: 120px;
+	letter-spacing: 4px;
+	font-family: Impact;
+	//background-color: black;
+	text-shadow: 1px 1px 0 white,
+				 3px 3px 0 white;
+	padding-top: 2%;
+	margin-top: 15%;
+	color: rgba(0, 0, 0, 0.9);
+}
+
+#questionType, #questionTimer{
+	width: 28%;
+	height: 7%;
+	font-size: 30px;
+	font-family: Tahoma;
+	//background-color: red;
+	font-weight: bold;
+	margin-left: 1.5%;
+	padding-left: 2%;
+	padding-top: 1%;
+}
+
+#betText{
+	width: 90%;
+	height: 20%;
+	font-size: 100px;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding-left: 2%;
+	padding-top: 5%;
+	background-color: rgba(0, 0, 0, 0.9);
+	color: white;
+	position: fixed;
+	top: 22%;
+	margin-left: -2%;
+	text-align: center;
+	text-shadow: 1px 1px 0 gray,
+				 3px 3px 0 yellow;
+}
+
+#badgeText{
+	width: 90%;
+	height: 20%;
+	font-size: 80px;
+	font-family: Tahoma;
+	font-weight: bold;
+	padding-left: 2%;
+	padding-top: 5%;
+	background-color: rgba(0, 10, 240, 0.7);
+	color: white;
+	position: fixed;
+	top: 22%;
+	margin-left: -2%;
+	text-align: center;
+	text-shadow: 1px 1px 0 black,
+				 3px 3px 0 black;
+}
+#questionTimer, #questionType{
+	color: #1F4FC1;
+	text-shadow: 1px 1px 0 black;
+}
+
+#duration{
+	width: 28%;
+	height: 7%;
+	font-family: OCR A Extended;
+	//background-color: yellow;
+	margin-left: 1.5%;
+	padding-left: 2%;
+	padding-top: 1%;
+	font-weight: bold;
+	font-family: 'Comic Sans MS', cursive;
+	line-height: 1em;
+	color: rgb(189, 10, 10);
+	font-size: 30px;
+	text-shadow: 1px 1px 0 black,
+				 2px 2px 0 gray;
+}
+
+.correct{
+	color: red;
+}
+
+@font-face{
+font-family: radioland;
+src: url(RADIOLAND.ttf);
+}
+
+@font-face{
+font-family: digital;
+src: url(DS-DIGI.ttf);
 }
 
 
-.correct{
-	color:red;
+#timer{
+	height: 50%;
+	width: 29%;
+	float: left;
+	font-family: digital;
+	text-align: center;
+	font-size: 200px;
+	margin-left: 1.5%;
+	padding-top: 8%;
+	margin-top: 10%;
+	//background-color: blue;
+	color: black;
+	text-shadow: 2px 2px 0 #CA0800,
+				 3px 3px 0 #CA0800;
+	position: fixed;
+	top: 33%;
+	left: 3%;
+}
+
+#scores{
+	height: 100%;
+	width: 98%;
+	float: left;
+	margin-top: 0.5%;
+	//margin-bottom: 1%;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 2%;
+	padding-right: 2%;
+	//background-color: blue;
+}
+
+.team_style{
+	width: 98%;
+	border-width: 2px;
+	border-style: solid;
+	border-color: black; 
+	border-radius: 40px;
+	//line-height: 30px;
+	font-family: "Century Gothic";
+	//background-color: white;
+	background-image: url('/img/whitetile2.png');
+	font-weight: bold;
+	height: 7%;
+	margin-top: 1%;
+	box-shadow:
+		inset 0 1px 0 rgba(255,255,255,0.7), 
+        inset 0 3px 4px rgba(255,255,255,0.3), 
+        inset 0 -3px 4px rgba(0,0,0,0.3),
+        0 2px 2px rgba(255,255,255,0.9);
+}
+
+.team_num{
+	width: 31px;
+	height: 31px;
+	float: left;
+	background-color: black;
+	border-radius: 100%;
+	text-align: center;
+	opacity: 1;
+	margin-top: 0.75%;
+	margin-bottom: 0.75%;
+	margin-right: 0.75%;
+	margin-left: 0.75%;
+	font-size: 100%;
+	color: white;
+}
+
+.team_num p{
+	margin-top: 20%;
+}
+
+#team_scores{
+	text-align: center;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	font-family: Impact;
+	border-width: 2px;
+	border-radius: 15px;
+	margin-top: 0.5%;
+	font-size: 35px;
+	//color: white;
+	letter-spacing: 35px;
+	background-color: black;
+	font-weight: bold;
+	//text-shadow: 1px 1px 20px red;
+	color: #d7ceb2;
+	text-shadow: 2px 2px 0px #2c2e38, 3px 3px 0px #5c5f72;
+}
+
+#question{
+	margin-top: -5%;
+	width: 57%;
+	height: 88%;
+	//background-color: black;
+	float: right;
+	padding: 1% 2%;
+	font-size: 110%;
+	line-height: 110%;
+	font-family: monaco;
+	position: fixed;
+	top: 13%;
+	left: 40%;
+	color: rgba(0, 0, 0, 0.9);
+	font-weight: bold;
+}
+
+#answer{
+	width: 28%;
+	height: 65%;
+	font-size: 120%;
+	line-height: 120%;
+	font-family: Tahoma;
+	//background-color: red;
+	margin-left: 1.5%;
+	padding-left: 2%;
+	padding-top: 1%;
+	text-align: justify;
+	color: rgba(0, 0, 0, 0.9);
 }

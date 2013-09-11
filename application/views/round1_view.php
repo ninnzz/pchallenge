@@ -45,146 +45,111 @@
 </script>
 
 <div id="container">
-    <div id="pre">
-        <p>Pens are pointy</p>
-        <p>Papers are thin</p>
-        <p>Get 1/4! is close by</p>
-        <p>Join now and win</p>
-    </div>
-    <div id="countdown">countdown</div>
-    <div id="newsfeed">
-        <div id="nftitle">
-            <h1>NEWS FEED:</h1>
-        </div>
-        <div id="feed">
+	<div id="pre">
+		<p>Pens are pointy</p>
+		<p>Papers are thin</p>
+		<p>Get 1/4! is close by</p>
+		<p>Join now and win</p>
+	</div>
+	<div id="countdown">countdown</div>
+	<div id="newsfeed">
+		<div id="nftitle">
+			NEWS<br/>FEED:
+		</div>
+		<div id="feed">
+			
+		</div>
+		<div id="sub_feed">
+		</div>
+	</div>
+	<div id="sponsors">
+		<div id="exclusive">
+			<p>Exclusive Partner:</p>
+			<img id="image" src="/img/azeus1.png">
+		</div>
+		<div id="logos" class="span3">
+			<p>Sponsors:</p>
+			<div id="slider" class="carousel slide">
+				<div class="carousel-inner">
+					<div class="item">
+						<img src="/img/silver/ristretto.png" width="75%" height="75%" />
+					</div>
+					<div class="item active">
+						<img src="/img/nonlocal/chikka.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/tresto.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/proximity.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/kamlanders.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/etiquetta.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/decorland.png" width="75%" height="75%" />
+					</div>
+					<div class="item">
+						<img src="/img/gold/decohair.png" width="75%" height="75%" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="scores">
+		<div id="team_scores">
+			TEAM SCORES
+		</div>
+		<div id="part1" style="width: 48%; green; height: 98%; float:left; padding: 1% 1%;">
+			<?php for($i= 0; $i<10; $i++){?>
+			<div id="team<?php echo $i?>" class="team_style">
+				<div class="team_num"><p><?php echo $i+1 ?></p></div>
+				<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 0.75%;"></div>
+				<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size: 160%;"></div>
+			</div>
+			<?php }?>
+		</div>
+		<div id="part2" style="width: 48%; height: 98%; float:left; padding: 1% 1%;">
+			<?php for($i = 10; $i<20; $i++){?>
+			<div id="team<?php echo $i?>" class="team_style">
+				<div class="team_num"><p><?php echo $i+1 ?></p></div>
+				<div id="score_team<?php echo $i?>" style="width: 75%; float:left; font-size:150%; margin-top: 0.75%;"></div>
+				<div id="score_points<?php echo $i?>" style="float: right; margin-right: 2%; font-size:150%;"></div>
+			</div>
+			<?php }?>
+		</div>		
+	</div>
 
-        </div>
-        <div id="subfeed">
+	<div id="round1Timer">Add timer here</div>
+	<div id="achievement">
+		<div id="achievement_title">
+			TEAM ACHIEVEMENTS
+		</div>
+		<div class="badge_container">
+            <div id="badge_slider" class="carousel slide">
+                <div class="carousel-inner"height="150px" width="300px">
+                    <!--div class="laman item" height="100%" width="100%">
 
-        </div>
-    </div>
-    <div id="sponsors">
-        <div id="exclusive">
-            <p>Exclusive Partner:</p>
-            <img id="image" src="/img/azeus1.png">
-        </div>
-        <div class="span3">
-            <div id="slider" class="carousel slide">
-                <p>Sponsors:</p>
-                <div class="carousel-inner">
-                    <div class="item">
-                        <img src="/img/silver/ristretto.png">
-                    </div>
-                    <div class="item active">
-                        <img src="/img/nonlocal/chikka.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/tresto.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/proximity.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/kamlanders.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/etiquetta.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/decorland.png">
-                    </div>
-                    <div class="item">
-                        <img src="/img/gold/decohair.png">
-                    </div>
+                        <div class="badge_pic">
+                            <img src="/img/badge/Collectibles.png" height="85%" width="90%" />
+                        </div>
+                        <div class="badge_title">
+                            Badge Title
+                        </div>
+                        <div class="badge_owner">
+                            Badge Owner
+                        </div>
+
+                    </div-->
                 </div>
-                <a class="left carousel-control" hidden="true" href="#slider" data-slide="prev"></a>
-                <a class="right carousel-control" hidden="true" href="#slider" data-slide="next"></a>
             </div>
-        </div>
-    </div>
-    <div id="scores">
-        <div id="team_scores">
-            TEAM SCORES
-        </div>
-        <div id="part1" style="width: 48%; green; height: 98%; float:left; padding: 1% 1%;">
-            <?php for($i= 0; $i<10; $i++){?>
-                <div id="team<?php echo $i?>" style="
-				width: 98%;
-				border-width: 2px;
-				border-style: solid;
-				border-color: black; 
-				border-radius: 40px;
-				line-height: 30px;
-				font-family: Calibri;
-				background-color: white;
-				font-weight: bold;
-				opacity: 0.8;
-				font-size: 18px;
-				height: 8%;
-				margin-top: 1%;">
-                    <div style="width: 30px;
-							height: 30px;
-							float: left;
-							background-color: black;
-							border-radius: 100%;
-							text-align: center;
-							opacity: 1;
-							margin-top: 5px;
-							margin-bottom: 5px;
-							margin-right: 5px;
-							margin-left: 5px;
-							color: white;"><?php echo $i+1 ?> </div>
-                    <div id="score_team<?php echo $i?>" style="width: 75%; float:left; opacity: 1.0;"></div>
-                    <div id="score_points<?php echo $i?>" style="opacity: 1"></div>
-                </div>
-            <?php }?>
-        </div>
-        <div id="part2" style="width: 48%; height: 98%; float:left; padding: 1% 1%;">
-            <?php for($i = 10; $i<20; $i++){?>
-                <div id="team<?php echo $i?>" style="
-				width: 98%;
-				border-width: 2px;
-				border-style: solid;
-				border-color: black; 
-				border-radius: 40px;
-				line-height: 30px;
-				font-family: Calibri;
-				background-color: white;
-				font-weight: bold;
-				opacity: 0.8;
-				font-size: 18px;
-				height: 8%;
-				margin-top: 1%;">
-                    <div style="width: 30px;
-							height: 30px;
-							float: left;
-							background-color: black;
-							border-radius: 100%;
-							text-align: center;
-							opacity: 1;
-							margin-top: 5px;
-							margin-bottom: 5px;
-							margin-right: 5px;
-							margin-left: 5px;
-							color: white;"><?php echo $i+1 ?> </div>
-                    <div id="score_team<?php echo $i?>" style="width: 75%; float:left; opacity: 1.0;"></div>
-                    <div id="score_points<?php echo $i?>" style="opacity: 1"></div>
-                </div>
-            <?php }?>
-        </div>
-    </div>
 
-    <div id="round1Timer">Add timer here</div>
-    <div id="achievement">
-        <div id="achievement_title">
-            ACHIEVEMENT
-        </div>
-        <div id="achievement_body">
-
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
-
 <!--Load JQUERY from Google's network -->
 <script>
 var counter = 0;
@@ -192,6 +157,7 @@ var start_time = null;
 var event_queue = [];
 var event_lifetime = 3000; //how long a main event should stay in main feed until the secondary one overrides it (milliseconds)
 var last_event;
+var last_badge;
 
 current_state="pre";
 
@@ -246,7 +212,6 @@ function update_newsfeed(){
 
     $.get("/events/latest", function (latest_news) {
         var latest_json = eval("(" + latest_news + ")");
-        var event_to_process = null;
 
         if(last_event==latest_json.data[0].evnt){
             return;
@@ -255,31 +220,85 @@ function update_newsfeed(){
         if(start_time!=null && start_time < latest_json.data[0].date_time){
             last_event = latest_json.data[0].evnt;
 
-            for(var i= 0,len=latest_json.data.length;i<len;i++){
-                event_to_process = latest_json.data[i].evnt;
+            if(event_queue.length==0){
+                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
+                renew_newsfeed();
+                console.log('initial event');
+            }
+            else if(!event_queue[0].fading){
+                event_queue[0].fading = true;
+                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
+                renew_newsfeed();
+                reload_newsfeed();
+                console.log('add event and start to reload');
+            }
+            else{
+                event_queue.push({msg:latest_json.data[0].evnt, fading:false});
+                console.log('add event');
+            }
+        }
+    });
+}
 
-                //TODO : this is a sucky way of checking of the event is not a badge achievement. sadly, you have to change the database to add a 'category' attribute for an event
-                if(event_to_process.indexOf("obtained")==-1){
-                    if(event_queue.length==0){
-                        event_queue.push({msg:event_to_process, fading:false});
-                        renew_newsfeed();
-                    }
-                    else if(!event_queue[0].fading){
-                        event_queue[0].fading = true;
-                        event_queue.push({msg:event_to_process, fading:false});
-                        renew_newsfeed();
-                        reload_newsfeed();
-                    }
-                    else{
-                        event_queue.push({msg:event_to_process, fading:false});
-                    }
-                }
-                //if event is a badge achievement
-                else{
-                    $("#achievement_body").html(event_to_process);
-                }
+function update_achievements(){
+    $.get("/events/badge", function (latest_badge) {
+        var latest_json2 = eval("(" + latest_badge + ")");
+        //(latest_json2);
+        if(latest_json2.data[0] == null || last_badge==latest_json2.data[0].evnt){
+            return;
+        }
+
+        else if(last_badge!=latest_json2.data[0].evnt){
+            var image_path;
+            var badge_title;
+            last_badge = latest_json2.data[0].evnt;
+            console.log(last_badge);
+
+
+
+            if(last_badge.match("Collectibles") != null){
+                image_path = "/img/badge/Collectibles.png";
+                badge_title = "Collectibles";
+            }else if(last_badge.match("Segmentation") != null){
+                image_path = "/img/badge/SegFault.png";
+                badge_title = "Segmentation Difficult";
+            }else if(last_badge.match("abSORTion") != null){
+                image_path = "/img/badge/abSORTion2.png";
+                badge_title = "abSORTion";
+            }else if(last_badge.match("Oops, Added It Again") != null){
+                image_path = "/img/badge/Oops.png";
+                badge_title = "Oops, Added It Again";
+            }else if(last_badge.match("Lucky") != null){
+                image_path = "/img/badge/LuckyStar.png";
+                badge_title = "Lucky Star";
             }
 
+            $("#badge_slider > div").append(
+                "<div class='item' height='100%' width='100%'>"+
+                "<div class='badge_pic'>"+
+                "<img src='"+image_path+"' height='85%' width='90%' />"+
+                "</div>" +
+                "<div class='badge_title'>"+
+                    badge_title+
+                "</div>"+
+                "<div class='badge_owner'>"+
+                    "Owner here"+
+                "</div>"+
+                "</div>"
+            );
+
+//          $('#badge_slider').carousel().click();
+            $('#badge_slider').carousel('pause');
+            $("#badge_slider").carousel({interval:2000});
+            /*$('body').append(
+                "<link rel='stylesheet' type='text/css' href='/css/bootstrap.min.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/bootstrap-responsive.min.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/style.css'>"+
+                "<link rel='stylesheet' type='text/css' href='/css/vertical_slider.css'>"
+            );*/
+//           $('#badge_slider').carousel().click();
+ //          $('#badge_slider').carousel();
+            console.log("Executed here!");
         }
     });
 }
@@ -301,10 +320,10 @@ function renew_newsfeed(){
         $("#feed").html(event_queue[0].msg);
     }
     if(event_queue[1]){
-        $("#subfeed").html(event_queue[1].msg);
+        $("#sub_feed").html(event_queue[1].msg);
     }
     else{
-        $("#subfeed").html("");
+        $("#sub_feed").html("");
     }
 }
 
@@ -410,9 +429,9 @@ function startGameLoop(){
 
     setInterval(function(){
         counter++;
-        counter%=10;
+        counter%=3;
 
-        if(counter%2 == 0){
+        if(counter == 0){
             events.setCurrentEvent('update_newsfeed()');
             router.setMethod('get');
             router.setParams();
@@ -421,18 +440,29 @@ function startGameLoop(){
         }
 
 
-        else if(counter%2 == 1){
+        else if(counter == 1){
             events.setCurrentEvent('update()');
             router.setMethod('get');
             router.setTargetUrl('/round1/team_score');
             router.connect();
         }
+
+        else if(counter == 2){
+            events.setCurrentEvent('update_achievements()');
+            router.setMethod('get');
+            router.setTargetUrl('/events/badge');
+            router.connect();
+        }
+
+
+
     }, 100);
 
-    $('#slider').carousel();
+//    $('#badge_slider').carousel();
 
     //makes the carousel start automatically, without needing a manual mouse click
     $('#slider').carousel().click();
+//    $('#badge_slider').carousel().click();
 }
 
 </script>
