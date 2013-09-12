@@ -270,11 +270,11 @@ function update_achievements(){
                 "<div class='badge_pic'>"+
                 "<img src='"+image_path+"' height='85%' width='90%' />"+
                 "</div>" +
-                "<div class='badge_title'>"+
+                "<div class='badge_title' style='margin-top:-1%'>"+
                     badge_title+
                 "</div>"+
-                "<div class='badge_owner'>"+
-                    "Owner here"+
+                "<div class='badge_owner' style='margin-top:-2%;font-size:20px;'>"+
+                    latest_json2.data[0].evnt+
                 "</div>"+
                 "</div>"
             );
