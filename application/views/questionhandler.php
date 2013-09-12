@@ -17,6 +17,8 @@
                     $("#q_number").html(obj['q_number']);
                 });
             }
+            else if(obj['state']=='preparation')
+                $("#result").html('Preparation');
             else if(obj['state']=='preview')
                 $("#result").html('Flash Question');
             else if(obj['state']=='badge')
@@ -65,14 +67,13 @@
     <!--<form method="post" action="<?php echo base_url(); ?>index.php/main/processRound2Query" target="result">-->
         <div class="row">
             <div class="span6 text-center">
-                <button class="btn" onclick="setState('init')"> Ready Next Question </button>
+                <button class="btn" onclick="setState('preparation')"> Preparation </button>
             </div>
 
             <div class="span6 text-center">
                 <!--put status of ready next question here-->
             </div>
         </div>
-        <br/>
         <div class="row">
             <div class="span6 text-center">
                 <button class="btn" onclick="setPreviousQuestion()"><i class="icon-step-backward"></i> Previous Question </button>
@@ -85,6 +86,17 @@
             </div>
         </div>
         <br/>
+        <div class="row">
+            <div class="span6 text-center">
+                <button class="btn" onclick="setState('init')"> Ready Next Question </button>
+            </div>
+
+            <div class="span6 text-center">
+                <!--put status of ready next question here-->
+            </div>
+        </div>
+        <br/>
+
         <div class="row">
             <div class="span6 text-center">
                 <button class="btn" onclick="setState('preview')"> Flash Question </button>

@@ -158,10 +158,11 @@
 		$("#timer").hide();
 		$("#question").hide();
 		$("#questionTimer").hide();
-		
+
 		$("#answer").hide();
 		$("#scores").hide();
 		$("#timesup").show();
+        $("#preparation").hide();
 		hideData = true;
 		
 	}
@@ -182,6 +183,7 @@
 			$("#questionTimer").hide();
 			$("#answer").hide();
 			$("#scores").hide();
+            $("#preparation").hide();
 			if(debug)
 				console.log("setState(init)");
 		}
@@ -198,10 +200,27 @@
 			$("#answer").hide();
 			$("#scores").hide();
 			$("#q_number").show();
-			
+            $("#preparation").hide();
+
 			if(debug)
 				console.log("setState(preview)");
 		}
+        else if(state=="preparation"){
+            $("#questionType").hide();
+            $("#duration").hide();
+            $("#badgeText").hide();
+            $("#betText").hide();
+            $("#timer").hide();
+            $("#question").hide();
+            $("#questionTimer").hide();
+            $("#answer").hide();
+            $("#scores").hide();
+            $("#q_number").hide();
+            $("#preparation").show();
+            $("#q_header").hide();
+            if(debug)
+                console.log("setState(preview)");
+        }
 		else if(state=="badge"){
 			$("#questionType").hide();
 			if(changeState==true) countdown('timer', 10, hideAllDetails);
@@ -215,6 +234,7 @@
 			$("#answer").hide();
 			$("#scores").hide();
 			$("#q_number").show();
+            $("#preparation").hide();
 			if(debug)
 				console.log("setState(badge)");
 		}
@@ -231,7 +251,8 @@
 			$("#q_number").show();
 			$("#answer").hide();
 			$("#scores").hide();
-			
+            $("#preparation").hide();
+
 			if(debug)
 				console.log("setState(bet)");
 		}
@@ -246,7 +267,8 @@
 			$("#questionTimer").show();
 			$("#answer").hide();
 			$("#scores").hide();
-			
+            $("#preparation").hide();
+
 			if(debug)
 				console.log("setState(show_question)");
 		}
@@ -261,7 +283,8 @@
 			$("#question").show();
 			$("#answer").hide();
 			$("#scores").hide();
-			
+            $("#preparation").hide();
+
 			if(debug)
 				console.log("setState(timer)");
 		}else if(state=="show_answer"){
@@ -275,6 +298,7 @@
 			$("#questionTimer").hide();
 			$("#answer").show();
 			$("#scores").hide();
+            $("#preparation").hide();
 			$("#q_header").animate({width: 'toggle'});
 			if(debug)
 				console.log("setState(show_answer)");
@@ -290,6 +314,7 @@
 			$("#questionTimer").hide();
 			$("#answer").hide();
 			$("#scores").show();
+            $("#preparation").hide();
 
             $.get("/round2/")
 			
@@ -308,6 +333,7 @@
 	<body>
 		<div id="outer">		
 			<div id="upper">
+                <div id="preparation"></div>
 				<div id="q_header">
 				<div id="q_number"></div></div>
 				<div id="q_proper"></div>
