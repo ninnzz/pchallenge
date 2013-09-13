@@ -199,99 +199,154 @@ class Round2 extends CI_Controller {
 	}
 
 	function encoder_round2(){
-		$data["team_data"] = $this->team_model->getAllTeams();
+		$data["teams"] = $this->team_model->getAllTeams();
         $data["badges"] = $this->badge_model->getBadges();
 		$data["question_count"] = $this->round2_model->getTotalQuestions('questions_round2');
 		$this->load->view("encoder_round2", $data);
 	}
 
-	function edit_bet(){
-		if(isset($_POST["submit"])){
-			$team_count = $this->team_model->getTotalNumberOfTeams();
-			$question_number = $_POST["question_number"];
-
-			for($index = 0; $index < $team_count; $index++){
-				$team_id = $_POST[$index];
-				$bet = $_POST[$team_id];
-
-				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
-                $params = array('q_number'=>$question_number,'team_id'=>$team_id,'bet'=>$bet);
-				if($bet != ""){
-					if($team_in_db > 0)
-                        $res = $this->round2_model->editBet($params);
-                    else
-                        $res = $this->round2_model->insertBet($params);
-				}else{
-					$params['bet'] = 0;
-                    if($team_in_db > 0)
-                        $res = $this->round2_model->editBet($params);
-                    else
-                        $res = $this->round2_model->insertBet($params);
-				}
-			}
-			echo $res ? "Bets submitted for Question Number $question_number." : "Something went wrong.";
-		}
-	}
-
-	function update_score(){
-		if(isset($_POST["submit"])){
-            $team_count = $this->team_model->getTotalNumberOfTeams();
-			$question_number = $_POST["question_number"];
-            $badge_in_effect = $this->round2_model->getBadgeInEffect($question_number);
-
-            $res = NULL;
-			for($index = 0; $index < $team_count; $index++){
-				$team_id = $_POST[$index];
-				$is_correct = $_POST[$team_id];
-				$bet = $this->round2_model->getBet($question_number, $team_id);
-
-				$team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
-				$params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>$is_correct,'bet'=>$bet,'badge_in_effect'=>$badge_in_effect);
-				if($is_correct != ""){
-					if($team_in_db > 0){
-                        $res = $this->round2_model->updateScore($params);
-                    }else{
-                        $res = $this->round2_model->insertScore($params);
-                    }
-				}
-			}
-
-            if($badge_in_effect != NULL){
-                $owner = $this->badge_model->getOwner($badge_in_effect);
-                if($_POST[$owner] != NULL){
-                    if($badge_in_effect == 'ABS'){
-                        $res1 = $this->round2_model->getScores();
-                        $res2 = $this->round2_model->getBaseScores();
-                        $owner_bet = 0;
-                        foreach($res1 as $key1){
-                            foreach($res2 as $key2){
-                                if($key2->team_id == $key1->team_id && $key2->team_id != $owner){
-                                    if($key2->points + $key1->points > 30){
-                                        $owner_bet += 20;
-                                        if($_POST[$key2->team_id] == 1){
-                                            $query = "UPDATE answered_round2 SET bet = bet-20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
-                                        }else{
-                                            $query = "UPDATE answered_round2 SET bet = bet+20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
-                                        }
-                                        $this->badge_model->executeBadge($key2->team_id,$query);
-                                    }
+    function use_badge($badge_in_effect){
+        $owner = $this->badge_model->getOwner($badge_in_effect);
+        if($owner != NULL){
+            if($badge_in_effect == 'ABS'){
+                $res1 = $this->round2_model->getScores();
+                $res2 = $this->round2_model->getBaseScores();
+                $owner_bet = 0;
+                foreach($res1 as $key1){
+                    foreach($res2 as $key2){
+                        if($key2->team_id == $key1->team_id && $key2->team_id != $owner){
+                            if($key2->points + $key1->points > 30){
+                                $owner_bet += 20;
+                                if($_POST[$key2->team_id] == 1){
+                                    $query = "UPDATE answered_round2 SET bet = bet-20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
+                                }else{
+                                    $query = "UPDATE answered_round2 SET bet = bet+20 WHERE team_id='team-id' AND badge_in_effect='ABS'";
                                 }
+                                $this->badge_model->executeBadge($key2->team_id,$query);
                             }
                         }
-                        if($_POST[$owner] == 1){
-                            $query = "UPDATE answered_round2 SET bet = '{$owner_bet}' WHERE team_id='team-id' AND badge_in_effect='ABS'";
-                            $this->badge_model->executeBadge($owner,$query);
-                        }
-                    }else{
-                        $query = $this->badge_model->getQuery($badge_in_effect);
-                        $this->badge_model->executeBadge($owner,$query);
                     }
-                    $this->badge_model->setOwner(NULL,$badge_in_effect,NULL);
+                }
+                if($_POST[$owner] == 1){
+                    $query = "UPDATE answered_round2 SET bet = '{$owner_bet}' WHERE team_id='team-id' AND badge_in_effect='ABS'";
+                    if($this->badge_model->executeBadge($owner,$query))
+                        echo "Badge has been successfully executed.";
+                    else
+                        echo "Badge failed to execute.";
+                }
+            }else{
+                $query = $this->badge_model->getQuery($badge_in_effect);
+                $this->badge_model->executeBadge($owner,$query);
+            }
+            $this->badge_model->setOwner(NULL,$badge_in_effect,NULL);
+        }
+    }
+
+    function get_scores_encoder($team_id){
+        $res1 = $this->round2_model->getScores();
+        $res2 = $this->round2_model->getBaseScores();
+        foreach($res1 as $key1){
+            foreach($res2 as $key2){
+                if($team_id == $key2->team_id && $key2->team_id == $key1->team_id){
+                    return $key2->points + $key1->points;
                 }
             }
-            if(!is_null($res))
-			    echo $res ? "Scores updated for Question Number $question_number." : "Something went wrong";
-		}
+        }
+    }
+
+	function update_round2(){
+		if(isset($_POST["submit"])){
+            $question_number = $_POST["question_number"];
+            $res = TRUE;
+
+            switch($_POST['option']){
+                case "bet":
+                    $str = trim($_POST['text']);
+                    $str = str_replace("\n",";",$str);
+                    $arr = explode(";",trim($str));
+
+                    foreach($arr as $el){
+                        $entry = explode(",",$el);
+                        $team_no = $entry[0];
+                        $bet = $entry[1];
+
+                        $team_id = $this->team_model->getTeamIdByNo($team_no);
+                        if(is_null($team_id)){
+                            echo "ERROR: Team ".$team_no." does not exist.<br/>";
+                        }
+                        if($bet % 10 != 0){
+                            echo "ERROR: Team ".$team_no."'s bet is not divisible by 10.<br/>";
+                        }
+                        if(!is_null($team_id) && $bet % 10 ==0){
+                            $params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>0,'bet'=>$bet);
+
+                            $team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
+                            if($team_in_db > 0)
+                                $res = $this->round2_model->editBet($params);
+                            else
+                                $res = $this->round2_model->insertBet($params);
+                            echo "Team ".$team_no."'s bet set to ".$bet."<br/>";
+                        }
+                    }
+                    echo $res ? "<br/>Bets submitted for Question Number $question_number." : "Something went wrong.";
+                    break;
+                case "correct":
+                    $badge_in_effect = $this->round2_model->getBadgeInEffect($question_number);
+                    $str = trim($_POST['text']);
+                    $str = str_replace("\n",";",$str);
+                    $arr = explode(";",trim($str));
+                    foreach($arr as $el){
+                        $entry = explode(",",$el);
+                        $team_no = $entry[0];
+                        $is_correct = $entry[1];
+
+                        $team_id = $this->team_model->getTeamIdByNo($team_no);
+                        if(is_null($team_id)){
+                            echo "ERROR: Team ".$team_no." does not exist.<br/>";
+                        }
+                        else if($is_correct == 0 || $is_correct == 1){
+                            $team_id = $this->team_model->getTeamIdByNo($team_no);
+                            $params = array('q_number'=>$question_number,'team_id'=>$team_id,'is_correct'=>$is_correct,'badge_in_effect'=>$badge_in_effect);
+
+                            $team_in_db = $this->round2_model->isTeamAlreadyExist('answered_round2', $question_number, $team_id);
+                            if($team_in_db > 0)
+                                $res = $this->round2_model->updateScore($params);
+                            else
+                                $res = $this->round2_model->insertScore($params);
+                            $curr_score = $this->get_scores_encoder($team_id);
+                            if($badge_in_effect == NULL){
+                                echo $is_correct == 1?
+                                    "CORRECT: "."Team ".$team_no."'s updated score = ".$curr_score." ; bet = ".$this->round2_model->getBet($question_number,$team_id)."<br/>"
+                                    :
+                                    "WRONG: "."Team ".$team_no."'s updated score = ".$curr_score." ; bet = ".$this->round2_model->getBet($question_number,$team_id)."<br/>";
+                            }else{
+                                if($badge_in_effect == NULL) "ERROR: Team ".$team_no." has wrong input for is_correct.<br/>";
+                            }
+                        }
+                    }
+                    if($badge_in_effect != NULL){
+                        $this->use_badge($badge_in_effect);
+                        foreach($arr as $el){
+                            $entry = explode(",",$el);
+                            $team_no = $entry[0];
+                            $is_correct = $entry[1];
+                            $team_id = $this->team_model->getTeamIdByNo($team_no);
+                            $curr_score = $this->get_scores_encoder($team_id);
+                            $owner = $this->badge_model->getOwner($badge_in_effect);
+                            if($is_correct == 0 || $is_correct == 1){
+                                echo $is_correct == 1 ?
+                                    "CORRECT: "."Team ".$team_no."'s updated score = ".$curr_score." ; bet = ".$this->round2_model->getBet($question_number,$team_id)."<br/>"
+                                    :
+                                    "WRONG: "."Team ".$team_no."'s updated score = ".$curr_score." ; bet = ".$this->round2_model->getBet($question_number,$team_id)."<br/>";
+                            }else{
+                                echo "ERROR: Team ".$team_no." has wrong input for is_correct.<br/>";
+                            }
+                        }
+                    }
+                    echo $res ? "<br/>"."Scores updated for Question Number $question_number." : "Something went wrong";
+                    break;
+            }
+        }
 	}
 
     function set_badge(){

@@ -8,9 +8,9 @@ class Team_model extends CI_Model {
 
 	public function getTeamName($params){
 		$this->db->select('team_name');
-		$this->db->from('teams');
 		$this->db->where($params);
-		return $this->db->get()->row()->team_name;
+        $res = $this->db->get('teams')->row();
+		return $res->team_name;
 	}
 
 	public function getTeamId($params){
@@ -19,6 +19,14 @@ class Team_model extends CI_Model {
 		$res = $this->db->get('teams')->row();
 		return $res->team_id;
 	}
+
+    public function getTeamIdByNo($team_no){
+        $this->db->select('team_id');
+        $this->db->where('team_no',$team_no);
+        $res = $this->db->get('teams')->row();
+        if($res != null)
+            return $res->team_id;
+    }
 
     public function getTeamIds(){
         $this->db->select('team_id');

@@ -115,14 +115,14 @@ class Round2_model extends CI_Model {
 
 	public function insertScore($params){
 		return $this->db->query(
-            "INSERT INTO answered_round2 (q_number,team_id,is_correct,bet,badge_in_effect)
-            VALUES ({$params['q_number']}, '{$params['team_id']}', {$params['is_correct']}, {$params['bet']}, '{$params['badge_in_effect']}'");
+            "INSERT INTO answered_round2 (q_number,team_id,is_correct,badge_in_effect)
+            VALUES ({$params['q_number']}, '{$params['team_id']}', {$params['is_correct']}, '{$params['badge_in_effect']}'");
 	}
 
 	public function updateScore($params){
         return $this->db->query(
             "UPDATE answered_round2
-            SET is_correct= {$params['is_correct']},bet={$params['bet']},badge_in_effect='{$params['badge_in_effect']}'
+            SET is_correct= {$params['is_correct']},badge_in_effect='{$params['badge_in_effect']}'
             WHERE q_number={$params['q_number']} AND team_id='{$params['team_id']}'");
 	}
 
