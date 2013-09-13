@@ -116,7 +116,7 @@ body{
 }
 
 #q_header{
-	color: black;
+	color: white;
 	margin-top: 1.5%;
 	margin-left: -3%;
 	font-weight: bold;
@@ -127,7 +127,7 @@ body{
 	letter-spacing: 4px;
 	font-family: Impact;
 	//background-color: black;
-	text-shadow: 1px 1px 0 white;
+	text-shadow: 2px 2px 0 black, 3px 3px 0 black;
 	padding-top: 2%;
 	background-color: rgba(204, 0, 0, 0.7);
 	border-radius: 3px;
@@ -224,9 +224,6 @@ body{
 				 2px 2px 0 gray;
 }
 
-.correct{
-	color: red;
-}
 
 @font-face{
 font-family: radioland;
@@ -338,7 +335,7 @@ src: url(DS-DIGI.ttf);
 	padding: 1% 2%;
 	font-size: 110%;
 	line-height: 110%;
-	font-family: monaco;
+	font-family: 'Courier New';
 	position: fixed;
 	top: 13%;
 	left: 40%;
@@ -358,4 +355,15 @@ src: url(DS-DIGI.ttf);
 	padding-top: 1%;
 	text-align: justify;
 	color: rgba(0, 0, 0, 0.9);
+}
+
+.correct{
+    background-image:url('/img/greentile.png');
+}
+
+#preparation{
+    height:100%;
+    width:100%;
+    background-image: url('/img/round2.png');
+    background-size:100% 100%;
 }

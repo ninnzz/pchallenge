@@ -175,7 +175,7 @@ class Round2 extends CI_Controller {
 			}
 			$arr[$i++]['team_id'] = $key->team_id;
 		}
-		for ($i = 1 ; $i <= 3; $i++) {
+		for ($i = 1 ; $i < count($arr); $i++) {
     		$d = $i;
 
     		while ( $d > 0 && $arr[$d]['points']> $arr[$d-1]['points']) {

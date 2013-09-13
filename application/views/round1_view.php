@@ -131,22 +131,13 @@
 		<div class="badge_container">
             <div id="badge_slider" class="carousel slide">
                 <div class="carousel-inner"height="150px" width="300px">
-                    <!--div class="laman item" height="100%" width="100%">
-
-                        <div class="badge_pic">
-                            <img src="/img/badge/Collectibles.png" height="85%" width="90%" />
-                        </div>
-                        <div class="badge_title">
-                            Badge Title
-                        </div>
-                        <div class="badge_owner">
-                            Badge Owner
-                        </div>
-
-                    </div-->
+                    <div class="item" height="100%" width="100%">
+                    </div>
+                    <div class="item" height="100%" width="100%" style="margin-top:4%;font-size:500%">
+                            <center><p>BADGES ACQUIRED</p></center>
+                    </div>
                 </div>
             </div>
-
 		</div>
 	</div>
 </div>
@@ -273,22 +264,23 @@ function update_achievements(){
                 badge_title = "Lucky Star";
             }
 
+
             $("#badge_slider > div").append(
                 "<div class='item' height='100%' width='100%'>"+
                 "<div class='badge_pic'>"+
                 "<img src='"+image_path+"' height='85%' width='90%' />"+
                 "</div>" +
-                "<div class='badge_title'>"+
+                "<div class='badge_title' style='margin-top:-1%'>"+
                     badge_title+
                 "</div>"+
-                "<div class='badge_owner'>"+
-                    "Owner here"+
+                "<div class='badge_owner' style='margin-top:-2%;font-size:20px;'>"+
+                    latest_json2.data[0].evnt+
                 "</div>"+
                 "</div>"
             );
 
 //          $('#badge_slider').carousel().click();
-            $('#badge_slider').carousel('pause');
+            $('#badge_slider').carousel();
             $("#badge_slider").carousel({interval:2000});
             /*$('body').append(
                 "<link rel='stylesheet' type='text/css' href='/css/bootstrap.min.css'>"+
@@ -345,7 +337,7 @@ function state_reactor(){
 
             //"countdown"==id of div to present countdown on
             // 10 = seconds
-            countdown("countdown", 10,
+            countdown("countdown", 2,
                 function(){
                     $("#countdown").html("Round 1");
                     setTimeout(function(){
@@ -459,9 +451,9 @@ function startGameLoop(){
     }, 100);
 
 //    $('#badge_slider').carousel();
+    $('#badge_slider').carousel(function(){$('#slider').carousel().click();});
 
     //makes the carousel start automatically, without needing a manual mouse click
-    $('#slider').carousel().click();
 //    $('#badge_slider').carousel().click();
 }
 
